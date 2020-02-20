@@ -6,7 +6,8 @@ const flexContainer = {
   display: "flex",
   height: "100vh",
   justifyContent: "center",
-  alignItems: "center"
+  alignItems: "center",
+  flexDirection: "column"
 };
 
 function App() {
