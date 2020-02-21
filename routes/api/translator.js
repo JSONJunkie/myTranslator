@@ -58,8 +58,9 @@ const translationResult = {
     character_count: 5
   }
 };
-router.get("/", async (req, res) => {
-  res.json(translationResult);
+router.post("/", async (req, res) => {
+  // res.json(translationResult);
+  res.json(req.body);
 });
 
 module.exports = router;

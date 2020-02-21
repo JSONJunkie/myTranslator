@@ -9,7 +9,7 @@ const textArea = {
   height: "40%"
 };
 
-const Landing = ({ translate }) => {
+const Landing = ({ translate, lang: { preTrans, postTrans } }) => {
   const [text, setText] = useState("");
 
   const onChange = e => {
@@ -20,6 +20,8 @@ const Landing = ({ translate }) => {
     e.preventDefault();
     translate({ text });
   };
+  console.log(preTrans);
+  console.log(postTrans);
 
   return (
     <Fragment>
@@ -31,6 +33,10 @@ const Landing = ({ translate }) => {
         onChange={e => onChange(e)}
       />
       <button onClick={e => handleClick(e)}>Translate</button>
+      <div>
+        {preTrans.text}
+        {postTrans.text}
+      </div>
     </Fragment>
   );
 };
@@ -39,4 +45,8 @@ Landing.propTypes = {
   translate: PropTypes.func.isRequired
 };
 
-export default connect(null, { translate })(Landing);
+const mapStateToProps = state => ({
+  lang: state.lang
+});
+
+export default connect(mapStateToProps, { translate })(Landing);
