@@ -59,8 +59,12 @@ const translationResult = {
   }
 };
 router.post("/", async (req, res) => {
-  // res.json(translationResult);
-  res.json(req.body);
+  try {
+    // res.json(translationResult);
+    res.json(req.body);
+  } catch (err) {
+    // console.log(err);
+  }
 });
 
 module.exports = router;

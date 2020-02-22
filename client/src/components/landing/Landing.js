@@ -6,7 +6,7 @@ import { translate } from "../../actions/lang";
 
 const textArea = {
   width: "60%",
-  height: "40%"
+  height: "20%"
 };
 
 const Landing = ({ translate, lang: { preTrans, postTrans } }) => {
@@ -20,8 +20,6 @@ const Landing = ({ translate, lang: { preTrans, postTrans } }) => {
     e.preventDefault();
     translate({ text });
   };
-  console.log(preTrans);
-  console.log(postTrans);
 
   return (
     <Fragment>
@@ -33,10 +31,11 @@ const Landing = ({ translate, lang: { preTrans, postTrans } }) => {
         onChange={e => onChange(e)}
       />
       <button onClick={e => handleClick(e)}>Translate</button>
-      <div>
-        {preTrans.text}
-        {postTrans.text}
-      </div>
+      <textarea
+        placeholder={"Translated text will appear here..."}
+        style={textArea}
+        value={postTrans.text}
+      />
     </Fragment>
   );
 };
