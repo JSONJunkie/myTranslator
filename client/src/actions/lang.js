@@ -10,13 +10,12 @@ export const translate = formData => async dispatch => {
     const body = translateParams;
 
     const res = await axios.post("/api/translator", body);
-    console.log(res.data);
     dispatch({
       type: TRANSLATE,
       payload: { preTrans: formData, postTrans: res.data }
     });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };
 
@@ -47,6 +46,6 @@ export const speak = async postTrans => {
     source.connect(audioCtx.destination);
     source.start();
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };

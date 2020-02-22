@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-// import sound from "../../hello_world.wav";
 
 import { translate, speak } from "../../actions/lang";
 
@@ -26,9 +25,7 @@ const Landing = ({ translate, lang: { preTrans, postTrans } }) => {
     e.preventDefault();
     speak(postTrans);
   };
-  console.log(preTrans);
 
-  console.log(postTrans);
   return (
     <Fragment>
       Welcome to the translator! To begin, enter text below:

@@ -1,4 +1,3 @@
-const fs = require("fs");
 const express = require("express");
 const LanguageTranslatorV3 = require("ibm-watson/language-translator/v3");
 const TextToSpeechV1 = require("ibm-watson/text-to-speech/v1");
@@ -27,45 +26,26 @@ const textToSpeech = new TextToSpeechV1({
   }
 });
 
-// const translateParams = {
-//   text: "Hello",
-//   modelId: "en-es"
-// };
-
-// const synthesizeParams = {
-//   text: "Hello world",
-//   accept: "audio/wav",
-//   voice: "en-US_AllisonVoice"
-// };
-
 router.post("/", async (req, res) => {
   try {
     const translateParams = req.body;
-    languageTranslator
-      .translate(translateParams)
-      .then(translationResult => {
-        console.log(translationResult);
-        res.json(translationResult.result.translations[0].translation);
-      })
-      .catch(err => {
-        console.log("error:", err);
-      });
+    const translationResult = await languageTranslator.translate(
+      translateParams
+    );
+    const result = translationResult.result.translations[0].translation;
+    res.json(result);
+    if (err) throw err;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 });
 
 router.post("/speak", async (req, res) => {
   try {
     const synthesizeParams = req.body;
-    textToSpeech
-      .synthesize(synthesizeParams)
-      .then(audio => {
-        audio.result.pipe(res);
-      })
-      .catch(err => {
-        // console.log("error:", err);
-      });
+    const audio = await textToSpeech.synthesize(synthesizeParams);
+    await audio.result.pipe(res);
+    if (err) throw err;
   } catch (err) {
     // console.log(err);
   }
