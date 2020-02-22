@@ -40,6 +40,7 @@ const Landing = ({ translate, lang: { preTrans, postTrans } }) => {
         placeholder={"Translated text will appear here..."}
         style={textArea}
         value={postTrans}
+        readOnly
       />
       <button onClick={e => handleClick2(e)}>Speak!</button>
     </Fragment>

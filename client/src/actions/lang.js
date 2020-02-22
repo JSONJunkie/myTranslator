@@ -15,7 +15,7 @@ export const translate = formData => async dispatch => {
       payload: { preTrans: formData, postTrans: res.data }
     });
   } catch (err) {
-    // console.log(err);
+    console.log(err);
   }
 };
 
@@ -36,16 +36,16 @@ export const speak = async postTrans => {
     const res = await axios.post("/api/translator/speak", body, config);
 
     const audio = res.data;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
     const audioCtx = new AudioContext();
     const source = audioCtx.createBufferSource();
-
-    audioCtx.decodeAudioData(audio).then(function(decodedData) {
-      source.buffer = decodedData;
-    });
+    const decodedData = await audioCtx.decodeAudioData(audio);
+    source.buffer = decodedData;
 
     source.connect(audioCtx.destination);
     source.start();
+    console.log("hello");
   } catch (err) {
-    // console.log(err);
+    console.log(err);
   }
 };

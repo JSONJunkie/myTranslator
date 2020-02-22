@@ -34,9 +34,8 @@ router.post("/", async (req, res) => {
     );
     const result = translationResult.result.translations[0].translation;
     res.json(result);
-    if (err) throw err;
   } catch (err) {
-    // console.log(err);
+    console.log(err);
   }
 });
 
@@ -45,9 +44,8 @@ router.post("/speak", async (req, res) => {
     const synthesizeParams = req.body;
     const audio = await textToSpeech.synthesize(synthesizeParams);
     await audio.result.pipe(res);
-    if (err) throw err;
   } catch (err) {
-    // console.log(err);
+    console.log(err);
   }
 });
 
