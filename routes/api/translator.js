@@ -44,14 +44,14 @@ router.post("/", async (req, res) => {
     languageTranslator
       .translate(translateParams)
       .then(translationResult => {
-        console.log(JSON.stringify(translationResult, null, 2));
+        console.log(translationResult);
+        res.json(translationResult.result.translations[0].translation);
       })
       .catch(err => {
         console.log("error:", err);
       });
-    res.json(req.body);
   } catch (err) {
-    // console.log(err);
+    console.log(err);
   }
 });
 

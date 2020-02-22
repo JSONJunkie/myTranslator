@@ -10,7 +10,7 @@ const textArea = {
   height: "20%"
 };
 
-const Landing = ({ translate, lang: { postTrans } }) => {
+const Landing = ({ translate, lang: { preTrans, postTrans } }) => {
   const [text, setText] = useState("");
 
   const onChange = e => {
@@ -24,9 +24,11 @@ const Landing = ({ translate, lang: { postTrans } }) => {
 
   const handleClick2 = e => {
     e.preventDefault();
-    speak(postTrans.text);
+    speak(postTrans);
   };
+  console.log(preTrans);
 
+  console.log(postTrans);
   return (
     <Fragment>
       Welcome to the translator! To begin, enter text below:
@@ -40,7 +42,7 @@ const Landing = ({ translate, lang: { postTrans } }) => {
       <textarea
         placeholder={"Translated text will appear here..."}
         style={textArea}
-        value={postTrans.text}
+        value={postTrans}
       />
       <button onClick={e => handleClick2(e)}>Speak!</button>
     </Fragment>

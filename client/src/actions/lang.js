@@ -5,26 +5,27 @@ export const translate = formData => async dispatch => {
   try {
     const translateParams = {
       text: formData,
-      modelId: "es-en"
+      modelId: "en-es"
     };
     const body = translateParams;
 
     const res = await axios.post("/api/translator", body);
+    console.log(res.data);
     dispatch({
       type: TRANSLATE,
       payload: { preTrans: formData, postTrans: res.data }
     });
   } catch (err) {
-    // console.log(err);
+    console.log(err);
   }
 };
 
-export const speak = async data => {
+export const speak = async postTrans => {
   try {
     const synthesizeParams = {
-      text: data,
+      text: postTrans,
       accept: "audio/wav",
-      voice: "en-US_AllisonVoice"
+      voice: "es-ES_LauraVoice"
     };
 
     const config = {
