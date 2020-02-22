@@ -3,7 +3,11 @@ import { TRANSLATE } from "./types";
 
 export const translate = formData => async dispatch => {
   try {
-    const body = formData;
+    const translateParams = {
+      text: formData,
+      modelId: "es-en"
+    };
+    const body = translateParams;
 
     const res = await axios.post("/api/translator", body);
     dispatch({
@@ -13,9 +17,6 @@ export const translate = formData => async dispatch => {
   } catch (err) {
     // console.log(err);
   }
-
-  //   console.log(res.data);
-  //   console.log(payload);
 };
 
 export const speak = async data => {
@@ -29,25 +30,19 @@ export const speak = async data => {
     const config = {
       responseType: "arraybuffer"
     };
+
     const body = synthesizeParams;
 
     const res = await axios.post("/api/translator/speak", body, config);
-    // console.log(res.data);
-    // console.log(res);
+
     const audio = res.data;
     const audioCtx = new AudioContext();
     const source = audioCtx.createBufferSource();
-    // var source = null;
-    audioCtx.decodeAudioData(audio, function(buffer) {
-      source.buffer = buffer;
 
-      source.connect(audioCtx.destination);
-      // source.loop = true;
+    audioCtx.decodeAudioData(audio).then(function(decodedData) {
+      source.buffer = decodedData;
     });
 
-    console.log(typeof audio);
-
-    // source = buf;
     source.connect(audioCtx.destination);
     source.start();
   } catch (err) {

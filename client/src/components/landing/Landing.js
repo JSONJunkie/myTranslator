@@ -19,7 +19,7 @@ const Landing = ({ translate, lang: { postTrans } }) => {
 
   const handleClick = e => {
     e.preventDefault();
-    translate({ text });
+    translate(text);
   };
 
   const handleClick2 = e => {
@@ -43,9 +43,6 @@ const Landing = ({ translate, lang: { postTrans } }) => {
         value={postTrans.text}
       />
       <button onClick={e => handleClick2(e)}>Speak!</button>
-      <audio controls>
-        <source src={require("../../hello_world.wav")} type="audio/wav" />
-      </audio>
     </Fragment>
   );
 };
