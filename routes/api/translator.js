@@ -1,14 +1,27 @@
+const fs = require("fs");
 const express = require("express");
 const LanguageTranslatorV3 = require("ibm-watson/language-translator/v3");
+const TextToSpeechV1 = require("ibm-watson/text-to-speech/v1");
 const { IamAuthenticator } = require("ibm-watson/auth");
 
 const router = express.Router();
+
 const languageTranslator = new LanguageTranslatorV3({
   version: "2018-05-01",
   authenticator: new IamAuthenticator({
-    apikey: process.env.API_KEY
+    apikey: process.env.TRANSLATE_KEY
   }),
-  url: process.env.API_URL,
+  url: process.env.TRANSLATE_URL,
+  headers: {
+    "X-Watson-Learning-Opt-Out": "true"
+  }
+});
+
+const textToSpeech = new TextToSpeechV1({
+  authenticator: new IamAuthenticator({
+    apikey: process.env.SPEAK_KEY
+  }),
+  url: process.env.SPEAK_URL,
   headers: {
     "X-Watson-Learning-Opt-Out": "true"
   }
@@ -28,6 +41,19 @@ const languageTranslator = new LanguageTranslatorV3({
 //     console.log("error:", err);
 //   });
 
+// const synthesizeParams = {
+//   text: "Hello world",
+//   accept: "audio/wav",
+//   voice: "en-US_AllisonVoice"
+// };
+
+// textToSpeech.synthesize(synthesizeParams)
+//   .then(audio => {
+//     audio.pipe(fs.createWriteStream('hello_world.wav'));
+//   })
+//   .catch(err => {
+//     console.log('error:', err);
+//   });
 const translationResult = {
   status: 200,
   statusText: "OK",
@@ -58,10 +84,44 @@ const translationResult = {
     character_count: 5
   }
 };
+
 router.post("/", async (req, res) => {
   try {
-    // res.json(translationResult);
+    // res.json(translationR esult);
     res.json(req.body);
+  } catch (err) {
+    // console.log(err);
+  }
+});
+
+router.post("/speak", async (req, res) => {
+  try {
+    const synthesizeParams = req.body;
+    textToSpeech
+      .synthesize(synthesizeParams)
+      .then(audio => {
+        // const data = new Buffer(audio.result.buffer);
+        // audio.result.pipe(fs.createWriteStream("./client/src/speak.wav"));
+        // var arr = [];
+        audio.result.pipe(res);
+        // audio.result.on("data", function(chunk) {
+        //   console.log("chunk received");
+        //   arr.push(chunk);
+        // });
+        // audio.result.on("end", function() {
+        //   arr = Buffer.concat(arr); // do something with data
+        //   console.log(arr);
+        //   console.log(arr.length);
+        //   res.set("Content-Type", "application/octet-stream");
+        //   res.send(arr);
+        // });
+        // console.log(arr);
+        // console.log(arr.length);
+      })
+      .catch(err => {
+        console.log("error:", err);
+      });
+    // res.json({ obj: "sound" });
   } catch (err) {
     // console.log(err);
   }
