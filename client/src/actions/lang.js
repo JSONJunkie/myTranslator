@@ -30,7 +30,7 @@ export const speak = async postTrans => {
     };
 
     const config = {
-      responseType: "arraybuffer"
+      responseType: "blob"
     };
 
     const body = synthesizeParams;
@@ -39,7 +39,33 @@ export const speak = async postTrans => {
 
     const audio = res.data;
 
-    playSound(audio);
+    const config2 = {
+      headers: {
+        "Content-Type": "blob.type"
+      }
+    };
+
+    const res2 = await axios.post("/api/translator/listen", audio, config2);
+
+    // playSound(audio);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const listen = async audio => {
+  try {
+    // console.log(audio);
+    // const data = new FormData();
+    // data.append("audio", audio, audio.name);
+    // const body = data;
+    // console.log(data);
+    // const config = {
+    //   headers: { "Content-Type": "multipart/form-data" }
+    // };
+    // const res = await axios.post("/api/translator/listen", body, config);
+    // const audio = res.data;
+    // playSound(audio);
   } catch (err) {
     console.log(err);
   }

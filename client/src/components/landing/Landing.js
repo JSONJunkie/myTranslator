@@ -9,7 +9,7 @@ const textArea = {
   height: "20%"
 };
 
-const Landing = ({ translate, lang: { preTrans, postTrans } }) => {
+const Landing = ({ translate, lang: { postTrans } }) => {
   const [text, setText] = useState("");
 
   const onChange = e => {
