@@ -62,10 +62,16 @@ router.post("/speak", async (req, res) => {
 
 router.post("/listen", async (req, res) => {
   try {
+    // var params = {
+    //   objectMode: true,
+    //   contentType: "audio/mp3",
+    //   model: "es-ES_BroadbandModel",
+    //   maxAlternatives: 1
+    // };
     var params = {
       objectMode: true,
       contentType: "audio/mp3",
-      model: "es-ES_BroadbandModel",
+      model: "en-US_BroadbandModel",
       maxAlternatives: 1
     };
     const recognizeStream = speechToText.recognizeUsingWebSocket(params);
@@ -77,7 +83,7 @@ router.post("/listen", async (req, res) => {
       res.send(event.results[0].alternatives[0].transcript);
     });
     recognizeStream.on("error", function(event) {
-      onEvent("Error:", event);
+      onEvent("Error:", event.raw.data);
     });
     recognizeStream.on("close", function(event) {
       onEvent("Close:", event);

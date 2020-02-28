@@ -77,15 +77,26 @@ export const listen = () => async dispatch => {
         };
       }
       stream = await navigator.mediaDevices.getUserMedia(constraints);
-      // return stream;
-      setTimeout(() => {
-        const tracks = stream.getTracks();
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      console.log("recording starting");
+      let chunks = [];
 
-        tracks.forEach(function(track) {
-          track.stop();
-        });
-      }, 3000);
-      return stream;
+      mediaRecorder.ondataavailable = function(e) {
+        chunks.push(e.data);
+        console.log(e);
+        console.log(e.data);
+        console.log("chunk collected");
+      };
+      setTimeout(() => {
+        mediaRecorder.stop();
+      }, 5000);
+      const blob = (mediaRecorder.onstop = function(e) {
+        const blob = new Blob(chunks, { type: "audio/mp3" });
+        chunks = [];
+        return blob;
+      });
+      return blob;
     }
 
     const res = await axios.post("/api/translator/listen", audio, config);
