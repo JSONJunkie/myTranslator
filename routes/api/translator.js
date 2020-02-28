@@ -1,5 +1,3 @@
-const fs = require("fs");
-const streamBuffers = require("stream-buffers");
 const express = require("express");
 const LanguageTranslatorV3 = require("ibm-watson/language-translator/v3");
 const TextToSpeechV1 = require("ibm-watson/text-to-speech/v1");
@@ -39,33 +37,6 @@ const speechToText = new SpeechToTextV1({
   }
 });
 
-// var params = {
-//   objectMode: true,
-//   contentType: "audio/flac",
-//   model: "es-ES_BroadbandModel",
-//   maxAlternatives: 1
-// };
-
-// // Create the stream.
-// var recognizeStream = speechToText.recognizeUsingWebSocket(params);
-
-// // Pipe in the audio.
-// fs.createReadStream("audio-file.flac").pipe(recognizeStream);
-
-// recognizeStream.on("data", function(event) {
-//   onEvent("Data:", event);
-// });
-// recognizeStream.on("error", function(event) {
-//   onEvent("Error:", event);
-// });
-// recognizeStream.on("close", function(event) {
-//   onEvent("Close:", event);
-// });
-
-// function onEvent(name, event) {
-//   console.log(name, JSON.stringify(event, null, 2));
-// }
-
 router.post("/", async (req, res) => {
   try {
     const translateParams = req.body;
@@ -91,55 +62,19 @@ router.post("/speak", async (req, res) => {
 
 router.post("/listen", async (req, res) => {
   try {
-    // const synthesizeParams = req.body;
-    // const audio = await textToSpeech.synthesize(synthesizeParams);
-    // await audio.result.pipe(res);
     var params = {
       objectMode: true,
       contentType: "audio/mpeg",
       model: "es-ES_BroadbandModel",
       maxAlternatives: 1
     };
-    const arr = [];
-
-    // req.on("data", data => {
-    //   // console.log(data);
-    //   // Create the stream.
-    //   // const myReadStream = fs.createReadStream(data);
-    //   // arr.push(data);
-    //   // Pipe in the audio.
-    // });
-    // req.on("finish", () => {
-    //   // res.send("ok");
-    //   console.log("hi");
-    // });
     const recognizeStream = speechToText.recognizeUsingWebSocket(params);
 
-    req.pipe(recognizeStream);
-
-    // res.send("okok");
-
-    // const buf = Buffer.concat(arr);
-    // Initialize stream
-    // const myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({});
-
-    // With a buffer
-    // myReadableStreamBuffer.put(buf);
-    // await myReadableStreamBuffer.pipe(recognizeStream);
-
-    // req.on("end", () => {
-    //   res.send("ok");
-    // });
-    // console.log(req);
-
-    // const audio = req.body;
-
-    // console.log(audio);
-
-    // console.log(typeof audio);
+    await req.pipe(recognizeStream);
 
     recognizeStream.on("data", function(event) {
       onEvent("Data:", event);
+      res.send(event.results[0].alternatives[0].transcript);
     });
     recognizeStream.on("error", function(event) {
       onEvent("Error:", event);
