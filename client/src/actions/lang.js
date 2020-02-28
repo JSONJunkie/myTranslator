@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { TRANSLATE, SPEAK } from "./types";
+import { TRANSLATE, SPEAK, LISTEN } from "./types";
 import playSound from "../utils/playSound";
 
 export const translate = formData => async dispatch => {
@@ -51,19 +51,20 @@ export const speak = postTrans => async dispatch => {
   }
 };
 
-export const listen = async audio => {
+export const listen = () => async dispatch => {
   try {
-    // console.log(audio);
-    // const data = new FormData();
-    // data.append("audio", audio, audio.name);
-    // const body = data;
-    // console.log(data);
-    // const config = {
-    //   headers: { "Content-Type": "multipart/form-data" }
-    // };
-    // const res = await axios.post("/api/translator/listen", body, config);
-    // const audio = res.data;
-    // playSound(audio);
+    const config = {
+      headers: {
+        "Content-Type": "blob.type"
+      }
+    };
+
+    const res = await axios.post("/api/translator/listen", audio, config);
+
+    dispatch({
+      type: LISTEN,
+      payload: { transcribed: res.data }
+    });
   } catch (err) {
     console.log(err);
   }
