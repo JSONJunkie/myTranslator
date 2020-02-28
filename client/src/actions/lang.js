@@ -46,8 +46,7 @@ export const speak = async postTrans => {
     };
 
     const res2 = await axios.post("/api/translator/listen", audio, config2);
-
-    // playSound(audio);
+    // playSound(audio)
   } catch (err) {
     console.log(err);
   }

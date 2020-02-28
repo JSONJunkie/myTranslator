@@ -96,32 +96,40 @@ router.post("/listen", async (req, res) => {
     // await audio.result.pipe(res);
     var params = {
       objectMode: true,
-      contentType: "audio/flac",
+      contentType: "audio/mpeg",
       model: "es-ES_BroadbandModel",
       maxAlternatives: 1
     };
     const arr = [];
 
-    req.on("data", data => {
-      // console.log(data);
-      // Create the stream.
-      // const myReadStream = fs.createReadStream(data);
-      arr.push(data);
-      console.log("hi");
-      // Pipe in the audio.
-    });
+    // req.on("data", data => {
+    //   // console.log(data);
+    //   // Create the stream.
+    //   // const myReadStream = fs.createReadStream(data);
+    //   // arr.push(data);
+    //   // Pipe in the audio.
+    // });
+    // req.on("finish", () => {
+    //   // res.send("ok");
+    //   console.log("hi");
+    // });
     const recognizeStream = speechToText.recognizeUsingWebSocket(params);
-    const buf = Buffer.concat(arr);
+
+    req.pipe(recognizeStream);
+
+    // res.send("okok");
+
+    // const buf = Buffer.concat(arr);
     // Initialize stream
-    const myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({});
+    // const myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({});
 
     // With a buffer
-    myReadableStreamBuffer.put(buf);
-    await myReadableStreamBuffer.pipe(recognizeStream);
+    // myReadableStreamBuffer.put(buf);
+    // await myReadableStreamBuffer.pipe(recognizeStream);
 
-    req.on("end", () => {
-      res.send("ok");
-    });
+    // req.on("end", () => {
+    //   res.send("ok");
+    // });
     // console.log(req);
 
     // const audio = req.body;
