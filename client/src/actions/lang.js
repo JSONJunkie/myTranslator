@@ -98,6 +98,21 @@ export const listen = () => async dispatch => {
       });
       return blob;
     }
+    // const synthesizeParams = {
+    //   text: "Hello",
+    //   accept: "audio/mp3",
+    //   voice: "es-ES_LauraVoice"
+    // };
+
+    // const config2 = {
+    //   responseType: "blob"
+    // };
+
+    // const body = synthesizeParams;
+
+    // const res2 = await axios.post("/api/translator/speak", body, config2);
+
+    // const audio = res2.data;
 
     const res = await axios.post("/api/translator/listen", audio, config);
 
