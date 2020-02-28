@@ -12,25 +12,22 @@ export default function playSound(audio) {
   } else if (source.noteOn) {
     source.noteOn(0);
   }
-  const bufferSound = audio => {
-    audioCtx.decodeAudioData(
-      audio,
-      buffer => {
-        const source = audioCtx.createBufferSource();
-        source.buffer = buffer;
-        source.connect(audioCtx.destination);
-        if (source.start) {
-          source.start(0);
-        } else if (source.play) {
-          source.play(0);
-        } else if (source.noteOn) {
-          source.noteOn(0);
-        }
-      },
-      function(err) {
-        console.log("Error with decoding audio data" + err);
+  audioCtx.decodeAudioData(
+    audio,
+    buffer => {
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audioCtx.destination);
+      if (source.start) {
+        source.start(0);
+      } else if (source.play) {
+        source.play(0);
+      } else if (source.noteOn) {
+        source.noteOn(0);
       }
-    );
-  };
-  bufferSound(audio);
+    },
+    function(err) {
+      console.log("Error with decoding audio data" + err);
+    }
+  );
 }
