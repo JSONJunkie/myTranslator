@@ -1,4 +1,4 @@
-import { TRANSLATE } from "../actions/types";
+import { TRANSLATE, SPEAK, LISTEN } from "../actions/types";
 
 const initialState = {
   preTrans: "",
@@ -12,6 +12,10 @@ export default function(state = initialState, action) {
     case TRANSLATE:
       const { preTrans, postTrans } = payload;
       return { ...state, preTrans, postTrans };
+    case SPEAK:
+      return state;
+    case LISTEN:
+      return state;
     default:
       return state;
   }

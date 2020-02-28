@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { TRANSLATE } from "./types";
+import { TRANSLATE, SPEAK } from "./types";
 import playSound from "../utils/playSound";
 
 export const translate = formData => async dispatch => {
@@ -12,6 +12,7 @@ export const translate = formData => async dispatch => {
     const body = translateParams;
 
     const res = await axios.post("/api/translator", body);
+
     dispatch({
       type: TRANSLATE,
       payload: { preTrans: formData, postTrans: res.data }
@@ -21,7 +22,7 @@ export const translate = formData => async dispatch => {
   }
 };
 
-export const speak = async postTrans => {
+export const speak = postTrans => async dispatch => {
   try {
     const synthesizeParams = {
       text: postTrans,
@@ -30,7 +31,7 @@ export const speak = async postTrans => {
     };
 
     const config = {
-      responseType: "blob"
+      responseType: "arraybuffer"
     };
 
     const body = synthesizeParams;
@@ -39,14 +40,12 @@ export const speak = async postTrans => {
 
     const audio = res.data;
 
-    const config2 = {
-      headers: {
-        "Content-Type": "blob.type"
-      }
-    };
+    playSound(audio);
 
-    const res2 = await axios.post("/api/translator/listen", audio, config2);
-    // playSound(audio)
+    dispatch({
+      type: SPEAK,
+      payload: { msg: "Playing back translation" }
+    });
   } catch (err) {
     console.log(err);
   }

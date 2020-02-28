@@ -64,7 +64,7 @@ router.post("/listen", async (req, res) => {
   try {
     var params = {
       objectMode: true,
-      contentType: "audio/mpeg",
+      contentType: "audio/mp3",
       model: "es-ES_BroadbandModel",
       maxAlternatives: 1
     };
@@ -84,7 +84,7 @@ router.post("/listen", async (req, res) => {
     });
 
     function onEvent(name, event) {
-      console.log(name, JSON.stringify(event, null, 2));
+      // console.log(name, JSON.stringify(event, null, 2));
     }
   } catch (err) {
     console.log(err);
