@@ -58,6 +58,35 @@ export const listen = () => async dispatch => {
         "Content-Type": "blob.type"
       }
     };
+    const constraints = { audio: true };
+    const audio = await getAudio(constraints);
+    async function getAudio(constraints) {
+      let stream = null;
+      if (navigator.mediaDevices.getUserMedia === undefined) {
+        navigator.mediaDevices.getUserMedia = function(constraints) {
+          const getUserMedia =
+            navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+          if (!getUserMedia) {
+            return Promise.reject(new Error("This browser is not supported"));
+          }
+
+          return new Promise(function(resolve, reject) {
+            getUserMedia.call(navigator, constraints, resolve, reject);
+          });
+        };
+      }
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      // return stream;
+      setTimeout(() => {
+        const tracks = stream.getTracks();
+
+        tracks.forEach(function(track) {
+          track.stop();
+        });
+      }, 3000);
+      return stream;
+    }
 
     const res = await axios.post("/api/translator/listen", audio, config);
 

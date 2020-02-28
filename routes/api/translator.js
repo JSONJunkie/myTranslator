@@ -84,7 +84,7 @@ router.post("/listen", async (req, res) => {
     });
 
     function onEvent(name, event) {
-      // console.log(name, JSON.stringify(event, null, 2));
+      console.log(name, JSON.stringify(event, null, 2));
     }
   } catch (err) {
     console.log(err);
