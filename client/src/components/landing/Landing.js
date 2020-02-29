@@ -29,7 +29,9 @@ const Landing = ({
         if (navigator.mediaDevices.getUserMedia === undefined) {
           navigator.mediaDevices.getUserMedia = legacyGetUserMedia;
         }
-        setStream(await navigator.mediaDevices.getUserMedia(constraints));
+        if (!stream) {
+          setStream(await navigator.mediaDevices.getUserMedia(constraints));
+        }
         if (stream) {
           setMediaRecorder(new MediaRecorder(stream));
         }
