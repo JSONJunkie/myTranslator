@@ -16,6 +16,7 @@ const Landing = ({
   lang: { postTrans, transcribed }
 }) => {
   const [text, setText] = useState("");
+  const [listening, setListening] = useState(false);
 
   const onChange = e => {
     setText(e.target.value);
@@ -33,7 +34,6 @@ const Landing = ({
 
   const handleClick3 = e => {
     e.preventDefault();
-    listen();
   };
 
   return (
@@ -59,7 +59,8 @@ const Landing = ({
         value={transcribed}
         readOnly
       />
-      <button onClick={e => handleClick3(e)}>Listen!</button>
+      {!listening && <button onClick={e => handleClick3(e)}>Listen!</button>}
+      {listening && <button onClick={e => handleClick3(e)}>Stop!</button>}
     </Fragment>
   );
 };
