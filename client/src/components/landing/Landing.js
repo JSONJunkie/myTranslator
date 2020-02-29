@@ -42,12 +42,11 @@ const Landing = ({
   useEffect(() => {
     if (mediaRecorder) {
       mediaRecorder.ondataavailable = function(e) {
-        setChunks(prev => prev.push(e.data));
+        setChunks(prev => [...prev, e.data]);
         console.log("chunk collected");
       };
     }
   }, [mediaRecorder]);
-
   const onChange = e => {
     setText(e.target.value);
   };
