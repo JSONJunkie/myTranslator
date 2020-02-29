@@ -51,59 +51,18 @@ export const speak = postTrans => async dispatch => {
   }
 };
 
-export const listen = () => async dispatch => {
+export const listen = blob => async dispatch => {
   try {
-    const constraints = { audio: true };
-
-    let stream = null;
-    if (navigator.mediaDevices.getUserMedia === undefined) {
-      navigator.mediaDevices.getUserMedia = function(constraints) {
-        const getUserMedia =
-          navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-        if (!getUserMedia) {
-          return Promise.reject(new Error("This browser is not supported"));
-        }
-
-        return new Promise(function(resolve, reject) {
-          getUserMedia.call(navigator, constraints, resolve, reject);
-        });
-      };
-    }
-    setTimeout(() => {
-      mediaRecorder.stop();
-      console.log("recording stopping");
-    }, 4000);
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start(500);
-    console.log("recording starting");
-    let chunks = [];
-    let audio = [];
-
-    mediaRecorder.ondataavailable = function(e) {
-      chunks.push(e.data);
-      console.log("chunk collected");
+    const config = {
+      headers: {
+        "Content-Type": "blob.type"
+      }
     };
-
-    mediaRecorder.onstop = async function(e) {
-      stream.getTracks().forEach(function(track) {
-        track.stop();
-      });
-      const blob = new Blob(chunks, { type: "audio/webm" });
-      console.log("recording stopping");
-      chunks = [];
-      const config = {
-        headers: {
-          "Content-Type": "blob.type"
-        }
-      };
-      const res = await axios.post("/api/translator/listen", blob, config);
-      dispatch({
-        type: LISTEN,
-        payload: { transcribed: res.data }
-      });
-    };
+    const res = await axios.post("/api/translator/listen", blob, config);
+    dispatch({
+      type: LISTEN,
+      payload: { transcribed: res.data }
+    });
   } catch (err) {
     console.log(err);
   }

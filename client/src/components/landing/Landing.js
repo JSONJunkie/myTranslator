@@ -16,13 +16,37 @@ const Landing = ({
   listen,
   lang: { postTrans, transcribed }
 }) => {
-  useEffect(() => {
-    if (navigator.mediaDevices.getUserMedia === undefined) {
-      navigator.mediaDevices.getUserMedia = legacyGetUserMedia;
-    }
-  }, []);
+  let [stream, setStream] = useState(null);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
+  const [chunks, setChunks] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const constraints = { audio: true };
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+          navigator.mediaDevices.getUserMedia = legacyGetUserMedia;
+        }
+        setStream(await navigator.mediaDevices.getUserMedia(constraints));
+        if (stream) {
+          setMediaRecorder(new MediaRecorder(stream));
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [stream]);
+
+  useEffect(() => {
+    if (mediaRecorder) {
+      mediaRecorder.ondataavailable = function(e) {
+        setChunks(prev => prev.push(e.data));
+        console.log("chunk collected");
+      };
+    }
+  }, [mediaRecorder]);
 
   const onChange = e => {
     setText(e.target.value);
@@ -40,6 +64,24 @@ const Landing = ({
 
   const handleClick3 = e => {
     e.preventDefault();
+    setListening(!listening);
+    if (!listening) {
+      // mediaRecorder.start(500);
+      console.log("recording starting");
+    } else {
+      // mediaRecorder.stop();
+      console.log("recording stopping");
+      save();
+    }
+  };
+
+  const save = () => {
+    stream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    const blob = new Blob(chunks, { type: "audio/webm" });
+    console.log("recording saved");
+    setChunks([]);
   };
 
   return (
