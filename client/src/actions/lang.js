@@ -53,54 +53,91 @@ export const speak = postTrans => async dispatch => {
 
 export const listen = () => async dispatch => {
   try {
-    const config = {
-      headers: {
-        "Content-Type": "blob.type"
-      }
-    };
     const constraints = { audio: true };
-    const audio = await getAudio(constraints);
-    async function getAudio(constraints) {
-      let stream = null;
-      if (navigator.mediaDevices.getUserMedia === undefined) {
-        navigator.mediaDevices.getUserMedia = function(constraints) {
-          const getUserMedia =
-            navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-          if (!getUserMedia) {
-            return Promise.reject(new Error("This browser is not supported"));
-          }
+    // let stream = null;
+    if (navigator.mediaDevices.getUserMedia === undefined) {
+      navigator.mediaDevices.getUserMedia = function(constraints) {
+        const getUserMedia =
+          navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-          return new Promise(function(resolve, reject) {
-            getUserMedia.call(navigator, constraints, resolve, reject);
-          });
-        };
-      }
-      stream = await navigator.mediaDevices.getUserMedia(constraints);
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
-      console.log("recording starting");
-      let chunks = [];
+        if (!getUserMedia) {
+          return Promise.reject(new Error("This browser is not supported"));
+        }
 
-      mediaRecorder.ondataavailable = function(e) {
-        chunks.push(e.data);
-        console.log(e);
-        console.log(e.data);
-        console.log("chunk collected");
+        return new Promise(function(resolve, reject) {
+          getUserMedia.call(navigator, constraints, resolve, reject);
+        });
       };
-      setTimeout(() => {
-        mediaRecorder.stop();
-      }, 5000);
-      const blob = (mediaRecorder.onstop = function(e) {
-        const blob = new Blob(chunks, { type: "audio/mp3" });
-        chunks = [];
-        return blob;
-      });
-      return blob;
     }
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then(function(stream) {
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+        console.log("recording starting");
+        let chunks = [];
+
+        mediaRecorder.ondataavailable = function(e) {
+          chunks.push(e.data);
+          console.log("chunk collected");
+        };
+
+        mediaRecorder.onstop = async function(e) {
+          const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+          console.log("recording stopping");
+
+          chunks = [];
+          const audioURL = window.URL.createObjectURL(blob);
+          const config = {
+            headers: {
+              "Content-Type": "blob.type"
+            }
+          };
+
+          const res = await axios.post(
+            "/api/translator/listen",
+            audioURL,
+            config
+          );
+        };
+      })
+      .catch(function(err) {
+        console.log("The following getUserMedia error occured: " + err);
+      });
+    // setTimeout(() => {
+    //   mediaRecorder.stop();
+    //   console.log("recording stopping");
+    // }, 5000);
+    // stream = await navigator.mediaDevices.getUserMedia(constraints);
+    // const mediaRecorder = new MediaRecorder(stream);
+    // mediaRecorder.start();
+    // console.log("recording starting");
+    // let chunks = [];
+
+    // mediaRecorder.ondataavailable = function(e) {
+    //   chunks.push(e.data);
+    //   console.log("chunk collected");
+    // };
+
+    // mediaRecorder.onstop = async function(e) {
+    //   const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+    //   console.log("recording stopping");
+
+    //   chunks = [];
+    //   const audioURL = window.URL.createObjectURL(blob);
+    //   const config = {
+    //     headers: {
+    //       "Content-Type": "blob.type"
+    //     }
+    //   };
+
+    //   const res = await axios.post("/api/translator/listen", audioURL, config);
+    // };
+
     // const synthesizeParams = {
     //   text: "Hello",
-    //   accept: "audio/mp3",
+    //   accept: "audio/ogg",
     //   voice: "es-ES_LauraVoice"
     // };
 
@@ -113,13 +150,18 @@ export const listen = () => async dispatch => {
     // const res2 = await axios.post("/api/translator/speak", body, config2);
 
     // const audio = res2.data;
+    // const config = {
+    //   headers: {
+    //     "Content-Type": "blob.type"
+    //   }
+    // };
+    // const res = await axios.post("/api/translator/listen", audio, config);
 
-    const res = await axios.post("/api/translator/listen", audio, config);
-
-    dispatch({
-      type: LISTEN,
-      payload: { transcribed: res.data }
-    });
+    // dispatch({
+    //   type: LISTEN,
+    //   payload: { transcribed: res.data }
+    // });
+    console.log("change");
   } catch (err) {
     console.log(err);
   }

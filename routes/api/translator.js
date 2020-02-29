@@ -70,7 +70,7 @@ router.post("/listen", async (req, res) => {
     // };
     var params = {
       objectMode: true,
-      contentType: "audio/mpeg",
+      contentType: "audio/ogg;codecs=opus",
       model: "en-US_BroadbandModel",
       maxAlternatives: 1
     };
