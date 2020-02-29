@@ -87,6 +87,9 @@ export const listen = () => async dispatch => {
     };
 
     mediaRecorder.onstop = async function(e) {
+      stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
       const blob = new Blob(chunks, { type: "audio/webm" });
       console.log("recording stopping");
       chunks = [];
