@@ -89,9 +89,9 @@ router.post("/listen", async (req, res) => {
       onEvent("Close:", event);
     });
 
-    function onEvent(name, event) {
-      console.log(name, JSON.stringify(event, null, 2));
-    }
+    // function onEvent(name, event) {
+    //   console.log(name, JSON.stringify(event, null, 2));
+    // }
   } catch (err) {
     console.log(err);
   }

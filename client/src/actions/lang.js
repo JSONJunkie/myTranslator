@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { TRANSLATE, SPEAK, LISTEN } from "./types";
 import playSound from "../utils/playSound";
+import recordAudio from "../utils/recordAudio";
 
 export const translate = formData => async dispatch => {
   try {
@@ -53,79 +54,16 @@ export const speak = postTrans => async dispatch => {
 
 export const listen = () => async dispatch => {
   try {
-    const constraints = { audio: true };
-
-    let stream = null;
-    if (navigator.mediaDevices.getUserMedia === undefined) {
-      navigator.mediaDevices.getUserMedia = function(constraints) {
-        const getUserMedia =
-          navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-        if (!getUserMedia) {
-          return Promise.reject(new Error("This browser is not supported"));
-        }
-
-        return new Promise(function(resolve, reject) {
-          getUserMedia.call(navigator, constraints, resolve, reject);
-        });
-      };
-    }
-    setTimeout(() => {
-      mediaRecorder.stop();
-      console.log("recording stopping");
-    }, 6000);
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start(500);
-    console.log("recording starting");
-    let chunks = [];
-
-    mediaRecorder.ondataavailable = function(e) {
-      chunks.push(e.data);
-      console.log("chunk collected");
-    };
-
-    mediaRecorder.onstop = async function(e) {
-      const blob = new Blob(chunks, { type: "audio/webm" });
-      console.log("recording stopping");
-
-      chunks = [];
-      const config = {
-        headers: {
-          "Content-Type": "blob.type"
-        }
-      };
-
-      const res = await axios.post("/api/translator/listen", blob, config);
-    };
-
-    // const synthesizeParams = {
-    //   text: "Hello",
-    //   accept: "audio/ogg",
-    //   voice: "es-ES_LauraVoice"
-    // };
-
-    // const config2 = {
-    //   responseType: "blob"
-    // };
-
-    // const body = synthesizeParams;
-
-    // const res2 = await axios.post("/api/translator/speak", body, config2);
-
-    // const audio = res2.data;
     // const config = {
     //   headers: {
     //     "Content-Type": "blob.type"
     //   }
     // };
-    // const res = await axios.post("/api/translator/listen", audio, config);
-
+    // const res = await axios.post("/api/translator/listen", blob, config);
     // dispatch({
     //   type: LISTEN,
     //   payload: { transcribed: res.data }
     // });
-    console.log("change");
   } catch (err) {
     console.log(err);
   }
