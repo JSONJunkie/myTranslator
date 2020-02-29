@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import { translate, speak, listen } from "../../actions/lang";
+import legacyGetUserMedia from "../../utils/legacyRecording";
 
 const textArea = {
   width: "60%",
@@ -15,6 +16,11 @@ const Landing = ({
   listen,
   lang: { postTrans, transcribed }
 }) => {
+  useEffect(() => {
+    if (navigator.mediaDevices.getUserMedia === undefined) {
+      navigator.mediaDevices.getUserMedia = legacyGetUserMedia;
+    }
+  }, []);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
 
