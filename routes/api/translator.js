@@ -64,13 +64,13 @@ router.post("/listen", async (req, res) => {
   try {
     // var params = {
     //   objectMode: true,
-    //   contentType: "audio/mpeg",
+    //   contentType: "audio/webm",
     //   model: "es-ES_BroadbandModel",
     //   maxAlternatives: 1
     // };
     var params = {
       objectMode: true,
-      contentType: "audio/ogg;codecs=opus",
+      contentType: "audio/webm",
       model: "en-US_BroadbandModel",
       maxAlternatives: 1
     };
