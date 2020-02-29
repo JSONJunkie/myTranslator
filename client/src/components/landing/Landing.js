@@ -21,6 +21,7 @@ const Landing = ({
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   const [chunks, setChunks] = useState([]);
+  const [blob, setBlob] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -34,6 +35,10 @@ const Landing = ({
         }
         if (stream) {
           setMediaRecorder(new MediaRecorder(stream));
+        }
+        if (blob) {
+          setBlob(null);
+          listen(blob);
         }
       } catch (err) {
         console.log(err);
@@ -80,9 +85,10 @@ const Landing = ({
     stream.getTracks().forEach(function(track) {
       track.stop();
     });
-    const blob = new Blob(chunks, { type: "audio/webm" });
     console.log("recording saved");
     setChunks([]);
+    setStream(null);
+    setBlob(new Blob(chunks, { type: "audio/webm" }));
   };
 
   return (
