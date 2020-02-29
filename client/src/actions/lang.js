@@ -76,7 +76,7 @@ export const listen = () => async dispatch => {
     }, 6000);
     stream = await navigator.mediaDevices.getUserMedia(constraints);
     const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start();
+    mediaRecorder.start(500);
     console.log("recording starting");
     let chunks = [];
 
