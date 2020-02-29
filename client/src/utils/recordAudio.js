@@ -36,6 +36,8 @@ export default async function recordAudio() {
       const blob = new Blob(chunks, { type: "audio/webm" });
       console.log("recording stopping");
       chunks = [];
+      const recordedURL = URL.createObjectURL(blob);
+      localStorage.setItem("recordedAudio", JSON.stringify(recordedURL));
     };
   } catch (err) {
     console.log(err);
