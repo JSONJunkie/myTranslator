@@ -55,7 +55,7 @@ export const listen = () => async dispatch => {
   try {
     const constraints = { audio: true };
 
-    // let stream = null;
+    let stream = null;
     if (navigator.mediaDevices.getUserMedia === undefined) {
       navigator.mediaDevices.getUserMedia = function(constraints) {
         const getUserMedia =
@@ -70,70 +70,34 @@ export const listen = () => async dispatch => {
         });
       };
     }
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then(function(stream) {
-        const mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
-        console.log("recording starting");
-        let chunks = [];
+    setTimeout(() => {
+      mediaRecorder.stop();
+      console.log("recording stopping");
+    }, 6000);
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+    console.log("recording starting");
+    let chunks = [];
 
-        mediaRecorder.ondataavailable = function(e) {
-          chunks.push(e.data);
-          console.log("chunk collected");
-        };
+    mediaRecorder.ondataavailable = function(e) {
+      chunks.push(e.data);
+      console.log("chunk collected");
+    };
 
-        mediaRecorder.onstop = async function(e) {
-          const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-          console.log("recording stopping");
+    mediaRecorder.onstop = async function(e) {
+      const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+      console.log("recording stopping");
 
-          chunks = [];
-          const audioURL = window.URL.createObjectURL(blob);
-          const config = {
-            headers: {
-              "Content-Type": "blob.type"
-            }
-          };
+      chunks = [];
+      const config = {
+        headers: {
+          "Content-Type": "blob.type"
+        }
+      };
 
-          const res = await axios.post(
-            "/api/translator/listen",
-            audioURL,
-            config
-          );
-        };
-      })
-      .catch(function(err) {
-        console.log("The following getUserMedia error occured: " + err);
-      });
-    // setTimeout(() => {
-    //   mediaRecorder.stop();
-    //   console.log("recording stopping");
-    // }, 5000);
-    // stream = await navigator.mediaDevices.getUserMedia(constraints);
-    // const mediaRecorder = new MediaRecorder(stream);
-    // mediaRecorder.start();
-    // console.log("recording starting");
-    // let chunks = [];
-
-    // mediaRecorder.ondataavailable = function(e) {
-    //   chunks.push(e.data);
-    //   console.log("chunk collected");
-    // };
-
-    // mediaRecorder.onstop = async function(e) {
-    //   const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-    //   console.log("recording stopping");
-
-    //   chunks = [];
-    //   const audioURL = window.URL.createObjectURL(blob);
-    //   const config = {
-    //     headers: {
-    //       "Content-Type": "blob.type"
-    //     }
-    //   };
-
-    //   const res = await axios.post("/api/translator/listen", audioURL, config);
-    // };
+      const res = await axios.post("/api/translator/listen", blob, config);
+    };
 
     // const synthesizeParams = {
     //   text: "Hello",
