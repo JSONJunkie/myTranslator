@@ -86,21 +86,21 @@ export const listen = () => async dispatch => {
       console.log("chunk collected");
     };
 
-    mediaRecorder.onstop = function(e) {
+    mediaRecorder.onstop = async function(e) {
       const blob = new Blob(chunks, { type: "audio/webm" });
       console.log("recording stopping");
       chunks = [];
+      const config = {
+        headers: {
+          "Content-Type": "blob.type"
+        }
+      };
+      const res = await axios.post("/api/translator/listen", blob, config);
+      dispatch({
+        type: LISTEN,
+        payload: { transcribed: res.data }
+      });
     };
-    // const config = {
-    //   headers: {
-    //     "Content-Type": "blob.type"
-    //   }
-    // };
-    // const res = await axios.post("/api/translator/listen", blob, config);
-    // dispatch({
-    //   type: LISTEN,
-    //   payload: { transcribed: res.data }
-    // });
   } catch (err) {
     console.log(err);
   }
