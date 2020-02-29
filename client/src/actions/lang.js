@@ -86,7 +86,7 @@ export const listen = () => async dispatch => {
     };
 
     mediaRecorder.onstop = async function(e) {
-      const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+      const blob = new Blob(chunks, { type: "audio/webm" });
       console.log("recording stopping");
 
       chunks = [];
