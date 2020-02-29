@@ -35,10 +35,10 @@ const Landing = ({
         }
         if (stream) {
           setMediaRecorder(new MediaRecorder(stream));
-        }
-        if (blob) {
-          setBlob(null);
-          listen(blob);
+          if (blob) {
+            setBlob(null);
+            listen(blob);
+          }
         }
       } catch (err) {
         console.log(err);
@@ -88,6 +88,7 @@ const Landing = ({
     console.log("recording saved");
     setChunks([]);
     setStream(null);
+    setMediaRecorder(null);
     setBlob(new Blob(chunks, { type: "audio/webm" }));
   };
 
