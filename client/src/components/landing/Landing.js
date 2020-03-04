@@ -37,7 +37,7 @@ const Landing = ({
           setMediaRecorder(new MediaRecorder(stream));
           if (blob) {
             setBlob(null);
-            listen(blob);
+            // listen(blob);
           }
         }
       } catch (err) {
@@ -54,6 +54,7 @@ const Landing = ({
       };
     }
   }, [mediaRecorder]);
+
   const onChange = e => {
     setText(e.target.value);
   };
