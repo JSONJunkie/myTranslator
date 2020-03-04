@@ -51,6 +51,10 @@ const Landing = ({
       mediaRecorder.ondataavailable = function(e) {
         setChunks(prev => [...prev, e.data]);
         console.log("chunk collected");
+        if (mediaRecorder.state === "inactive") {
+          save();
+          console.log("inact");
+        }
       };
     }
   }, [mediaRecorder]);
@@ -78,7 +82,7 @@ const Landing = ({
     } else {
       mediaRecorder.stop();
       console.log("recording stopping");
-      save();
+      // save();
     }
   };
 
