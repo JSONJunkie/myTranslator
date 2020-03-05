@@ -62,18 +62,18 @@ router.post("/speak", async (req, res) => {
 
 router.post("/listen", async (req, res) => {
   try {
-    // var params = {
-    //   objectMode: true,
-    //   contentType: "audio/webm",
-    //   model: "es-ES_BroadbandModel",
-    //   maxAlternatives: 1
-    // };
     var params = {
       objectMode: true,
       contentType: "audio/webm",
-      model: "en-US_BroadbandModel",
+      model: "es-ES_BroadbandModel",
       maxAlternatives: 1
     };
+    // var params = {
+    //   objectMode: true,
+    //   contentType: "audio/webm",
+    //   model: "en-US_BroadbandModel",
+    //   maxAlternatives: 1
+    // };
     const recognizeStream = speechToText.recognizeUsingWebSocket(params);
 
     await req.pipe(recognizeStream);
