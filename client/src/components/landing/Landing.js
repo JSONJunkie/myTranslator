@@ -21,6 +21,7 @@ const Landing = ({
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   const [chunks, setChunks] = useState([]);
+  const [supported, setSupported] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -34,6 +35,9 @@ const Landing = ({
         }
         if (stream) {
           setMediaRecorder(new MediaRecorder(stream));
+        }
+        if (navigator.mediaDevices.getUserMedia) {
+          setSupported(!supported);
         }
       } catch (err) {
         console.log(err);
@@ -87,7 +91,7 @@ const Landing = ({
     }
   };
 
-  return (
+  return supported ? (
     <Fragment>
       Welcome to the translator! To begin, enter text below:
       <textarea
@@ -113,6 +117,8 @@ const Landing = ({
       {!listening && <button onClick={e => handleClick3(e)}>Listen!</button>}
       {listening && <button onClick={e => handleClick3(e)}>Stop!</button>}
     </Fragment>
+  ) : (
+    <Fragment>Browser not supported</Fragment>
   );
 };
 
