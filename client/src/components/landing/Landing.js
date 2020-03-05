@@ -21,7 +21,6 @@ const Landing = ({
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   const [chunks, setChunks] = useState([]);
-  const [blob, setBlob] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -35,12 +34,6 @@ const Landing = ({
         }
         if (stream) {
           setMediaRecorder(new MediaRecorder(stream));
-          if (blob) {
-            console.log(chunks.length);
-            setBlob(null);
-            setChunks([]);
-            // listen(blob);
-          }
         }
       } catch (err) {
         console.log(err);
@@ -53,10 +46,6 @@ const Landing = ({
       mediaRecorder.ondataavailable = function(e) {
         setChunks(prev => [...prev, e.data]);
         console.log("chunk collected");
-        if (mediaRecorder.state === "inactive") {
-          // save();
-          console.log("inact");
-        }
       };
     }
   }, [mediaRecorder]);
@@ -84,18 +73,15 @@ const Landing = ({
     } else {
       mediaRecorder.stop();
       console.log("recording stopping");
-      save();
+      stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+      const blob = new Blob(chunks, { type: "audio/webm" });
+      setChunks([]);
+      setStream(null);
+      setMediaRecorder(null);
+      listen(blob);
     }
-  };
-
-  const save = () => {
-    stream.getTracks().forEach(function(track) {
-      track.stop();
-    });
-    console.log("recording saved");
-    setStream(null);
-    setMediaRecorder(null);
-    setBlob(new Blob(chunks, { type: "audio/webm" }));
   };
 
   return (
