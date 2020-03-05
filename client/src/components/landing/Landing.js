@@ -37,6 +37,7 @@ const Landing = ({
           setMediaRecorder(new MediaRecorder(stream));
           if (blob) {
             setBlob(null);
+            setChunks([]);
             // listen(blob);
           }
         }
@@ -91,7 +92,6 @@ const Landing = ({
       track.stop();
     });
     console.log("recording saved");
-    setChunks([]);
     setStream(null);
     setMediaRecorder(null);
     setBlob(new Blob(chunks, { type: "audio/webm" }));
