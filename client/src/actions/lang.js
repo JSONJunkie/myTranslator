@@ -58,10 +58,26 @@ export const listen = blob => async dispatch => {
         "Content-Type": "blob.type"
       }
     };
-    const res = await axios.post("/api/translator/listen", blob, config);
+    const transcribedRes = await axios.post(
+      "/api/translator/listen",
+      blob,
+      config
+    );
     dispatch({
       type: LISTEN,
-      payload: { transcribed: res.data }
+      payload: { transcribed: transcribedRes.data }
+    });
+    const translateParams = {
+      text: transcribedRes.data,
+      modelId: "es-en"
+    };
+    const body = translateParams;
+
+    const translatedRes = await axios.post("/api/translator", body);
+
+    dispatch({
+      type: TRANSLATE,
+      payload: { preTrans: transcribedRes.data, postTrans: translatedRes.data }
     });
   } catch (err) {
     console.log(err);
