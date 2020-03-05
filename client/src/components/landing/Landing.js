@@ -47,6 +47,9 @@ const Landing = ({
         setChunks(prev => [...prev, e.data]);
         console.log("chunk collected");
       };
+      if (mediaRecorder.state === "inactive") {
+        setChunks([]);
+      }
     }
   }, [mediaRecorder]);
 
