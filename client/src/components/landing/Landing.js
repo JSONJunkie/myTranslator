@@ -68,7 +68,7 @@ const Landing = ({
     e.preventDefault();
     setListening(!listening);
     if (!listening) {
-      mediaRecorder.start(500);
+      mediaRecorder.start(200);
       console.log("recording starting");
     } else {
       mediaRecorder.stop();
