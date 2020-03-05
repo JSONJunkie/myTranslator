@@ -36,6 +36,7 @@ const Landing = ({
         if (stream) {
           setMediaRecorder(new MediaRecorder(stream));
           if (blob) {
+            console.log(chunks.length);
             setBlob(null);
             setChunks([]);
             // listen(blob);
