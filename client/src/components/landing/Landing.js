@@ -83,7 +83,7 @@ const Landing = ({
     } else {
       mediaRecorder.stop();
       console.log("recording stopping");
-      // save();
+      save();
     }
   };
 
