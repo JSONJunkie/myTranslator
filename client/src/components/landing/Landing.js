@@ -2,9 +2,11 @@ import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 
 import { translate, speak, listen } from "../../actions/lang";
 import legacyGetUserMedia from "../../utils/legacyRecording";
@@ -25,6 +27,22 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     marginTop: theme.spacing(1)
   }
+  // container: {
+  //   paddingTop: theme.spacing(4),
+  //   paddingBottom: theme.spacing(4)
+  // }
+  // paper: {
+  //   padding: theme.spacing(2),
+  //   display: "flex",
+  //   overflow: "auto",
+  //   flexDirection: "column"
+  // },
+  // centerFlexibleItem: {
+  //   alignSelf: "center"
+  // },
+  // fixedHeight: {
+  //   height: 260
+  // }
 }));
 
 const Landing = ({
@@ -116,54 +134,66 @@ const Landing = ({
         Welcome to the translator! To begin, enter text below:
         <Paper>
           <form className={classes.form}>
-            <TextField
-              aria-label="untranslated text"
-              name="text"
-              value={text}
-              variant="filled"
-              placeholder="Enter text to be translated here..."
-              fullWidth
-              multiline
-              rows={4}
-              onChange={e => onChange(e)}
-            />
-            <button onClick={e => handleClick(e)}>Translate</button>
-            <TextField
-              aria-label="translated text"
-              name="postTrans"
-              value={postTrans}
-              variant="filled"
-              placeholder="Translated text will appear here..."
-              fullWidth
-              multiline
-              rows={4}
-              inputProps={{ disabled: true }}
-            />
-            <button onClick={e => handleClick2(e)}>Speak!</button>
-            <TextField
-              aria-label="transcribed text"
-              value={transcribed}
-              variant={"filled"}
-              placeholder="Transcribed text will appear here..."
-              fullWidth
-              multiline
-              rows={4}
-              inputProps={{ disabled: true }}
-            />
-            <TextField
-              aria-label="translated transcribed text"
-              value={translatedTranscription}
-              variant={"filled"}
-              placeholder="Translated transcription will appear here..."
-              fullWidth
-              multiline
-              rows={4}
-              inputProps={{ disabled: true }}
-            />
-            {!listening && (
-              <button onClick={e => handleClick3(e)}>Listen!</button>
-            )}
-            {listening && <button onClick={e => handleClick3(e)}>Stop!</button>}
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  aria-label="untranslated text"
+                  name="text"
+                  value={text}
+                  variant="filled"
+                  placeholder="Enter text to be translated here..."
+                  fullWidth
+                  multiline
+                  rows={4}
+                  onChange={e => onChange(e)}
+                />
+                <button onClick={e => handleClick(e)}>Translate</button>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  aria-label="translated text"
+                  name="postTrans"
+                  value={postTrans}
+                  variant="filled"
+                  placeholder="Translated text will appear here..."
+                  fullWidth
+                  multiline
+                  rows={4}
+                  inputProps={{ disabled: true }}
+                />
+                <button onClick={e => handleClick2(e)}>Speak!</button>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  aria-label="transcribed text"
+                  value={transcribed}
+                  variant={"filled"}
+                  placeholder="Transcribed text will appear here..."
+                  fullWidth
+                  multiline
+                  rows={4}
+                  inputProps={{ disabled: true }}
+                />
+                {!listening && (
+                  <button onClick={e => handleClick3(e)}>Listen!</button>
+                )}
+                {listening && (
+                  <button onClick={e => handleClick3(e)}>Stop!</button>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  aria-label="translated transcribed text"
+                  value={translatedTranscription}
+                  variant={"filled"}
+                  placeholder="Translated transcription will appear here..."
+                  fullWidth
+                  multiline
+                  rows={4}
+                  inputProps={{ disabled: true }}
+                />
+              </Grid>
+            </Grid>
           </form>
         </Paper>
       </Container>
