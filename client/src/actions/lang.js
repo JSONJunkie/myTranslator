@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { TRANSLATE, SPEAK, LISTEN } from "./types";
+import { TRANSLATE, SPEAK, LISTEN, TRANSLATE_TRANSCRIPTION } from "./types";
 import playSound from "../utils/playSound";
 
 export const translate = formData => async dispatch => {
@@ -66,8 +66,8 @@ export const listen = blob => async dispatch => {
   //   const body = translateParams;
   //   const translatedRes = await axios.post("/api/translator", body);
   //   dispatch({
-  //     type: TRANSLATE,
-  //     payload: { preTrans: transcribedRes.data, postTrans: translatedRes.data }
+  //     type: TRANSLATE_TRANSCRIPTION,
+  //     payload: { translatedTranscription: translatedRes.data }
   //   });
   // } catch (err) {
   //   console.log(err);
