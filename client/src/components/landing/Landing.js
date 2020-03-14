@@ -6,7 +6,9 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import { useForm } from "react-hook-form";
 
 import { translate, speak, listen } from "../../actions/lang";
 import legacyGetUserMedia from "../../utils/legacyRecording";
@@ -26,6 +28,9 @@ const useStyles = makeStyles(theme => ({
   form: {
     width: "100%",
     marginTop: theme.spacing(1)
+  },
+  submit: {
+    margin: theme.spacing(2, 0, 2)
   }
   // container: {
   //   paddingTop: theme.spacing(4),
@@ -53,12 +58,19 @@ const Landing = ({
 }) => {
   const classes = useStyles();
 
+  const { register, handleSubmit, errors } = useForm();
+
   let [stream, setStream] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   const [chunks, setChunks] = useState([]);
   const [supported, setSupported] = useState(false);
+
+  const [textError, setTextError] = useState("");
+  const [isTextError, setIsTextError] = useState(false);
+  const [translatedError, setTranslatedError] = useState("");
+  const [isTranslatedError, setIsTranslatedError] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -94,12 +106,32 @@ const Landing = ({
     }
   }, [mediaRecorder]);
 
+  useEffect(() => {
+    if (errors.text) {
+      setTextError(errors.text.message);
+      setIsTextError(true);
+    } else {
+      setTextError("");
+      setIsTextError(false);
+    }
+    if (errors.translated) {
+      setTranslatedError(errors.translated.message);
+      setIsTranslatedError(true);
+    } else {
+      setTranslatedError("");
+      setIsTranslatedError(false);
+    }
+  }, [errors.text, errors.translated]);
+
   const onChange = e => {
+    console.log("text:");
+    console.log(text);
+    console.log("e.target.value:");
+    console.log(e.target.value);
     setText(e.target.value);
   };
 
-  const handleClick = e => {
-    e.preventDefault();
+  const handleTranslate = () => {
     translate(text);
   };
 
@@ -133,7 +165,10 @@ const Landing = ({
       <Container className={classes.content}>
         Welcome to the translator! To begin, enter text below:
         <Paper>
-          <form className={classes.form}>
+          <form
+            className={classes.form}
+            onSubmit={handleSubmit(handleTranslate)}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -145,20 +180,50 @@ const Landing = ({
                   fullWidth
                   multiline
                   rows={4}
+                  autoFocus
+                  helperText={textError}
+                  error={isTextError}
+                  inputRef={register({
+                    required: {
+                      value: true,
+                      message: "Please include some text to translate"
+                    },
+                    pattern: {
+                      value: /\b[^\d\W]+\b/,
+                      message: "Please only include words"
+                    }
+                  })}
                   onChange={e => onChange(e)}
                 />
-                <button onClick={e => handleClick(e)}>Translate</button>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Translate
+                </Button>
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   aria-label="translated text"
-                  name="postTrans"
+                  name="translated"
                   value={postTrans}
                   variant="filled"
                   placeholder="Translated text will appear here..."
                   fullWidth
                   multiline
                   rows={4}
+                  helperText={translatedError}
+                  error={isTranslatedError}
+                  inputRef={register({
+                    required: {
+                      value: true,
+                      message: "Please translate some text first"
+                    }
+                  })}
                   inputProps={{ disabled: true }}
                 />
                 <button onClick={e => handleClick2(e)}>Speak!</button>
