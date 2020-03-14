@@ -174,7 +174,6 @@ const Landing = ({
                 <TextField
                   aria-label="untranslated text"
                   name="text"
-                  // value={text}
                   variant="filled"
                   placeholder="Enter text to be translated here..."
                   fullWidth
