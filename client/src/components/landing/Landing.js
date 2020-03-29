@@ -29,19 +29,22 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     marginTop: theme.spacing(1)
   },
-  submit: {
-    margin: theme.spacing(2, 0, 2)
+  outterButton: {
+    padding: theme.spacing(1)
+  },
+  button: {
+    margin: theme.spacing(1, 0, 1)
+  },
+  paper: {
+    padding: theme.spacing(2)
+    // display: "flex",
+    // overflow: "auto",
+    // flexDirection: "column"
   }
   // container: {
   //   paddingTop: theme.spacing(4),
   //   paddingBottom: theme.spacing(4)
   // }
-  // paper: {
-  //   padding: theme.spacing(2),
-  //   display: "flex",
-  //   overflow: "auto",
-  //   flexDirection: "column"
-  // },
   // centerFlexibleItem: {
   //   alignSelf: "center"
   // },
@@ -154,8 +157,10 @@ const Landing = ({
   return supported ? (
     <div className={classes.root}>
       <Container className={classes.content}>
-        Welcome to the translator! To begin, enter text below:
-        <Paper>
+        <Typography component="h1">
+          Welcome to the translator! To begin, enter text below:
+        </Typography>
+        <Paper className={classes.paper}>
           <form
             className={classes.form}
             onSubmit={handleSubmit(handleTranslate)}
@@ -185,15 +190,30 @@ const Landing = ({
                   })}
                   onChange={e => onChange(e)}
                 />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Translate
-                </Button>
+                <Grid container>
+                  <Grid item xs={6} className={classes.outterButton}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.button}
+                    >
+                      Translate
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6} className={classes.outterButton}>
+                    <Button
+                      type="reset"
+                      fullWidth
+                      variant="contained"
+                      color="secondary"
+                      className={classes.button}
+                    >
+                      Clear
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -208,7 +228,19 @@ const Landing = ({
                   rows={4}
                   inputProps={{ disabled: true }}
                 />
-                <button onClick={e => handleClick2(e)}>Speak!</button>
+                <Grid container>
+                  <Grid item xs={12} className={classes.outterButton}>
+                    <Button
+                      onClick={e => handleClick2(e)}
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.button}
+                    >
+                      Speak!
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -222,10 +254,34 @@ const Landing = ({
                   inputProps={{ disabled: true }}
                 />
                 {!listening && (
-                  <button onClick={e => handleClick3(e)}>Listen!</button>
+                  <Grid container>
+                    <Grid item xs={12} className={classes.outterButton}>
+                      <Button
+                        onClick={e => handleClick3(e)}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                      >
+                        Listen!
+                      </Button>
+                    </Grid>
+                  </Grid>
                 )}
                 {listening && (
-                  <button onClick={e => handleClick3(e)}>Stop!</button>
+                  <Grid container>
+                    <Grid item xs={12} className={classes.outterButton}>
+                      <Button
+                        onClick={e => handleClick3(e)}
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                      >
+                        Stop!
+                      </Button>
+                    </Grid>
+                  </Grid>
                 )}
               </Grid>
               <Grid item xs={12} sm={6}>
