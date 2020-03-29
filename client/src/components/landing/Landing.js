@@ -8,6 +8,8 @@ import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import Alert from "@material-ui/lab/Alert";
+import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
 
 import { translate, speak, listen } from "../../actions/lang";
@@ -24,6 +26,12 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     paddingTop: theme.spacing(8),
     overflow: "auto"
+  },
+  alert: {
+    position: "absolute",
+    top: theme.spacing(1),
+    left: theme.spacing(0),
+    right: theme.spacing(0)
   },
   form: {
     width: "100%"
@@ -43,7 +51,7 @@ const Landing = ({
   translate,
   speak,
   listen,
-  lang: { postTrans, transcribed, translatedTranscription }
+  lang: { preTrans, postTrans, transcribed, translatedTranscription }
 }) => {
   const classes = useStyles();
 
@@ -55,6 +63,8 @@ const Landing = ({
   const [listening, setListening] = useState(false);
   const [chunks, setChunks] = useState([]);
   const [supported, setSupported] = useState(false);
+  const [badAlert, setBadAlert] = useState(false);
+  const [goodAlert, setGoodAlert] = useState(false);
 
   const [textError, setTextError] = useState("");
   const [isTextError, setIsTextError] = useState(false);
@@ -115,6 +125,29 @@ const Landing = ({
     translate(text);
   };
 
+  const handleSave = e => {
+    e.preventDefault();
+    window.scrollTo(0, 0);
+    if (preTrans && postTrans) {
+      setGoodAlert(true);
+      setTimeout(function() {
+        setGoodAlert(false);
+      }, 3000);
+      save();
+      clear();
+    } else {
+      setBadAlert(true);
+      setTimeout(function() {
+        setBadAlert(false);
+      }, 3000);
+    }
+  };
+
+  const handleCleanup = e => {
+    e.preventDefault();
+    clear();
+  };
+
   const handleClick2 = e => {
     e.preventDefault();
     speak(postTrans);
@@ -143,10 +176,20 @@ const Landing = ({
   return (
     <div className={classes.root}>
       <Container className={classes.content}>
-        <Typography component="h1">
-          Welcome to the translator! Enter english text below:
-        </Typography>
+        <Container className={classes.alert}>
+          <Collapse in={goodAlert}>
+            <Alert severity="success">Translated text saved!</Alert>
+          </Collapse>
+          <Collapse in={badAlert}>
+            <Alert severity="error">
+              Please execute a translation to save.
+            </Alert>
+          </Collapse>
+        </Container>
         <Paper className={classes.paper}>
+          <Typography component="h1">
+            Welcome to the translator! Enter english text below:
+          </Typography>
           <form
             className={classes.form}
             onSubmit={handleSubmit(handleTranslate)}
@@ -195,6 +238,7 @@ const Landing = ({
                       variant="contained"
                       color="secondary"
                       className={classes.button}
+                      onClick={e => handleCleanup(e)}
                     >
                       Clear
                     </Button>
@@ -215,7 +259,7 @@ const Landing = ({
                   inputProps={{ readOnly: true }}
                 />
                 <Grid container>
-                  <Grid item xs={12} className={classes.outterButton}>
+                  <Grid item xs={6} className={classes.outterButton}>
                     <Button
                       onClick={e => handleClick2(e)}
                       fullWidth
@@ -223,7 +267,19 @@ const Landing = ({
                       color="primary"
                       className={classes.button}
                     >
-                      Speak!
+                      Speak
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6} className={classes.outterButton}>
+                    <Button
+                      onClick={e => handleSave(e)}
+                      fullWidth
+                      variant="contained"
+                      color="secondary"
+                      className={classes.button}
+                      disabled={goodAlert || badAlert}
+                    >
+                      Save
                     </Button>
                   </Grid>
                 </Grid>
@@ -251,7 +307,7 @@ const Landing = ({
                             color="primary"
                             className={classes.button}
                           >
-                            Listen!
+                            Listen
                           </Button>
                         </Grid>
                       </Grid>
