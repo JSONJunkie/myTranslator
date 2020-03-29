@@ -116,10 +116,6 @@ const Landing = ({
   }, [errors.text]);
 
   const onChange = e => {
-    console.log("text:");
-    console.log(text);
-    console.log("e.target.value:");
-    console.log(e.target.value);
     setText(e.target.value);
   };
 
@@ -251,6 +247,7 @@ const Landing = ({
                 <TextField
                   aria-label="translated text"
                   name="translated"
+                  label={preTrans}
                   value={postTrans}
                   variant="filled"
                   placeholder="Translated text will appear here..."
