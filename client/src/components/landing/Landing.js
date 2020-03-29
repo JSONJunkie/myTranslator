@@ -12,7 +12,7 @@ import Alert from "@material-ui/lab/Alert";
 import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
 
-import { translate, speak, listen } from "../../actions/lang";
+import { save, clear, translate, speak, listen } from "../../actions/lang";
 import legacyGetUserMedia from "../../utils/legacyRecording";
 
 const useStyles = makeStyles(theme => ({
@@ -48,6 +48,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Landing = ({
+  save,
+  clear,
   translate,
   speak,
   listen,
@@ -358,6 +360,8 @@ const Landing = ({
 };
 
 Landing.propTypes = {
+  save: PropTypes.func.isRequired,
+  clear: PropTypes.func.isRequired,
   translate: PropTypes.func.isRequired,
   speak: PropTypes.func.isRequired,
   listen: PropTypes.func.isRequired
@@ -367,4 +371,10 @@ const mapStateToProps = state => ({
   lang: state.lang
 });
 
-export default connect(mapStateToProps, { translate, speak, listen })(Landing);
+export default connect(mapStateToProps, {
+  save,
+  clear,
+  translate,
+  speak,
+  listen
+})(Landing);

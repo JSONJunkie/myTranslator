@@ -2,7 +2,9 @@ import {
   TRANSLATE,
   SPEAK,
   LISTEN,
-  TRANSLATE_TRANSCRIPTION
+  TRANSLATE_TRANSCRIPTION,
+  SAVE,
+  CLEAR
 } from "../actions/types";
 
 const initialState = {
@@ -10,6 +12,7 @@ const initialState = {
   postTrans: "",
   transcribed: "",
   translatedTranscription: "",
+  saved: [],
   loading: true
 };
 
@@ -27,6 +30,10 @@ export default function(state = initialState, action) {
     case TRANSLATE_TRANSCRIPTION:
       const { translatedTranscription } = payload;
       return { ...state, translatedTranscription };
+    case SAVE:
+      return { ...state, saved: [...state.saved, payload] };
+    case CLEAR:
+      return { ...state, preTrans: "", postTrans: "" };
     default:
       return state;
   }

@@ -1,7 +1,34 @@
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
-import { TRANSLATE, SPEAK, LISTEN, TRANSLATE_TRANSCRIPTION } from "./types";
+import {
+  TRANSLATE,
+  SPEAK,
+  LISTEN,
+  TRANSLATE_TRANSCRIPTION,
+  SAVE,
+  CLEAR
+} from "./types";
 import playSound from "../utils/playSound";
+
+export const save = ({ preTrans, postTrans }) => dispatch => {
+  try {
+    dispatch({
+      type: SAVE,
+      payload: { transID: uuidv4(), preTrans, postTrans }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const clear = () => dispatch => {
+  try {
+    dispatch({ type: CLEAR });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const translate = formData => async dispatch => {
   try {
