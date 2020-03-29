@@ -22,12 +22,11 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    marginTop: theme.spacing(8),
+    paddingTop: theme.spacing(8),
     overflow: "auto"
   },
   form: {
-    width: "100%",
-    marginTop: theme.spacing(1)
+    width: "100%"
   },
   outterButton: {
     padding: theme.spacing(1)
@@ -37,20 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(2)
-    // display: "flex",
-    // overflow: "auto",
-    // flexDirection: "column"
   }
-  // container: {
-  //   paddingTop: theme.spacing(4),
-  //   paddingBottom: theme.spacing(4)
-  // }
-  // centerFlexibleItem: {
-  //   alignSelf: "center"
-  // },
-  // fixedHeight: {
-  //   height: 260
-  // }
 }));
 
 const Landing = ({
@@ -154,11 +140,11 @@ const Landing = ({
     }
   };
 
-  return supported ? (
+  return (
     <div className={classes.root}>
       <Container className={classes.content}>
         <Typography component="h1">
-          Welcome to the translator! To begin, enter text below:
+          Welcome to the translator! Enter english text below:
         </Typography>
         <Paper className={classes.paper}>
           <form
@@ -226,7 +212,7 @@ const Landing = ({
                   fullWidth
                   multiline
                   rows={4}
-                  inputProps={{ disabled: true }}
+                  inputProps={{ readOnly: true }}
                 />
                 <Grid container>
                   <Grid item xs={12} className={classes.outterButton}>
@@ -242,67 +228,76 @@ const Landing = ({
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  aria-label="transcribed text"
-                  value={transcribed}
-                  variant={"filled"}
-                  placeholder="Transcribed text will appear here..."
-                  fullWidth
-                  multiline
-                  rows={4}
-                  inputProps={{ disabled: true }}
-                />
-                {!listening && (
-                  <Grid container>
-                    <Grid item xs={12} className={classes.outterButton}>
-                      <Button
-                        onClick={e => handleClick3(e)}
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                      >
-                        Listen!
-                      </Button>
-                    </Grid>
+              {supported ? (
+                <Fragment>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      aria-label="transcribed text"
+                      value={transcribed}
+                      variant={"filled"}
+                      placeholder="Transcribed text will appear here..."
+                      fullWidth
+                      multiline
+                      rows={4}
+                      inputProps={{ disabled: true }}
+                    />
+                    {!listening && (
+                      <Grid container>
+                        <Grid item xs={12} className={classes.outterButton}>
+                          <Button
+                            onClick={e => handleClick3(e)}
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                          >
+                            Listen!
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    )}
+                    {listening && (
+                      <Grid container>
+                        <Grid item xs={12} className={classes.outterButton}>
+                          <Button
+                            onClick={e => handleClick3(e)}
+                            fullWidth
+                            variant="contained"
+                            color="secondary"
+                            className={classes.button}
+                          >
+                            Stop!
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    )}
                   </Grid>
-                )}
-                {listening && (
-                  <Grid container>
-                    <Grid item xs={12} className={classes.outterButton}>
-                      <Button
-                        onClick={e => handleClick3(e)}
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                      >
-                        Stop!
-                      </Button>
-                    </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      aria-label="translated transcribed text"
+                      value={translatedTranscription}
+                      variant={"filled"}
+                      placeholder="Translated transcription will appear here..."
+                      fullWidth
+                      multiline
+                      rows={4}
+                      inputProps={{ disabled: true }}
+                    />
                   </Grid>
-                )}
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  aria-label="translated transcribed text"
-                  value={translatedTranscription}
-                  variant={"filled"}
-                  placeholder="Translated transcription will appear here..."
-                  fullWidth
-                  multiline
-                  rows={4}
-                  inputProps={{ disabled: true }}
-                />
-              </Grid>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <Typography component="h1" variant="caption">
+                    Browser not supported. Please use a laptop or computer
+                    browser for audio transcription support.
+                  </Typography>
+                </Fragment>
+              )}
             </Grid>
           </form>
         </Paper>
       </Container>
     </div>
-  ) : (
-    <Fragment>Browser not supported</Fragment>
   );
 };
 
