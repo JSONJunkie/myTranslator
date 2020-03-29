@@ -135,7 +135,7 @@ const Landing = ({
       setTimeout(function() {
         setGoodAlert(false);
       }, 3000);
-      save();
+      save({ preTrans, postTrans });
       clear();
     } else {
       setBadAlert(true);
