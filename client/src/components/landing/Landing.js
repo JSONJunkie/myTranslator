@@ -146,7 +146,6 @@ const Landing = ({
   };
 
   const handleCleanup = e => {
-    e.preventDefault();
     clear();
   };
 
