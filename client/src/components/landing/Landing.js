@@ -69,8 +69,6 @@ const Landing = ({
 
   const [textError, setTextError] = useState("");
   const [isTextError, setIsTextError] = useState(false);
-  const [translatedError, setTranslatedError] = useState("");
-  const [isTranslatedError, setIsTranslatedError] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -114,14 +112,7 @@ const Landing = ({
       setTextError("");
       setIsTextError(false);
     }
-    if (errors.translated) {
-      setTranslatedError(errors.translated.message);
-      setIsTranslatedError(true);
-    } else {
-      setTranslatedError("");
-      setIsTranslatedError(false);
-    }
-  }, [errors.text, errors.translated]);
+  }, [errors.text]);
 
   const onChange = e => {
     console.log("text:");
@@ -215,14 +206,6 @@ const Landing = ({
                   fullWidth
                   multiline
                   rows={4}
-                  helperText={translatedError}
-                  error={isTranslatedError}
-                  inputRef={register({
-                    required: {
-                      value: true,
-                      message: "Please translate some text first"
-                    }
-                  })}
                   inputProps={{ disabled: true }}
                 />
                 <button onClick={e => handleClick2(e)}>Speak!</button>
