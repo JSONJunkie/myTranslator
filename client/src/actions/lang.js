@@ -59,7 +59,7 @@ export const translate = formData => async dispatch => {
   }
 };
 
-export const speak = postTrans => async dispatch => {
+export const textToSpeech = postTrans => async dispatch => {
   try {
     const synthesizeParams = {
       text: postTrans,
@@ -81,23 +81,7 @@ export const speak = postTrans => async dispatch => {
           type: SPEAK,
           payload: { translatedAudio: result }
         });
-
-        function dataURLtoBlob(dataUrl) {
-          var arr = dataUrl.split(","),
-            mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]),
-            n = bstr.length,
-            u8arr = new Uint8Array(n);
-          while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-          }
-          return new Blob([u8arr], { type: mime });
-        }
-        fileReader.onload = function(event) {
-          const result = event.target.result;
-          playSound(result);
-        };
-        fileReader.readAsArrayBuffer(dataURLtoBlob(result));
+        speak(result);
       } catch (err) {
         console.log(err);
       }
@@ -106,6 +90,26 @@ export const speak = postTrans => async dispatch => {
   } catch (err) {
     console.log(err);
   }
+};
+
+export const speak = dataUrl => {
+  const fileReader = new FileReader();
+  function dataURLtoBlob(dataUrl) {
+    var arr = dataUrl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  }
+  fileReader.onload = function(event) {
+    const result = event.target.result;
+    playSound(result);
+  };
+  fileReader.readAsArrayBuffer(dataURLtoBlob(dataUrl));
 };
 
 export const listen = blob => async dispatch => {
