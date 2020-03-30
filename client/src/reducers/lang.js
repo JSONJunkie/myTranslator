@@ -4,7 +4,8 @@ import {
   LISTEN,
   TRANSLATE_TRANSCRIPTION,
   SAVE,
-  CLEAR
+  CLEAR,
+  DELETE_SAVED
 } from "../actions/types";
 
 const initialState = {
@@ -30,6 +31,14 @@ export default function(state = initialState, action) {
     case TRANSLATE_TRANSCRIPTION:
       const { translatedTranscription } = payload;
       return { ...state, translatedTranscription };
+    case DELETE_SAVED:
+      const { transId } = payload;
+      return {
+        ...state,
+        saved: state.saved.filter(translation => {
+          return translation.transId !== transId;
+        })
+      };
     case SAVE:
       return { ...state, saved: [...state.saved, payload] };
     case CLEAR:

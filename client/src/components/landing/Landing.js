@@ -11,11 +11,21 @@ import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Alert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import ClearIcon from "@material-ui/icons/Clear";
 import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
 
-import { save, clear, translate, speak, listen } from "../../actions/lang";
+import {
+  save,
+  deleteSaved,
+  clear,
+  translate,
+  speak,
+  listen
+} from "../../actions/lang";
 import legacyGetUserMedia from "../../utils/legacyRecording";
 
 const useStyles = makeStyles(theme => ({
@@ -61,6 +71,7 @@ const useStyles = makeStyles(theme => ({
 
 const Landing = ({
   save,
+  deleteSaved,
   clear,
   translate,
   speak,
@@ -379,6 +390,14 @@ const Landing = ({
                           primary={translation.preTrans}
                           secondary={translation.postTrans}
                         />
+                        <ListItemSecondaryAction>
+                          <IconButton
+                            onClick={e => deleteSaved(translation.transId)}
+                            aria-label="delete"
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        </ListItemSecondaryAction>
                       </ListItem>
                     ))}
                   </List>
@@ -393,6 +412,7 @@ const Landing = ({
 };
 
 Landing.propTypes = {
+  deleteSaved: PropTypes.func.isRequired,
   save: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   translate: PropTypes.func.isRequired,
@@ -407,6 +427,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   save,
   clear,
+  deleteSaved,
   translate,
   speak,
   listen

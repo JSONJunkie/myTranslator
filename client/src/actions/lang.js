@@ -7,9 +7,21 @@ import {
   LISTEN,
   TRANSLATE_TRANSCRIPTION,
   SAVE,
-  CLEAR
+  CLEAR,
+  DELETE_SAVED
 } from "./types";
 import playSound from "../utils/playSound";
+
+export const deleteSaved = transId => dispatch => {
+  try {
+    dispatch({
+      type: DELETE_SAVED,
+      payload: { transId }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const save = ({ preTrans, postTrans }) => dispatch => {
   try {
