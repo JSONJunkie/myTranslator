@@ -166,7 +166,10 @@ const Landing = ({
       setTimeout(function() {
         setGoodAlert(false);
       }, 3000);
-      save({ preTrans, postTrans });
+      if (!translatedAudio) {
+        handleSpeak(e);
+      }
+      save({ preTrans, postTrans, translatedAudio });
       clear();
     } else {
       setBadAlert(true);
@@ -184,9 +187,15 @@ const Landing = ({
     e.preventDefault();
     if (translatedAudio) {
       speak(translatedAudio);
+      console.log("translated audio found");
     } else {
+      console.log("translated audio NOT found");
       textToSpeech(postTrans);
     }
+  };
+
+  const handleSavedSpeak = data => {
+    speak(data);
   };
 
   const handleClick3 = e => {
@@ -392,14 +401,21 @@ const Landing = ({
         {saved.length > 0 && (
           <Paper className={classes.paperTwo}>
             <Typography variant="subtitle2">Saved Translations:</Typography>
-            <Grid container spacing={2}>
+            <Grid container>
               <Grid item xs={12} md={6}>
                 <div>
-                  <List>
+                  <List disablePadding={true}>
                     {saved
                       .filter((translation, index) => index % 2 === 0)
                       .map(translation => (
-                        <ListItem button key={translation.transId}>
+                        <ListItem
+                          divider={true}
+                          button
+                          key={translation.transId}
+                          onClick={e =>
+                            handleSavedSpeak(translation.translatedAudio)
+                          }
+                        >
                           <ListItemText
                             primary={translation.preTrans}
                             secondary={translation.postTrans}
@@ -419,11 +435,18 @@ const Landing = ({
               </Grid>
               <Grid item xs={12} md={6}>
                 <div>
-                  <List>
+                  <List disablePadding={true}>
                     {saved
                       .filter((translation, index) => index % 2 !== 0)
                       .map(translation => (
-                        <ListItem key={translation.transId}>
+                        <ListItem
+                          divider={true}
+                          button
+                          key={translation.transId}
+                          onClick={e =>
+                            handleSavedSpeak(translation.translatedAudio)
+                          }
+                        >
                           <ListItemText
                             primary={translation.preTrans}
                             secondary={translation.postTrans}

@@ -23,11 +23,11 @@ export const deleteSaved = transId => dispatch => {
   }
 };
 
-export const save = ({ preTrans, postTrans }) => dispatch => {
+export const save = ({ preTrans, postTrans, translatedAudio }) => dispatch => {
   try {
     dispatch({
       type: SAVE,
-      payload: { transId: uuidv4(), preTrans, postTrans }
+      payload: { transId: uuidv4(), preTrans, postTrans, translatedAudio }
     });
   } catch (err) {
     console.log(err);

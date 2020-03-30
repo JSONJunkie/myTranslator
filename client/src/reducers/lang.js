@@ -44,7 +44,7 @@ export default function(state = initialState, action) {
     case SAVE:
       return { ...state, saved: [...state.saved, payload] };
     case CLEAR:
-      return { ...state, preTrans: "", postTrans: "" };
+      return { ...state, preTrans: "", postTrans: "", translatedAudio: "" };
     default:
       return state;
   }
