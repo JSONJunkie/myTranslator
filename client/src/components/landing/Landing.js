@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
-    minHeight: "40vh",
+    minHeight: "35vh",
     overflow: "auto"
   }
 }));
@@ -126,6 +126,10 @@ const Landing = ({
       setIsTextError(false);
     }
   }, [errors.text]);
+
+  useEffect(() => {
+    localStorage.setItem("savedTranslations", JSON.stringify(saved));
+  }, [saved]);
 
   const onChange = e => {
     setText(e.target.value);

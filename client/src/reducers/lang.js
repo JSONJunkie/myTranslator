@@ -12,7 +12,7 @@ const initialState = {
   postTrans: "",
   transcribed: "",
   translatedTranscription: "",
-  saved: [],
+  saved: JSON.parse(localStorage.getItem("savedTranslations")) || [],
   loading: true
 };
 
