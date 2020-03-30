@@ -30,6 +30,7 @@ export const save = ({ preTrans, postTrans, translatedAudio }) => dispatch => {
       type: SAVE,
       payload: { transId: uuidv4(), preTrans, postTrans, translatedAudio }
     });
+    dispatch(clear());
   } catch (err) {
     console.log(err);
   }
@@ -60,7 +61,12 @@ export const translate = formData => async dispatch => {
   }
 };
 
-export const textToSpeech = (postTrans, speaking) => async dispatch => {
+export const textToSpeech = (
+  preTrans,
+  postTrans,
+  translatedAudio,
+  speaking
+) => async dispatch => {
   try {
     const synthesizeParams = {
       text: postTrans,
@@ -82,7 +88,9 @@ export const textToSpeech = (postTrans, speaking) => async dispatch => {
         payload: { translatedAudio: result }
       });
       if (speaking) {
-        dispatch(speak(result));
+        dispatch(speak(preTrans, postTrans, result, speaking));
+      } else {
+        dispatch(save({ preTrans, postTrans, translatedAudio }));
       }
     };
     fileReader.readAsDataURL(blob);
@@ -91,28 +99,37 @@ export const textToSpeech = (postTrans, speaking) => async dispatch => {
   }
 };
 
-export const speak = dataUrl => async dispatch => {
+export const speak = (
+  preTrans,
+  postTrans,
+  dataUrl,
+  speaking
+) => async dispatch => {
   try {
-    const fileReader = new FileReader();
-    function dataURLtoBlob(dataUrl) {
-      var arr = dataUrl.split(","),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
+    if (!speaking) {
+      dispatch(save({ preTrans, postTrans, dataUrl }));
+    } else {
+      const fileReader = new FileReader();
+      function dataURLtoBlob(dataUrl) {
+        var arr = dataUrl.split(","),
+          mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]),
+          n = bstr.length,
+          u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
       }
-      return new Blob([u8arr], { type: mime });
+      fileReader.onload = function(event) {
+        const result = event.target.result;
+        playSound(result);
+      };
+      fileReader.readAsArrayBuffer(dataURLtoBlob(dataUrl));
+      dispatch({
+        type: SPEAK
+      });
     }
-    fileReader.onload = function(event) {
-      const result = event.target.result;
-      playSound(result);
-    };
-    fileReader.readAsArrayBuffer(dataURLtoBlob(dataUrl));
-    dispatch({
-      type: SPEAK
-    });
   } catch (err) {
     console.log(err);
   }

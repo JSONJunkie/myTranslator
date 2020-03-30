@@ -167,11 +167,11 @@ const Landing = ({
       setTimeout(function() {
         setGoodAlert(false);
       }, 3000);
-      if (!translatedAudio) {
-        textToSpeech(postTrans, false);
+      if (translatedAudio) {
+        speak(preTrans, postTrans, translatedAudio, false);
+      } else {
+        textToSpeech(preTrans, postTrans, translatedAudio, false);
       }
-      save({ preTrans, postTrans, translatedAudio });
-      clear();
     } else {
       setBadAlert(true);
       setTimeout(function() {
@@ -187,16 +187,14 @@ const Landing = ({
   const handleSpeak = e => {
     e.preventDefault();
     if (translatedAudio) {
-      speak(translatedAudio);
-      console.log("translated audio found");
+      speak(preTrans, postTrans, translatedAudio, true);
     } else {
-      console.log("translated audio NOT found");
-      textToSpeech(postTrans, true);
+      textToSpeech(preTrans, postTrans, translatedAudio, true);
     }
   };
 
   const handleSavedSpeak = data => {
-    speak(data, true);
+    speak(preTrans, postTrans, data, true);
   };
 
   const handleClick3 = e => {
