@@ -24,18 +24,15 @@ export const deleteSaved = transId => dispatch => {
   }
 };
 
-export const save = ({ preTrans, postTrans, result }) => dispatch => {
+export const save = ({ preTrans, postTrans, translatedAudio }) => dispatch => {
   try {
-    console.log(postTrans);
-    console.log(result);
-
     dispatch({
       type: SAVE,
       payload: {
         transId: uuidv4(),
         preTrans,
         postTrans,
-        translatedAudio: result
+        translatedAudio
       }
     });
     dispatch(clear());
@@ -107,7 +104,7 @@ export const textToSpeech = (
             if (speaking) {
               dispatch(speak(preTrans, postTrans, result, speaking));
             } else {
-              dispatch(save({ preTrans, postTrans, result }));
+              dispatch(save({ preTrans, postTrans, translatedAudio: result }));
             }
           };
           fileReader.readAsDataURL(blob);
@@ -141,12 +138,12 @@ export const textToSpeech = (
 export const speak = (
   preTrans,
   postTrans,
-  dataUrl,
+  translatedAudio,
   speaking
 ) => async dispatch => {
   try {
     if (!speaking) {
-      dispatch(save({ preTrans, postTrans, result: dataUrl }));
+      dispatch(save({ preTrans, postTrans, translatedAudio }));
     } else {
       const fileReader = new FileReader();
       function dataURLtoBlob(dataUrl) {
@@ -164,7 +161,7 @@ export const speak = (
         const result = event.target.result;
         playSound(result);
       };
-      fileReader.readAsArrayBuffer(dataURLtoBlob(dataUrl));
+      fileReader.readAsArrayBuffer(dataURLtoBlob(translatedAudio));
       dispatch({
         type: SPEAK
       });
