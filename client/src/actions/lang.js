@@ -31,7 +31,12 @@ export const save = ({ preTrans, postTrans, result }) => dispatch => {
 
     dispatch({
       type: SAVE,
-      payload: { transId: uuidv4(), preTrans, postTrans, result }
+      payload: {
+        transId: uuidv4(),
+        preTrans,
+        postTrans,
+        translatedAudio: result
+      }
     });
     dispatch(clear());
   } catch (err) {
@@ -90,7 +95,6 @@ export const textToSpeech = (
     xhr.addEventListener(
       "load",
       function() {
-        console.log("yo");
         if (xhr.status === 200) {
           blob = new Blob([xhr.response], { type: "audio/webm" });
 
@@ -100,8 +104,6 @@ export const textToSpeech = (
               type: STORE_TRANSLATED_AUDIO,
               payload: { translatedAudio: result }
             });
-            console.log(postTrans);
-            console.log(result);
             if (speaking) {
               dispatch(speak(preTrans, postTrans, result, speaking));
             } else {
