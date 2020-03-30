@@ -82,7 +82,7 @@ export const textToSpeech = postTrans => async dispatch => {
           type: STORE_TRANSLATED_AUDIO,
           payload: { translatedAudio: result }
         });
-        speak(result);
+        dispatch(speak(result));
       } catch (err) {
         console.log(err);
       }
