@@ -82,8 +82,7 @@ export const textToSpeech = (postTrans, speaking) => async dispatch => {
         payload: { translatedAudio: result }
       });
       if (speaking) {
-        // dispatch(speak(result));
-        speak(result);
+        dispatch(speak(result));
       }
     };
     fileReader.readAsDataURL(blob);
@@ -92,7 +91,7 @@ export const textToSpeech = (postTrans, speaking) => async dispatch => {
   }
 };
 
-export const speak = dataUrl => {
+export const speak = dataUrl => async dispatch => {
   try {
     const fileReader = new FileReader();
     function dataURLtoBlob(dataUrl) {
@@ -111,9 +110,9 @@ export const speak = dataUrl => {
       playSound(result);
     };
     fileReader.readAsArrayBuffer(dataURLtoBlob(dataUrl));
-    // dispatch({
-    //   type: SPEAK
-    // });
+    dispatch({
+      type: SPEAK
+    });
   } catch (err) {
     console.log(err);
   }

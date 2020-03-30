@@ -75,6 +75,7 @@ const Landing = ({
   deleteSaved,
   clear,
   translate,
+  speak,
   textToSpeech,
   listen,
   lang: {
@@ -477,6 +478,7 @@ Landing.propTypes = {
   save: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   translate: PropTypes.func.isRequired,
+  speak: PropTypes.func.isRequired,
   textToSpeech: PropTypes.func.isRequired,
   listen: PropTypes.func.isRequired
 };
