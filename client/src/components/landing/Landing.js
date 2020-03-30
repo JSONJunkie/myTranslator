@@ -170,7 +170,7 @@ const Landing = ({
       if (translatedAudio) {
         speak(preTrans, postTrans, translatedAudio, false);
       } else {
-        textToSpeech(preTrans, postTrans, translatedAudio, false);
+        textToSpeech(preTrans, postTrans, false);
       }
     } else {
       setBadAlert(true);
@@ -189,7 +189,7 @@ const Landing = ({
     if (translatedAudio) {
       speak(preTrans, postTrans, translatedAudio, true);
     } else {
-      textToSpeech(preTrans, postTrans, translatedAudio, true);
+      textToSpeech(preTrans, postTrans, true);
     }
   };
 

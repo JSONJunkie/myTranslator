@@ -24,11 +24,14 @@ export const deleteSaved = transId => dispatch => {
   }
 };
 
-export const save = ({ preTrans, postTrans, translatedAudio }) => dispatch => {
+export const save = ({ preTrans, postTrans, result }) => dispatch => {
   try {
+    console.log(postTrans);
+    console.log(result);
+
     dispatch({
       type: SAVE,
-      payload: { transId: uuidv4(), preTrans, postTrans, translatedAudio }
+      payload: { transId: uuidv4(), preTrans, postTrans, result }
     });
     dispatch(clear());
   } catch (err) {
@@ -64,36 +67,70 @@ export const translate = formData => async dispatch => {
 export const textToSpeech = (
   preTrans,
   postTrans,
-  translatedAudio,
   speaking
 ) => async dispatch => {
   try {
-    const synthesizeParams = {
-      text: postTrans,
-      accept: "audio/mp3",
-      voice: "es-ES_LauraVoice"
-    };
-    const config = {
-      responseType: "arraybuffer"
-    };
-    const body = synthesizeParams;
-    const res = await axios.post("/api/translator/speak", body, config);
-    const audio = res.data;
-    const fileReader = new FileReader();
-    const blob = new Blob([audio], { type: "audio/webm" });
-    fileReader.onload = function(event) {
-      const result = event.target.result;
-      dispatch({
-        type: STORE_TRANSLATED_AUDIO,
-        payload: { translatedAudio: result }
-      });
-      if (speaking) {
-        dispatch(speak(preTrans, postTrans, result, speaking));
-      } else {
-        dispatch(save({ preTrans, postTrans, translatedAudio }));
-      }
-    };
-    fileReader.readAsDataURL(blob);
+    // const synthesizeParams = {
+    //   text: postTrans,
+    //   accept: "audio/mp3",
+    //   voice: "es-ES_LauraVoice"
+    // };
+    // const config = {
+    //   responseType: "arraybuffer"
+    // };
+    // const body = synthesizeParams;
+    // const res = await axios.post("/api/translator/speak", body, config);
+    // const audio = res.data;
+    var xhr = new XMLHttpRequest(),
+      blob,
+      fileReader = new FileReader();
+
+    xhr.open("GET", "https://www.kozco.com/tech/piano2.wav", true);
+    xhr.responseType = "arraybuffer";
+    xhr.addEventListener(
+      "load",
+      function() {
+        console.log("yo");
+        if (xhr.status === 200) {
+          blob = new Blob([xhr.response], { type: "audio/webm" });
+
+          fileReader.onload = function(evt) {
+            var result = evt.target.result;
+            dispatch({
+              type: STORE_TRANSLATED_AUDIO,
+              payload: { translatedAudio: result }
+            });
+            console.log(postTrans);
+            console.log(result);
+            if (speaking) {
+              dispatch(speak(preTrans, postTrans, result, speaking));
+            } else {
+              dispatch(save({ preTrans, postTrans, result }));
+            }
+          };
+          fileReader.readAsDataURL(blob);
+        }
+      },
+      false
+    );
+    xhr.send();
+    // const fileReader = new FileReader();
+    // const blob = new Blob([audio], { type: "audio/webm" });
+    // fileReader.onload = function(event) {
+    //   const result = event.target.result;
+    //   dispatch({
+    //     type: STORE_TRANSLATED_AUDIO,
+    //     payload: { translatedAudio: result }
+    //   });
+    //   console.log(postTrans);
+    //   console.log(result);
+    //   if (speaking) {
+    //     dispatch(speak(preTrans, postTrans, result, speaking));
+    //   } else {
+    //     dispatch(save({ preTrans, postTrans, result }));
+    //   }
+    // };
+    // fileReader.readAsDataURL(blob);
   } catch (err) {
     console.log(err);
   }
