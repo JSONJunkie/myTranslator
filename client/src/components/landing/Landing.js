@@ -8,6 +8,9 @@ import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import Alert from "@material-ui/lab/Alert";
 import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
@@ -18,14 +21,14 @@ import legacyGetUserMedia from "../../utils/legacyRecording";
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    height: "100vh"
+    minHeight: "100vh",
+    width: "100%"
   },
   content: {
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    paddingTop: theme.spacing(8),
-    overflow: "auto"
+    paddingTop: theme.spacing(2)
   },
   alert: {
     position: "absolute",
@@ -43,7 +46,16 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1, 0, 1)
   },
   paper: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1)
+  },
+  paperTwo: {
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    minHeight: "40vh",
+    overflow: "auto"
   }
 }));
 
@@ -53,7 +65,7 @@ const Landing = ({
   translate,
   speak,
   listen,
-  lang: { preTrans, postTrans, transcribed, translatedTranscription }
+  lang: { preTrans, postTrans, transcribed, translatedTranscription, saved }
 }) => {
   const classes = useStyles();
 
@@ -183,10 +195,10 @@ const Landing = ({
             </Alert>
           </Collapse>
         </Container>
+        <Typography component="h1">
+          Welcome to the translator! Enter english text below:
+        </Typography>
         <Paper className={classes.paper}>
-          <Typography component="h1">
-            Welcome to the translator! Enter english text below:
-          </Typography>
           <form
             className={classes.form}
             onSubmit={handleSubmit(handleTranslate)}
@@ -350,6 +362,27 @@ const Landing = ({
             </Grid>
           </form>
         </Paper>
+        {saved.length > 0 && (
+          <Paper className={classes.paperTwo}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle2">Saved Translations:</Typography>
+                <div className={classes.demo}>
+                  <List>
+                    {saved.map(translation => (
+                      <ListItem key={translation.transId}>
+                        <ListItemText
+                          primary={translation.preTrans}
+                          secondary={translation.postTrans}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </div>
+              </Grid>
+            </Grid>
+          </Paper>
+        )}
       </Container>
     </div>
   );

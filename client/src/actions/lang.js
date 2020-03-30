@@ -15,7 +15,7 @@ export const save = ({ preTrans, postTrans }) => dispatch => {
   try {
     dispatch({
       type: SAVE,
-      payload: { transID: uuidv4(), preTrans, postTrans }
+      payload: { transId: uuidv4(), preTrans, postTrans }
     });
   } catch (err) {
     console.log(err);
