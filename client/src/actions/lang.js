@@ -146,7 +146,7 @@ export const speak = (
 ) => async dispatch => {
   try {
     if (!speaking) {
-      dispatch(save({ preTrans, postTrans, dataUrl }));
+      dispatch(save({ preTrans, postTrans, result: dataUrl }));
     } else {
       const fileReader = new FileReader();
       function dataURLtoBlob(dataUrl) {
