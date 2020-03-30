@@ -72,11 +72,37 @@ export const speak = postTrans => async dispatch => {
     const body = synthesizeParams;
     const res = await axios.post("/api/translator/speak", body, config);
     const audio = res.data;
-    playSound(audio);
-    dispatch({
-      type: SPEAK,
-      payload: { msg: "Playing back translation" }
-    });
+    const fileReader = new FileReader();
+    const blob = new Blob([audio], { type: "audio/webm" });
+    fileReader.onload = function(event) {
+      const result = event.target.result;
+      try {
+        dispatch({
+          type: SPEAK,
+          payload: { translatedAudio: result }
+        });
+
+        function dataURLtoBlob(dataUrl) {
+          var arr = dataUrl.split(","),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+          }
+          return new Blob([u8arr], { type: mime });
+        }
+        fileReader.onload = function(event) {
+          const result = event.target.result;
+          playSound(result);
+        };
+        fileReader.readAsArrayBuffer(dataURLtoBlob(result));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fileReader.readAsDataURL(blob);
   } catch (err) {
     console.log(err);
   }

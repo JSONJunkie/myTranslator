@@ -11,6 +11,7 @@ import {
 const initialState = {
   preTrans: "",
   postTrans: "",
+  translatedAudio: "",
   transcribed: "",
   translatedTranscription: "",
   saved: JSON.parse(localStorage.getItem("savedTranslations")) || [],
@@ -24,7 +25,8 @@ export default function(state = initialState, action) {
       const { preTrans, postTrans } = payload;
       return { ...state, preTrans, postTrans };
     case SPEAK:
-      return state;
+      const { translatedAudio } = payload;
+      return { ...state, translatedAudio };
     case LISTEN:
       const { transcribed } = payload;
       return { ...state, transcribed };
