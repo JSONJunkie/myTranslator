@@ -60,7 +60,7 @@ export const translate = formData => async dispatch => {
   }
 };
 
-export const textToSpeech = postTrans => async dispatch => {
+export const textToSpeech = (postTrans, speaking) => async dispatch => {
   try {
     const synthesizeParams = {
       text: postTrans,
@@ -77,14 +77,12 @@ export const textToSpeech = postTrans => async dispatch => {
     const blob = new Blob([audio], { type: "audio/webm" });
     fileReader.onload = function(event) {
       const result = event.target.result;
-      try {
-        dispatch({
-          type: STORE_TRANSLATED_AUDIO,
-          payload: { translatedAudio: result }
-        });
+      dispatch({
+        type: STORE_TRANSLATED_AUDIO,
+        payload: { translatedAudio: result }
+      });
+      if (speaking) {
         dispatch(speak(result));
-      } catch (err) {
-        console.log(err);
       }
     };
     fileReader.readAsDataURL(blob);
@@ -109,7 +107,6 @@ export const speak = dataUrl => dispatch => {
     }
     fileReader.onload = function(event) {
       const result = event.target.result;
-      console.log("spek");
       playSound(result);
     };
     fileReader.readAsArrayBuffer(dataURLtoBlob(dataUrl));

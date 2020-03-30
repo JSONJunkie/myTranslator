@@ -167,7 +167,7 @@ const Landing = ({
         setGoodAlert(false);
       }, 3000);
       if (!translatedAudio) {
-        handleSpeak(e);
+        textToSpeech(postTrans, false);
       }
       save({ preTrans, postTrans, translatedAudio });
       clear();
@@ -190,12 +190,12 @@ const Landing = ({
       console.log("translated audio found");
     } else {
       console.log("translated audio NOT found");
-      textToSpeech(postTrans);
+      textToSpeech(postTrans, true);
     }
   };
 
   const handleSavedSpeak = data => {
-    speak(data);
+    speak(data, true);
   };
 
   const handleClick3 = e => {
