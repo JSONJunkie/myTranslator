@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   TRANSLATE,
   SPEAK,
+  STORE_TRANSLATED_AUDIO,
   LISTEN,
   TRANSLATE_TRANSCRIPTION,
   SAVE,
@@ -78,7 +79,7 @@ export const textToSpeech = postTrans => async dispatch => {
       const result = event.target.result;
       try {
         dispatch({
-          type: SPEAK,
+          type: STORE_TRANSLATED_AUDIO,
           payload: { translatedAudio: result }
         });
         speak(result);
@@ -92,24 +93,32 @@ export const textToSpeech = postTrans => async dispatch => {
   }
 };
 
-export const speak = dataUrl => {
-  const fileReader = new FileReader();
-  function dataURLtoBlob(dataUrl) {
-    var arr = dataUrl.split(","),
-      mime = arr[0].match(/:(.*?);/)[1],
-      bstr = atob(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
+export const speak = dataUrl => dispatch => {
+  try {
+    const fileReader = new FileReader();
+    function dataURLtoBlob(dataUrl) {
+      var arr = dataUrl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
     }
-    return new Blob([u8arr], { type: mime });
+    fileReader.onload = function(event) {
+      const result = event.target.result;
+      console.log("spek");
+      playSound(result);
+    };
+    fileReader.readAsArrayBuffer(dataURLtoBlob(dataUrl));
+    dispatch({
+      type: SPEAK
+    });
+  } catch (err) {
+    console.log(err);
   }
-  fileReader.onload = function(event) {
-    const result = event.target.result;
-    playSound(result);
-  };
-  fileReader.readAsArrayBuffer(dataURLtoBlob(dataUrl));
 };
 
 export const listen = blob => async dispatch => {
