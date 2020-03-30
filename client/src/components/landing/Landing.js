@@ -379,27 +379,53 @@ const Landing = ({
         </Paper>
         {saved.length > 0 && (
           <Paper className={classes.paperTwo}>
+            <Typography variant="subtitle2">Saved Translations:</Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">Saved Translations:</Typography>
-                <div className={classes.demo}>
+                <div>
                   <List>
-                    {saved.map(translation => (
-                      <ListItem key={translation.transId}>
-                        <ListItemText
-                          primary={translation.preTrans}
-                          secondary={translation.postTrans}
-                        />
-                        <ListItemSecondaryAction>
-                          <IconButton
-                            onClick={e => deleteSaved(translation.transId)}
-                            aria-label="delete"
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    ))}
+                    {saved
+                      .filter((translation, index) => index % 2 === 0)
+                      .map(translation => (
+                        <ListItem key={translation.transId}>
+                          <ListItemText
+                            primary={translation.preTrans}
+                            secondary={translation.postTrans}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              onClick={e => deleteSaved(translation.transId)}
+                              aria-label="delete"
+                            >
+                              <ClearIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))}
+                  </List>
+                </div>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <div>
+                  <List>
+                    {saved
+                      .filter((translation, index) => index % 2 !== 0)
+                      .map(translation => (
+                        <ListItem key={translation.transId}>
+                          <ListItemText
+                            primary={translation.preTrans}
+                            secondary={translation.postTrans}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              onClick={e => deleteSaved(translation.transId)}
+                              aria-label="delete"
+                            >
+                              <ClearIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))}
                   </List>
                 </div>
               </Grid>
