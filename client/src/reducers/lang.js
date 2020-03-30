@@ -1,6 +1,7 @@
 import {
   TRANSLATE,
   SPEAK,
+  STORE_TRANSLATED_AUDIO,
   LISTEN,
   TRANSLATE_TRANSCRIPTION,
   SAVE,
@@ -24,7 +25,7 @@ export default function(state = initialState, action) {
     case TRANSLATE:
       const { preTrans, postTrans } = payload;
       return { ...state, preTrans, postTrans };
-    case SPEAK:
+    case STORE_TRANSLATED_AUDIO:
       const { translatedAudio } = payload;
       return { ...state, translatedAudio };
     case LISTEN:
@@ -45,6 +46,7 @@ export default function(state = initialState, action) {
       return { ...state, saved: [...state.saved, payload] };
     case CLEAR:
       return { ...state, preTrans: "", postTrans: "", translatedAudio: "" };
+    case SPEAK:
     default:
       return state;
   }
