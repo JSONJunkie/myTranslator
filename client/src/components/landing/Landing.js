@@ -23,6 +23,7 @@ import {
   deleteSaved,
   clear,
   translate,
+  textToSpeech,
   speak,
   listen
 } from "../../actions/lang";
@@ -74,9 +75,16 @@ const Landing = ({
   deleteSaved,
   clear,
   translate,
-  speak,
+  textToSpeech,
   listen,
-  lang: { preTrans, postTrans, transcribed, translatedTranscription, saved }
+  lang: {
+    preTrans,
+    postTrans,
+    transcribed,
+    translatedTranscription,
+    translatedAudio,
+    saved
+  }
 }) => {
   const classes = useStyles();
 
@@ -172,9 +180,13 @@ const Landing = ({
     clear();
   };
 
-  const handleClick2 = e => {
+  const handleSpeak = e => {
     e.preventDefault();
-    speak(postTrans);
+    if (translatedAudio) {
+      speak(translatedAudio);
+    } else {
+      textToSpeech(postTrans);
+    }
   };
 
   const handleClick3 = e => {
@@ -286,7 +298,7 @@ const Landing = ({
                 <Grid container>
                   <Grid item xs={6} className={classes.outterButton}>
                     <Button
-                      onClick={e => handleClick2(e)}
+                      onClick={e => handleSpeak(e)}
                       fullWidth
                       variant="contained"
                       color="primary"
@@ -387,7 +399,7 @@ const Landing = ({
                     {saved
                       .filter((translation, index) => index % 2 === 0)
                       .map(translation => (
-                        <ListItem key={translation.transId}>
+                        <ListItem button key={translation.transId}>
                           <ListItemText
                             primary={translation.preTrans}
                             secondary={translation.postTrans}
@@ -442,7 +454,7 @@ Landing.propTypes = {
   save: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   translate: PropTypes.func.isRequired,
-  speak: PropTypes.func.isRequired,
+  textToSpeech: PropTypes.func.isRequired,
   listen: PropTypes.func.isRequired
 };
 
@@ -456,5 +468,6 @@ export default connect(mapStateToProps, {
   deleteSaved,
   translate,
   speak,
+  textToSpeech,
   listen
 })(Landing);
