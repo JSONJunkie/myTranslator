@@ -158,6 +158,7 @@ const Landing = ({
 
   const [textError, setTextError] = useState("");
   const [isTextError, setIsTextError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -246,22 +247,29 @@ const Landing = ({
   const handleSave = data => {
     const { transId, preTrans, postTrans, translatedAudio, stored } = data;
     // window.scrollTo(0, 0);
-    if (preTrans && postTrans) {
-      setGoodAlert(true);
-      setTimeout(function() {
-        setGoodAlert(false);
-      }, 3000);
-      if (translatedAudio) {
-        save({ preTrans, postTrans, translatedAudio, transId, stored });
+    try {
+      if (preTrans && postTrans) {
+        setGoodAlert(true);
+        setTimeout(function() {
+          setGoodAlert(false);
+        }, 3000);
+        if (translatedAudio) {
+          save({ preTrans, postTrans, translatedAudio, transId, stored });
+        } else {
+          textToSpeech({
+            preTrans,
+            postTrans,
+            speaking: false,
+            transId,
+            stored
+          });
+        }
+        setIsSaving(true);
       } else {
-        textToSpeech({ preTrans, postTrans, speaking: false, transId, stored });
+        throw "You must make a translation before attempting to save!";
       }
-      setIsSaving(true);
-    } else {
-      setBadAlert(true);
-      setTimeout(function() {
-        setBadAlert(false);
-      }, 3000);
+    } catch (err) {
+      handleError(err);
     }
   };
 
@@ -271,18 +279,22 @@ const Landing = ({
 
   const handleSpeak = data => {
     const { preTrans, postTrans, translatedAudio, transId, stored } = data;
-
-    if (translatedAudio) {
-      speak({
-        preTrans,
-        postTrans,
-        translatedAudio,
-        speaking: true,
-        transId,
-        stored
-      });
-    } else {
-      textToSpeech({ preTrans, postTrans, speaking: true, transId, stored });
+    try {
+      if (!postTrans) throw "You need to make a translation first!";
+      if (translatedAudio) {
+        speak({
+          preTrans,
+          postTrans,
+          translatedAudio,
+          speaking: true,
+          transId,
+          stored
+        });
+      } else {
+        textToSpeech({ preTrans, postTrans, speaking: true, transId, stored });
+      }
+    } catch (err) {
+      handleError(err);
     }
   };
 
@@ -311,6 +323,14 @@ const Landing = ({
     }
   };
 
+  const handleError = err => {
+    setErrorMessage(err);
+    setBadAlert(true);
+    setTimeout(function() {
+      setBadAlert(false);
+    }, 3000);
+  };
+
   return (
     <div className={classes.root}>
       <Container className={classes.content}>
@@ -319,24 +339,10 @@ const Landing = ({
             <Alert severity="success">Translated text saved!</Alert>
           </Collapse>
           <Collapse in={badAlert}>
-            <Alert severity="error">
-              Please execute a translation to save.
-            </Alert>
+            <Alert severity="error">{errorMessage}</Alert>
           </Collapse>
         </Container>
-        <Typography variant="subtitle2">Storage Remaining:</Typography>
-        <div className={classes.storage}>
-          <Grid container>
-            <Grid item xs>
-              <StorageProgress variant="determinate" value={percentage} />
-            </Grid>
-            <Grid item>
-              <Typography className={classes.barText} variant="subtitle2">
-                {Math.ceil((100 - percentage) * 100) / 100}%
-              </Typography>
-            </Grid>
-          </Grid>
-        </div>
+        <Typography variant="h6">Welcome to the Translator! </Typography>
         <Paper className={classes.paper}>
           <form
             className={classes.form}
@@ -351,7 +357,7 @@ const Landing = ({
                   placeholder="Enter text to be translated here..."
                   fullWidth
                   multiline
-                  rows={4}
+                  rows={3}
                   autoFocus
                   helperText={textError}
                   error={isTextError}
@@ -404,7 +410,7 @@ const Landing = ({
                   placeholder="Translated text will appear here..."
                   fullWidth
                   multiline
-                  rows={4}
+                  rows={3}
                   inputProps={{ readOnly: true }}
                 />
                 <Grid container>
@@ -423,6 +429,7 @@ const Landing = ({
                       variant="contained"
                       color="primary"
                       className={classes.button}
+                      disabled={goodAlert || badAlert}
                     >
                       Speak
                     </Button>
@@ -458,7 +465,7 @@ const Landing = ({
                       placeholder="Transcribed text will appear here..."
                       fullWidth
                       multiline
-                      rows={4}
+                      rows={3}
                       inputProps={{ disabled: true }}
                     />
                     {!listening && (
@@ -500,7 +507,7 @@ const Landing = ({
                       placeholder="Translated transcription will appear here..."
                       fullWidth
                       multiline
-                      rows={4}
+                      rows={3}
                       inputProps={{ disabled: true }}
                     />
                   </Grid>
@@ -516,6 +523,21 @@ const Landing = ({
             </Grid>
           </form>
         </Paper>
+        <Typography variant="subtitle2">
+          Storage Remaining: {maxStorage - currentStorage} KB
+        </Typography>
+        <div className={classes.storage}>
+          <Grid container>
+            <Grid item xs>
+              <StorageProgress variant="determinate" value={percentage} />
+            </Grid>
+            <Grid item>
+              <Typography className={classes.barText} variant="subtitle2">
+                {Math.ceil((100 - percentage) * 100) / 100}%
+              </Typography>
+            </Grid>
+          </Grid>
+        </div>
         <Paper className={classes.paperTwo}>
           {translations.length > 0 || saved.length > 0 ? (
             saved.length > 0 ? (
