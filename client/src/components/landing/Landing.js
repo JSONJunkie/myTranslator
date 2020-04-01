@@ -266,7 +266,9 @@ const Landing = ({
         }
         setIsSaving(true);
       } else {
-        throw "You must make a translation before attempting to save!";
+        throw new Error(
+          "You must make a translation before attempting to save!"
+        );
       }
     } catch (err) {
       handleError(err);
@@ -280,7 +282,7 @@ const Landing = ({
   const handleSpeak = data => {
     const { preTrans, postTrans, translatedAudio, transId, stored } = data;
     try {
-      if (!postTrans) throw "You need to make a translation first!";
+      if (!postTrans) throw new Error("You need to make a translation first!");
       if (translatedAudio) {
         speak({
           preTrans,
@@ -324,7 +326,7 @@ const Landing = ({
   };
 
   const handleError = err => {
-    setErrorMessage(err);
+    setErrorMessage(err.message);
     setBadAlert(true);
     setTimeout(function() {
       setBadAlert(false);
