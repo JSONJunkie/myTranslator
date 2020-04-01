@@ -11,6 +11,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
+  transId: "",
   preTrans: "",
   postTrans: "",
   translatedAudio: "",
@@ -26,7 +27,7 @@ export default function(state = initialState, action) {
   switch (type) {
     case TRANSLATE:
       const { preTrans, postTrans } = payload;
-      return { ...state, preTrans, postTrans };
+      return { ...state, transId: payload.transId, preTrans, postTrans };
     case STORE_TRANSLATED_AUDIO:
       const { translatedAudio } = payload;
       return { ...state, translatedAudio };

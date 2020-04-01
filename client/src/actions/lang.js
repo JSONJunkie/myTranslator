@@ -65,16 +65,17 @@ export const translate = formData => async dispatch => {
       text: formData,
       modelId: "en-es"
     };
+    const transId = uuidv4();
     const body = translateParams;
     const res = await axios.post("/api/translator", body);
     dispatch({
       type: TRANSLATE,
-      payload: { preTrans: formData, postTrans: res.data }
+      payload: { transId, preTrans: formData, postTrans: res.data }
     });
     dispatch({
       type: PUSH_TRANS,
       payload: {
-        transId: uuidv4(),
+        transId,
         preTrans: formData,
         postTrans: res.data,
         translatedAudio: "",

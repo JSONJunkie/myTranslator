@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    paddingTop: theme.spacing(2)
+    paddingTop: theme.spacing(1)
   },
   alert: {
     position: "absolute",
@@ -85,7 +85,6 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto"
   },
   storage: {
-    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1)
   }
 }));
@@ -105,7 +104,8 @@ const Landing = ({
     translatedTranscription,
     translatedAudio,
     saved,
-    translations
+    translations,
+    transId
   }
 }) => {
   const classes = useStyles();
@@ -269,16 +269,7 @@ const Landing = ({
     clear();
   };
 
-  const handleSpeak = e => {
-    e.preventDefault();
-    if (translatedAudio) {
-      speak(preTrans, postTrans, translatedAudio, true);
-    } else {
-      textToSpeech(preTrans, postTrans, true);
-    }
-  };
-
-  const handleSavedSpeak = data => {
+  const handleSpeak = data => {
     const { preTrans, postTrans, translatedAudio, transId, stored } = data;
 
     if (translatedAudio) {
@@ -333,9 +324,19 @@ const Landing = ({
             </Alert>
           </Collapse>
         </Container>
-        <Typography component="h1">
-          Welcome to the translator! Enter english text below:
-        </Typography>
+        <Typography variant="subtitle2">Storage Remaining:</Typography>
+        <div className={classes.storage}>
+          <Grid container>
+            <Grid item xs>
+              <StorageProgress variant="determinate" value={percentage} />
+            </Grid>
+            <Grid item>
+              <Typography className={classes.barText} variant="subtitle2">
+                {Math.ceil((100 - percentage) * 100) / 100}%
+              </Typography>
+            </Grid>
+          </Grid>
+        </div>
         <Paper className={classes.paper}>
           <form
             className={classes.form}
@@ -409,7 +410,15 @@ const Landing = ({
                 <Grid container>
                   <Grid item xs={6} className={classes.outterButton}>
                     <Button
-                      onClick={e => handleSpeak(e)}
+                      onClick={e =>
+                        handleSpeak({
+                          transId,
+                          preTrans,
+                          postTrans,
+                          translatedAudio,
+                          stored: "no and i dont want you to"
+                        })
+                      }
                       fullWidth
                       variant="contained"
                       color="primary"
@@ -420,7 +429,14 @@ const Landing = ({
                   </Grid>
                   <Grid item xs={6} className={classes.outterButton}>
                     <Button
-                      onClick={e => handleSave(e)}
+                      onClick={e =>
+                        handleSave({
+                          transId,
+                          preTrans,
+                          postTrans,
+                          translatedAudio
+                        })
+                      }
                       fullWidth
                       variant="contained"
                       color="secondary"
@@ -501,19 +517,6 @@ const Landing = ({
           </form>
         </Paper>
         <Paper className={classes.paperTwo}>
-          <Typography variant="subtitle2">Storage Remaining:</Typography>
-          <div className={classes.storage}>
-            <Grid container>
-              <Grid item xs>
-                <StorageProgress variant="determinate" value={percentage} />
-              </Grid>
-              <Grid item>
-                <Typography className={classes.barText} variant="subtitle2">
-                  {100 - percentage}%
-                </Typography>
-              </Grid>
-            </Grid>
-          </div>
           {translations.length > 0 || saved.length > 0 ? (
             saved.length > 0 ? (
               <Grid container>
@@ -532,7 +535,7 @@ const Landing = ({
                           <ListItemSecondaryAction>
                             <IconButton
                               onClick={e =>
-                                handleSavedSpeak({
+                                handleSpeak({
                                   transId: translation.transId,
                                   preTrans: translation.preTrans,
                                   postTrans: translation.postTrans,
@@ -572,7 +575,7 @@ const Landing = ({
                           <ListItemSecondaryAction>
                             <IconButton
                               onClick={e =>
-                                handleSavedSpeak({
+                                handleSpeak({
                                   transId: translation.transId,
                                   preTrans: translation.preTrans,
                                   postTrans: translation.postTrans,
@@ -642,7 +645,7 @@ const Landing = ({
                             <ListItemSecondaryAction>
                               <IconButton
                                 onClick={e =>
-                                  handleSavedSpeak({
+                                  handleSpeak({
                                     transId: translation.transId,
                                     preTrans: translation.preTrans,
                                     postTrans: translation.postTrans,
@@ -696,7 +699,7 @@ const Landing = ({
                             <ListItemSecondaryAction>
                               <IconButton
                                 onClick={e =>
-                                  handleSavedSpeak({
+                                  handleSpeak({
                                     transId: translation.transId,
                                     preTrans: translation.preTrans,
                                     postTrans: translation.postTrans,
