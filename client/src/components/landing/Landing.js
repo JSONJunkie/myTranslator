@@ -118,7 +118,7 @@ const Landing = ({
   const [badAlert, setBadAlert] = useState(false);
   const [goodAlert, setGoodAlert] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUnstoring, setIsUnstoring] = useState(false);
   const [maxStorage, setMaxStorage] = useState(() => {
     var temp = localStorage.getItem("savedTranslations");
     localStorage.clear();
@@ -202,7 +202,7 @@ const Landing = ({
 
   useEffect(() => {
     localStorage.setItem("savedTranslations", JSON.stringify(saved));
-    if (isSaving) {
+    if (isSaving && saved.length > 0) {
       setCurrentStorage(
         prev =>
           prev +
@@ -214,7 +214,7 @@ const Landing = ({
       setIsSaving(false);
     }
 
-    if (isDeleting && saved.length > 0) {
+    if (isUnstoring && saved.length > 0) {
       setCurrentStorage(
         prev =>
           prev -
@@ -223,12 +223,12 @@ const Landing = ({
           ) /
             100
       );
-      setIsDeleting(false);
+      setIsUnstoring(false);
     }
 
-    if (isDeleting && saved.length === 0) {
+    if (isUnstoring && saved.length === 0) {
       setCurrentStorage(prev => 0);
-      setIsDeleting(false);
+      setIsUnstoring(false);
     }
   }, [saved]);
 
@@ -262,18 +262,18 @@ const Landing = ({
     translate(text);
   };
 
-  const handleSave = e => {
-    e.preventDefault();
-    window.scrollTo(0, 0);
+  const handleSave = data => {
+    const { transId, preTrans, postTrans, translatedAudio, stored } = data;
+    // window.scrollTo(0, 0);
     if (preTrans && postTrans) {
       setGoodAlert(true);
       setTimeout(function() {
         setGoodAlert(false);
       }, 3000);
       if (translatedAudio) {
-        speak(preTrans, postTrans, translatedAudio, false);
+        save({ preTrans, postTrans, translatedAudio, transId, stored });
       } else {
-        textToSpeech(preTrans, postTrans, false);
+        textToSpeech({ preTrans, postTrans, speaking: false, transId, stored });
       }
       setIsSaving(true);
     } else {
@@ -298,12 +298,25 @@ const Landing = ({
   };
 
   const handleSavedSpeak = data => {
-    speak(preTrans, postTrans, data, true);
+    const { preTrans, postTrans, translatedAudio, transId, stored } = data;
+
+    if (translatedAudio) {
+      speak({
+        preTrans,
+        postTrans,
+        translatedAudio,
+        speaking: true,
+        transId,
+        stored
+      });
+    } else {
+      textToSpeech({ preTrans, postTrans, speaking: true, transId, stored });
+    }
   };
 
-  const handleDelete = data => {
+  const handleUnstore = data => {
     deleteSaved(data);
-    setIsDeleting(true);
+    setIsUnstoring(true);
   };
 
   const handleClick3 = e => {
@@ -520,145 +533,202 @@ const Landing = ({
               </Grid>
             </Grid>
           </div>
-          {translations.length > 0 ||
-            (saved.length > 0 &&
-              (saved.length > 0 ? (
-                <Grid container>
-                  <Grid item xs={12} md={6}>
-                    <div>
-                      <List disablePadding={true}>
-                        {saved.map(translation => (
-                          <ListItem
-                            divider={true}
-                            button
-                            key={translation.transId}
-                            onClick={e =>
-                              handleSavedSpeak(translation.translatedAudio)
-                            }
-                          >
+          {(translations.length > 0 || saved.length > 0) &&
+            (saved.length > 0 ? (
+              <Grid container>
+                <Grid item xs={12} md={6}>
+                  <div>
+                    <List disablePadding={true}>
+                      {saved.map(translation => (
+                        <ListItem divider={true} key={translation.transId}>
+                          <ListItemText
+                            primary={translation.preTrans}
+                            secondary={translation.postTrans}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              onClick={e =>
+                                handleSavedSpeak({
+                                  transId: translation.transId,
+                                  preTrans: translation.preTrans,
+                                  postTrans: translation.postTrans,
+                                  translatedAudio: translation.translatedAudio,
+                                  stored: translation.stored
+                                })
+                              }
+                              aria-label="play"
+                            >
+                              <VolumeUpIcon />
+                            </IconButton>
+                            <IconButton
+                              onClick={e => handleUnstore(translation.transId)}
+                              aria-label="unstore"
+                            >
+                              <LockIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </div>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <div>
+                    <List disablePadding={true}>
+                      {translations.map(translation => (
+                        <ListItem divider={true} key={translation.transId}>
+                          <ListItemText
+                            primary={translation.preTrans}
+                            secondary={translation.postTrans}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              onClick={e =>
+                                handleSavedSpeak({
+                                  transId: translation.transId,
+                                  preTrans: translation.preTrans,
+                                  postTrans: translation.postTrans,
+                                  translatedAudio: translation.translatedAudio,
+                                  stored: translation.stored
+                                })
+                              }
+                              aria-label="play"
+                            >
+                              <VolumeUpIcon />
+                            </IconButton>
+                            {translation.stored ? (
+                              <IconButton
+                                onClick={e =>
+                                  handleUnstore(translation.transId)
+                                }
+                                aria-label="unstore"
+                              >
+                                <LockIcon />
+                              </IconButton>
+                            ) : (
+                              <IconButton
+                                onClick={e =>
+                                  handleSave({
+                                    transId: translation.transId,
+                                    preTrans: translation.preTrans,
+                                    postTrans: translation.postTrans,
+                                    translatedAudio:
+                                      translation.translatedAudio,
+                                    stored: translation.stored
+                                  })
+                                }
+                                aria-label="save"
+                              >
+                                <LockOpenIcon />
+                              </IconButton>
+                            )}
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </div>
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid container>
+                <Grid item xs={12} md={6}>
+                  <div>
+                    <List disablePadding={true}>
+                      {translations
+                        .filter((translation, index) => index % 2 === 0)
+                        .map(translation => (
+                          <ListItem divider={true} key={translation.transId}>
                             <ListItemText
                               primary={translation.preTrans}
                               secondary={translation.postTrans}
                             />
                             <ListItemSecondaryAction>
                               <IconButton
-                                onClick={e => handleDelete(translation.transId)}
-                                aria-label="delete"
+                                onClick={e =>
+                                  handleSavedSpeak({
+                                    transId: translation.transId,
+                                    preTrans: translation.preTrans,
+                                    postTrans: translation.postTrans,
+                                    translatedAudio:
+                                      translation.translatedAudio,
+                                    stored: translation.stored
+                                  })
+                                }
+                                aria-label="play"
                               >
                                 <VolumeUpIcon />
                               </IconButton>
                               <IconButton
-                                onClick={e => handleDelete(translation.transId)}
-                                aria-label="delete"
-                              >
-                                <LockIcon />
-                              </IconButton>
-                            </ListItemSecondaryAction>
-                          </ListItem>
-                        ))}
-                      </List>
-                    </div>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <div>
-                      <List disablePadding={true}>
-                        {translations.map(translation => (
-                          <ListItem
-                            divider={true}
-                            button
-                            key={translation.transId}
-                            onClick={e =>
-                              handleSavedSpeak(translation.translatedAudio)
-                            }
-                          >
-                            <ListItemText
-                              primary={translation.preTrans}
-                              secondary={translation.postTrans}
-                            />
-                            <ListItemSecondaryAction>
-                              <IconButton
-                                onClick={e => deleteSaved(translation.transId)}
-                                aria-label="delete"
+                                onClick={e =>
+                                  handleSave({
+                                    transId: translation.transId,
+                                    preTrans: translation.preTrans,
+                                    postTrans: translation.postTrans,
+                                    translatedAudio:
+                                      translation.translatedAudio,
+                                    stored: translation.stored
+                                  })
+                                }
+                                aria-label="save"
                               >
                                 <LockOpenIcon />
                               </IconButton>
                             </ListItemSecondaryAction>
                           </ListItem>
                         ))}
-                      </List>
-                    </div>
-                  </Grid>
+                    </List>
+                  </div>
                 </Grid>
-              ) : (
-                <Grid container>
-                  <Grid item xs={12} md={6}>
-                    <div>
-                      <List disablePadding={true}>
-                        {translations
-                          .filter((translation, index) => index % 2 === 0)
-                          .map(translation => (
-                            <ListItem
-                              divider={true}
-                              button
-                              key={translation.transId}
-                              onClick={e =>
-                                handleSavedSpeak(translation.translatedAudio)
-                              }
-                            >
-                              <ListItemText
-                                primary={translation.preTrans}
-                                secondary={translation.postTrans}
-                              />
-                              <ListItemSecondaryAction>
-                                <IconButton
-                                  onClick={e =>
-                                    handleDelete(translation.transId)
-                                  }
-                                  aria-label="delete"
-                                >
-                                  <LockOpenIcon />
-                                </IconButton>
-                              </ListItemSecondaryAction>
-                            </ListItem>
-                          ))}
-                      </List>
-                    </div>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <div>
-                      <List disablePadding={true}>
-                        {translations
-                          .filter((translation, index) => index % 2 !== 0)
-                          .map(translation => (
-                            <ListItem
-                              divider={true}
-                              button
-                              key={translation.transId}
-                              onClick={e =>
-                                handleSavedSpeak(translation.translatedAudio)
-                              }
-                            >
-                              <ListItemText
-                                primary={translation.preTrans}
-                                secondary={translation.postTrans}
-                              />
-                              <ListItemSecondaryAction>
-                                <IconButton
-                                  onClick={e =>
-                                    deleteSaved(translation.transId)
-                                  }
-                                  aria-label="delete"
-                                >
-                                  <LockOpenIcon />
-                                </IconButton>
-                              </ListItemSecondaryAction>
-                            </ListItem>
-                          ))}
-                      </List>
-                    </div>
-                  </Grid>
+                <Grid item xs={12} md={6}>
+                  <div>
+                    <List disablePadding={true}>
+                      {translations
+                        .filter((translation, index) => index % 2 !== 0)
+                        .map(translation => (
+                          <ListItem divider={true} key={translation.transId}>
+                            <ListItemText
+                              primary={translation.preTrans}
+                              secondary={translation.postTrans}
+                            />
+                            <ListItemSecondaryAction>
+                              <IconButton
+                                onClick={e =>
+                                  handleSavedSpeak({
+                                    transId: translation.transId,
+                                    preTrans: translation.preTrans,
+                                    postTrans: translation.postTrans,
+                                    translatedAudio:
+                                      translation.translatedAudio,
+                                    stored: translation.stored
+                                  })
+                                }
+                                aria-label="play"
+                              >
+                                <VolumeUpIcon />
+                              </IconButton>
+                              <IconButton
+                                onClick={e =>
+                                  handleSave({
+                                    transId: translation.transId,
+                                    preTrans: translation.preTrans,
+                                    postTrans: translation.postTrans,
+                                    translatedAudio:
+                                      translation.translatedAudio,
+                                    stored: translation.stored
+                                  })
+                                }
+                                aria-label="save"
+                              >
+                                <LockOpenIcon />
+                              </IconButton>
+                            </ListItemSecondaryAction>
+                          </ListItem>
+                        ))}
+                    </List>
+                  </div>
                 </Grid>
-              )))}
+              </Grid>
+            ))}
         </Paper>
       </Container>
     </div>

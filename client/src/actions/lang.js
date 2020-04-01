@@ -25,18 +25,27 @@ export const deleteSaved = transId => dispatch => {
   }
 };
 
-export const save = ({ preTrans, postTrans, translatedAudio }) => dispatch => {
+export const save = ({
+  preTrans,
+  postTrans,
+  translatedAudio,
+  transId,
+  stored
+}) => dispatch => {
   try {
-    dispatch({
-      type: SAVE,
-      payload: {
-        transId: uuidv4(),
-        preTrans,
-        postTrans,
-        translatedAudio
-      }
-    });
-    dispatch(clear());
+    if (!stored) {
+      dispatch({
+        type: SAVE,
+        payload: {
+          transId,
+          preTrans,
+          postTrans,
+          translatedAudio,
+          stored: true
+        }
+      });
+      dispatch(clear());
+    }
   } catch (err) {
     console.log(err);
   }
@@ -68,7 +77,8 @@ export const translate = formData => async dispatch => {
         transId: uuidv4(),
         preTrans: formData,
         postTrans: res.data,
-        translatedAudio: ""
+        translatedAudio: "",
+        stored: false
       }
     });
   } catch (err) {
@@ -76,11 +86,8 @@ export const translate = formData => async dispatch => {
   }
 };
 
-export const textToSpeech = (
-  preTrans,
-  postTrans,
-  speaking
-) => async dispatch => {
+export const textToSpeech = data => async dispatch => {
+  const { preTrans, postTrans, speaking, transId, stored } = data;
   try {
     var xhr = new XMLHttpRequest(),
       blob,
@@ -101,9 +108,26 @@ export const textToSpeech = (
               payload: { translatedAudio: result }
             });
             if (speaking) {
-              dispatch(speak(preTrans, postTrans, result, speaking));
+              dispatch(
+                speak({
+                  preTrans,
+                  postTrans,
+                  translatedAudio: result,
+                  speaking,
+                  transId,
+                  stored
+                })
+              );
             } else {
-              dispatch(save({ preTrans, postTrans, translatedAudio: result }));
+              dispatch(
+                save({
+                  preTrans,
+                  postTrans,
+                  translatedAudio: result,
+                  transId,
+                  stored
+                })
+              );
             }
           };
           fileReader.readAsDataURL(blob);
@@ -143,15 +167,18 @@ export const textToSpeech = (
   }
 };
 
-export const speak = (
-  preTrans,
-  postTrans,
-  translatedAudio,
-  speaking
-) => async dispatch => {
+export const speak = data => async dispatch => {
+  const {
+    preTrans,
+    postTrans,
+    translatedAudio,
+    speaking,
+    transId,
+    stored
+  } = data;
   try {
     if (!speaking) {
-      dispatch(save({ preTrans, postTrans, translatedAudio }));
+      dispatch(save({ preTrans, postTrans, translatedAudio, transId, stored }));
     } else {
       const fileReader = new FileReader();
       function dataURLtoBlob(dataUrl) {
@@ -173,6 +200,7 @@ export const speak = (
       dispatch({
         type: SPEAK
       });
+      dispatch(save({ preTrans, postTrans, translatedAudio, transId, stored }));
     }
   } catch (err) {
     console.log(err);

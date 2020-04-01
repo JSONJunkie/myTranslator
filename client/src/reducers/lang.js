@@ -42,10 +42,27 @@ export default function(state = initialState, action) {
         ...state,
         saved: state.saved.filter(translation => {
           return translation.transId !== transId;
+        }),
+        translations: state.translations.map(translation => {
+          if (translation.transId === transId) {
+            return { ...translation, stored: false };
+          } else return translation;
         })
       };
     case SAVE:
-      return { ...state, saved: [...state.saved, payload] };
+      return {
+        ...state,
+        saved: [...state.saved, payload],
+        translations: state.translations.map(translation => {
+          if (translation.transId === payload.transId) {
+            return {
+              ...translation,
+              stored: true,
+              translatedAudio: payload.translatedAudio
+            };
+          } else return translation;
+        })
+      };
     case PUSH_TRANS:
       return { ...state, translations: [...state.translations, payload] };
     case CLEAR:
