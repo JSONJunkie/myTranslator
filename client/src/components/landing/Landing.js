@@ -60,6 +60,9 @@ const useStyles = makeStyles(theme => ({
   barText: {
     marginLeft: theme.spacing(1)
   },
+  barTextHidden: {
+    color: theme.palette.background.paper
+  },
   form: {
     width: "100%"
   },
@@ -230,29 +233,7 @@ const Landing = ({
       setCurrentStorage(prev => 0);
       setIsUnstoring(false);
     }
-  }, [saved]);
-
-  useEffect(() => {
-    // var total = 0,
-    //   entryLength,
-    //   entry;
-    // for (entry in localStorage) {
-    //   if (!localStorage.hasOwnProperty(entry)) {
-    //     continue;
-    //   }
-    //   entryLength = (localStorage[entry].length + entry.length) * 2;
-    //   total += entryLength;
-    // }
-    // return (total / 1024).toFixed(2);
-    // console.log(saved.length);
-    // console.log(saved[saved.length - 1]);
-    // console.log(maxStorage);
-    // console.log(currentStorage);
-    // console.log(percentage);
-    // console.log(
-    //   ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024).toFixed(2)
-    // );
-  }, [saved]);
+  }, [saved, isSaving, isUnstoring]);
 
   const onChange = e => {
     setText(e.target.value);
@@ -533,14 +514,17 @@ const Landing = ({
               </Grid>
             </Grid>
           </div>
-          {(translations.length > 0 || saved.length > 0) &&
-            (saved.length > 0 ? (
+          {translations.length > 0 || saved.length > 0 ? (
+            saved.length > 0 ? (
               <Grid container>
                 <Grid item xs={12} md={6}>
+                  <Typography className={classes.barText} variant="subtitle2">
+                    Stored:
+                  </Typography>
                   <div>
                     <List disablePadding={true}>
                       {saved.map(translation => (
-                        <ListItem divider={true} key={translation.transId}>
+                        <ListItem key={translation.transId}>
                           <ListItemText
                             primary={translation.preTrans}
                             secondary={translation.postTrans}
@@ -572,11 +556,15 @@ const Landing = ({
                     </List>
                   </div>
                 </Grid>
+
                 <Grid item xs={12} md={6}>
+                  <Typography className={classes.barText} variant="subtitle2">
+                    History:
+                  </Typography>
                   <div>
                     <List disablePadding={true}>
                       {translations.map(translation => (
-                        <ListItem divider={true} key={translation.transId}>
+                        <ListItem key={translation.transId}>
                           <ListItemText
                             primary={translation.preTrans}
                             secondary={translation.postTrans}
@@ -631,13 +619,22 @@ const Landing = ({
               </Grid>
             ) : (
               <Grid container>
+                <Grid item xs={12}>
+                  <Typography className={classes.barText} variant="subtitle2">
+                    Stored:
+                  </Typography>
+                </Grid>
+
                 <Grid item xs={12} md={6}>
+                  <Typography className={classes.barText} variant="subtitle2">
+                    History:
+                  </Typography>
                   <div>
                     <List disablePadding={true}>
                       {translations
                         .filter((translation, index) => index % 2 === 0)
                         .map(translation => (
-                          <ListItem divider={true} key={translation.transId}>
+                          <ListItem key={translation.transId}>
                             <ListItemText
                               primary={translation.preTrans}
                               secondary={translation.postTrans}
@@ -680,12 +677,18 @@ const Landing = ({
                   </div>
                 </Grid>
                 <Grid item xs={12} md={6}>
+                  <Typography
+                    className={classes.barTextHidden}
+                    variant="subtitle2"
+                  >
+                    History:
+                  </Typography>
                   <div>
                     <List disablePadding={true}>
                       {translations
                         .filter((translation, index) => index % 2 !== 0)
                         .map(translation => (
-                          <ListItem divider={true} key={translation.transId}>
+                          <ListItem key={translation.transId}>
                             <ListItemText
                               primary={translation.preTrans}
                               secondary={translation.postTrans}
@@ -728,7 +731,17 @@ const Landing = ({
                   </div>
                 </Grid>
               </Grid>
-            ))}
+            )
+          ) : (
+            <Fragment>
+              <Typography className={classes.barText} variant="subtitle2">
+                Stored:
+              </Typography>
+              <Typography className={classes.barText} variant="subtitle2">
+                History:
+              </Typography>
+            </Fragment>
+          )}
         </Paper>
       </Container>
     </div>
