@@ -1,13 +1,14 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -29,6 +30,13 @@ import {
 } from "../../actions/lang";
 import legacyGetUserMedia from "../../utils/legacyRecording";
 
+const StorageProgress = withStyles({
+  root: {
+    height: "100%",
+    borderRadius: 10
+  }
+})(LinearProgress);
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
@@ -46,6 +54,9 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(1),
     left: theme.spacing(0),
     right: theme.spacing(0)
+  },
+  barText: {
+    marginLeft: theme.spacing(1)
   },
   form: {
     width: "100%"
@@ -67,6 +78,10 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
     minHeight: "35vh",
     overflow: "auto"
+  },
+  storage: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1)
   }
 }));
 
@@ -99,6 +114,22 @@ const Landing = ({
   const [supported, setSupported] = useState(false);
   const [badAlert, setBadAlert] = useState(false);
   const [goodAlert, setGoodAlert] = useState(false);
+  const [maxStorage, setMaxStorage] = useState(() => {
+    var temp = localStorage.getItem("savedTranslations");
+    localStorage.clear();
+
+    var i = 0;
+    try {
+      for (i = 250; i <= 10000; i += 250) {
+        localStorage.setItem("test", new Array(i * 1024 + 1).join("a"));
+      }
+    } catch (e) {
+      localStorage.removeItem("test");
+      localStorage.setItem("savedTranslations", temp);
+      temp = "";
+      return (i - 250) * 2;
+    }
+  });
 
   const [textError, setTextError] = useState("");
   const [isTextError, setIsTextError] = useState(false);
@@ -399,7 +430,19 @@ const Landing = ({
         </Paper>
         {saved.length > 0 && (
           <Paper className={classes.paperTwo}>
-            <Typography variant="subtitle2">Saved Translations:</Typography>
+            <Typography variant="subtitle2">Storage:</Typography>
+            <div className={classes.storage}>
+              <Grid container>
+                <Grid item xs>
+                  <StorageProgress variant="determinate" value={99} />
+                </Grid>
+                <Grid item>
+                  <Typography className={classes.barText} variant="subtitle2">
+                    50%
+                  </Typography>
+                </Grid>
+              </Grid>
+            </div>
             <Grid container>
               <Grid item xs={12} md={6}>
                 <div>
