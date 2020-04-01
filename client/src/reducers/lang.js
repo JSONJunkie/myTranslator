@@ -6,7 +6,8 @@ import {
   TRANSLATE_TRANSCRIPTION,
   SAVE,
   CLEAR,
-  DELETE_SAVED
+  DELETE_SAVED,
+  PUSH_TRANS
 } from "../actions/types";
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   translatedAudio: "",
   transcribed: "",
   translatedTranscription: "",
+  translations: [],
   saved: JSON.parse(localStorage.getItem("savedTranslations")) || [],
   loading: true
 };
@@ -44,6 +46,8 @@ export default function(state = initialState, action) {
       };
     case SAVE:
       return { ...state, saved: [...state.saved, payload] };
+    case PUSH_TRANS:
+      return { ...state, translations: [...state.translations, payload] };
     case CLEAR:
       return { ...state, preTrans: "", postTrans: "", translatedAudio: "" };
     case SPEAK:

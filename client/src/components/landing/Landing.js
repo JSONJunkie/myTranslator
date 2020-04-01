@@ -15,7 +15,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
-import ClearIcon from "@material-ui/icons/Clear";
+import VolumeUpIcon from "@material-ui/icons/VolumeUp";
+import LockIcon from "@material-ui/icons/Lock";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
 
@@ -99,7 +101,8 @@ const Landing = ({
     transcribed,
     translatedTranscription,
     translatedAudio,
-    saved
+    saved,
+    translations
   }
 }) => {
   const classes = useStyles();
@@ -517,72 +520,145 @@ const Landing = ({
               </Grid>
             </Grid>
           </div>
-          {saved.length > 0 && (
-            <Grid container>
-              <Grid item xs={12} md={6}>
-                <div>
-                  <List disablePadding={true}>
-                    {saved
-                      .filter((translation, index) => index % 2 === 0)
-                      .map(translation => (
-                        <ListItem
-                          divider={true}
-                          button
-                          key={translation.transId}
-                          onClick={e =>
-                            handleSavedSpeak(translation.translatedAudio)
-                          }
-                        >
-                          <ListItemText
-                            primary={translation.preTrans}
-                            secondary={translation.postTrans}
-                          />
-                          <ListItemSecondaryAction>
-                            <IconButton
-                              onClick={e => handleDelete(translation.transId)}
-                              aria-label="delete"
+          {translations.length > 0 ||
+            (saved.length > 0 &&
+              (saved.length > 0 ? (
+                <Grid container>
+                  <Grid item xs={12} md={6}>
+                    <div>
+                      <List disablePadding={true}>
+                        {saved.map(translation => (
+                          <ListItem
+                            divider={true}
+                            button
+                            key={translation.transId}
+                            onClick={e =>
+                              handleSavedSpeak(translation.translatedAudio)
+                            }
+                          >
+                            <ListItemText
+                              primary={translation.preTrans}
+                              secondary={translation.postTrans}
+                            />
+                            <ListItemSecondaryAction>
+                              <IconButton
+                                onClick={e => handleDelete(translation.transId)}
+                                aria-label="delete"
+                              >
+                                <VolumeUpIcon />
+                              </IconButton>
+                              <IconButton
+                                onClick={e => handleDelete(translation.transId)}
+                                aria-label="delete"
+                              >
+                                <LockIcon />
+                              </IconButton>
+                            </ListItemSecondaryAction>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <div>
+                      <List disablePadding={true}>
+                        {translations.map(translation => (
+                          <ListItem
+                            divider={true}
+                            button
+                            key={translation.transId}
+                            onClick={e =>
+                              handleSavedSpeak(translation.translatedAudio)
+                            }
+                          >
+                            <ListItemText
+                              primary={translation.preTrans}
+                              secondary={translation.postTrans}
+                            />
+                            <ListItemSecondaryAction>
+                              <IconButton
+                                onClick={e => deleteSaved(translation.transId)}
+                                aria-label="delete"
+                              >
+                                <LockOpenIcon />
+                              </IconButton>
+                            </ListItemSecondaryAction>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </div>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Grid container>
+                  <Grid item xs={12} md={6}>
+                    <div>
+                      <List disablePadding={true}>
+                        {translations
+                          .filter((translation, index) => index % 2 === 0)
+                          .map(translation => (
+                            <ListItem
+                              divider={true}
+                              button
+                              key={translation.transId}
+                              onClick={e =>
+                                handleSavedSpeak(translation.translatedAudio)
+                              }
                             >
-                              <ClearIcon />
-                            </IconButton>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      ))}
-                  </List>
-                </div>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <div>
-                  <List disablePadding={true}>
-                    {saved
-                      .filter((translation, index) => index % 2 !== 0)
-                      .map(translation => (
-                        <ListItem
-                          divider={true}
-                          button
-                          key={translation.transId}
-                          onClick={e =>
-                            handleSavedSpeak(translation.translatedAudio)
-                          }
-                        >
-                          <ListItemText
-                            primary={translation.preTrans}
-                            secondary={translation.postTrans}
-                          />
-                          <ListItemSecondaryAction>
-                            <IconButton
-                              onClick={e => deleteSaved(translation.transId)}
-                              aria-label="delete"
+                              <ListItemText
+                                primary={translation.preTrans}
+                                secondary={translation.postTrans}
+                              />
+                              <ListItemSecondaryAction>
+                                <IconButton
+                                  onClick={e =>
+                                    handleDelete(translation.transId)
+                                  }
+                                  aria-label="delete"
+                                >
+                                  <LockOpenIcon />
+                                </IconButton>
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                          ))}
+                      </List>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <div>
+                      <List disablePadding={true}>
+                        {translations
+                          .filter((translation, index) => index % 2 !== 0)
+                          .map(translation => (
+                            <ListItem
+                              divider={true}
+                              button
+                              key={translation.transId}
+                              onClick={e =>
+                                handleSavedSpeak(translation.translatedAudio)
+                              }
                             >
-                              <ClearIcon />
-                            </IconButton>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      ))}
-                  </List>
-                </div>
-              </Grid>
-            </Grid>
-          )}
+                              <ListItemText
+                                primary={translation.preTrans}
+                                secondary={translation.postTrans}
+                              />
+                              <ListItemSecondaryAction>
+                                <IconButton
+                                  onClick={e =>
+                                    deleteSaved(translation.transId)
+                                  }
+                                  aria-label="delete"
+                                >
+                                  <LockOpenIcon />
+                                </IconButton>
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                          ))}
+                      </List>
+                    </div>
+                  </Grid>
+                </Grid>
+              )))}
         </Paper>
       </Container>
     </div>

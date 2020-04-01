@@ -9,7 +9,8 @@ import {
   TRANSLATE_TRANSCRIPTION,
   SAVE,
   CLEAR,
-  DELETE_SAVED
+  DELETE_SAVED,
+  PUSH_TRANS
 } from "./types";
 import playSound from "../utils/playSound";
 
@@ -61,6 +62,15 @@ export const translate = formData => async dispatch => {
       type: TRANSLATE,
       payload: { preTrans: formData, postTrans: res.data }
     });
+    dispatch({
+      type: PUSH_TRANS,
+      payload: {
+        transId: uuidv4(),
+        preTrans: formData,
+        postTrans: res.data,
+        translatedAudio: ""
+      }
+    });
   } catch (err) {
     console.log(err);
   }
@@ -72,32 +82,62 @@ export const textToSpeech = (
   speaking
 ) => async dispatch => {
   try {
-    const synthesizeParams = {
-      text: postTrans,
-      accept: "audio/mp3",
-      voice: "es-ES_LauraVoice"
-    };
-    const config = {
-      responseType: "arraybuffer"
-    };
-    const body = synthesizeParams;
-    const res = await axios.post("/api/translator/speak", body, config);
-    const audio = res.data;
-    const fileReader = new FileReader();
-    const blob = new Blob([audio], { type: "audio/webm" });
-    fileReader.onload = function(event) {
-      const result = event.target.result;
-      dispatch({
-        type: STORE_TRANSLATED_AUDIO,
-        payload: { translatedAudio: result }
-      });
-      if (speaking) {
-        dispatch(speak(preTrans, postTrans, result, speaking));
-      } else {
-        dispatch(save({ preTrans, postTrans, translatedAudio: result }));
-      }
-    };
-    fileReader.readAsDataURL(blob);
+    var xhr = new XMLHttpRequest(),
+      blob,
+      fileReader = new FileReader();
+
+    xhr.open("GET", "https://www.kozco.com/tech/piano2.wav", true);
+    xhr.responseType = "arraybuffer";
+    xhr.addEventListener(
+      "load",
+      function() {
+        if (xhr.status === 200) {
+          blob = new Blob([xhr.response], { type: "audio/webm" });
+
+          fileReader.onload = function(evt) {
+            var result = evt.target.result;
+            dispatch({
+              type: STORE_TRANSLATED_AUDIO,
+              payload: { translatedAudio: result }
+            });
+            if (speaking) {
+              dispatch(speak(preTrans, postTrans, result, speaking));
+            } else {
+              dispatch(save({ preTrans, postTrans, translatedAudio: result }));
+            }
+          };
+          fileReader.readAsDataURL(blob);
+        }
+      },
+      false
+    );
+    xhr.send();
+    // const synthesizeParams = {
+    //   text: postTrans,
+    //   accept: "audio/mp3",
+    //   voice: "es-ES_LauraVoice"
+    // };
+    // const config = {
+    //   responseType: "arraybuffer"
+    // };
+    // const body = synthesizeParams;
+    // const res = await axios.post("/api/translator/speak", body, config);
+    // const audio = res.data;
+    // const fileReader = new FileReader();
+    // const blob = new Blob([audio], { type: "audio/webm" });
+    // fileReader.onload = function(event) {
+    //   const result = event.target.result;
+    //   dispatch({
+    //     type: STORE_TRANSLATED_AUDIO,
+    //     payload: { translatedAudio: result }
+    //   });
+    //   if (speaking) {
+    //     dispatch(speak(preTrans, postTrans, result, speaking));
+    //   } else {
+    //     dispatch(save({ preTrans, postTrans, translatedAudio: result }));
+    //   }
+    // };
+    // fileReader.readAsDataURL(blob);
   } catch (err) {
     console.log(err);
   }
