@@ -114,22 +114,41 @@ const Landing = ({
   const [supported, setSupported] = useState(false);
   const [badAlert, setBadAlert] = useState(false);
   const [goodAlert, setGoodAlert] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [maxStorage, setMaxStorage] = useState(() => {
     var temp = localStorage.getItem("savedTranslations");
     localStorage.clear();
 
     var i = 0;
     try {
-      for (i = 250; i <= 10000; i += 250) {
+      for (i = 500; i <= 10000; i += 500) {
         localStorage.setItem("test", new Array(i * 1024 + 1).join("a"));
       }
     } catch (e) {
       localStorage.removeItem("test");
       localStorage.setItem("savedTranslations", temp);
       temp = "";
-      return (i - 250) * 2;
+      return (i - 500) * 2;
     }
   });
+  const [currentStorage, setCurrentStorage] = useState(() => {
+    var total = 0,
+      entryLength,
+      entry;
+    for (entry in localStorage) {
+      if (!localStorage.hasOwnProperty(entry)) {
+        continue;
+      }
+      entryLength = (localStorage[entry].length + entry.length) * 2;
+      total += entryLength;
+    }
+    return Math.ceil((total / 1024) * 100) / 100;
+  });
+
+  const percentage =
+    100 -
+    Math.ceil(((maxStorage - currentStorage) / maxStorage) * 100 * 100) / 100;
 
   const [textError, setTextError] = useState("");
   const [isTextError, setIsTextError] = useState(false);
@@ -180,6 +199,56 @@ const Landing = ({
 
   useEffect(() => {
     localStorage.setItem("savedTranslations", JSON.stringify(saved));
+    if (isSaving) {
+      setCurrentStorage(
+        prev =>
+          prev +
+          Math.ceil(
+            ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024) * 100
+          ) /
+            100
+      );
+      setIsSaving(false);
+    }
+
+    if (isDeleting && saved.length > 0) {
+      setCurrentStorage(
+        prev =>
+          prev -
+          Math.ceil(
+            ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024) * 100
+          ) /
+            100
+      );
+      setIsDeleting(false);
+    }
+
+    if (isDeleting && saved.length === 0) {
+      setCurrentStorage(prev => 0);
+      setIsDeleting(false);
+    }
+  }, [saved]);
+
+  useEffect(() => {
+    // var total = 0,
+    //   entryLength,
+    //   entry;
+    // for (entry in localStorage) {
+    //   if (!localStorage.hasOwnProperty(entry)) {
+    //     continue;
+    //   }
+    //   entryLength = (localStorage[entry].length + entry.length) * 2;
+    //   total += entryLength;
+    // }
+    // return (total / 1024).toFixed(2);
+    // console.log(saved.length);
+    // console.log(saved[saved.length - 1]);
+    // console.log(maxStorage);
+    // console.log(currentStorage);
+    // console.log(percentage);
+    // console.log(
+    //   ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024).toFixed(2)
+    // );
   }, [saved]);
 
   const onChange = e => {
@@ -203,6 +272,7 @@ const Landing = ({
       } else {
         textToSpeech(preTrans, postTrans, false);
       }
+      setIsSaving(true);
     } else {
       setBadAlert(true);
       setTimeout(function() {
@@ -226,6 +296,11 @@ const Landing = ({
 
   const handleSavedSpeak = data => {
     speak(preTrans, postTrans, data, true);
+  };
+
+  const handleDelete = data => {
+    deleteSaved(data);
+    setIsDeleting(true);
   };
 
   const handleClick3 = e => {
@@ -428,21 +503,21 @@ const Landing = ({
             </Grid>
           </form>
         </Paper>
-        {saved.length > 0 && (
-          <Paper className={classes.paperTwo}>
-            <Typography variant="subtitle2">Storage:</Typography>
-            <div className={classes.storage}>
-              <Grid container>
-                <Grid item xs>
-                  <StorageProgress variant="determinate" value={99} />
-                </Grid>
-                <Grid item>
-                  <Typography className={classes.barText} variant="subtitle2">
-                    50%
-                  </Typography>
-                </Grid>
+        <Paper className={classes.paperTwo}>
+          <Typography variant="subtitle2">Storage Remaining:</Typography>
+          <div className={classes.storage}>
+            <Grid container>
+              <Grid item xs>
+                <StorageProgress variant="determinate" value={percentage} />
               </Grid>
-            </div>
+              <Grid item>
+                <Typography className={classes.barText} variant="subtitle2">
+                  {100 - percentage}%
+                </Typography>
+              </Grid>
+            </Grid>
+          </div>
+          {saved.length > 0 && (
             <Grid container>
               <Grid item xs={12} md={6}>
                 <div>
@@ -464,7 +539,7 @@ const Landing = ({
                           />
                           <ListItemSecondaryAction>
                             <IconButton
-                              onClick={e => deleteSaved(translation.transId)}
+                              onClick={e => handleDelete(translation.transId)}
                               aria-label="delete"
                             >
                               <ClearIcon />
@@ -507,8 +582,8 @@ const Landing = ({
                 </div>
               </Grid>
             </Grid>
-          </Paper>
-        )}
+          )}
+        </Paper>
       </Container>
     </div>
   );
