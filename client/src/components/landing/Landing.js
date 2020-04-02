@@ -107,7 +107,7 @@ const Landing = ({
     translations,
     transId,
     error,
-    saveSuccess
+    savedSuccess
   }
 }) => {
   const classes = useStyles();
@@ -246,19 +246,14 @@ const Landing = ({
   }, [error]);
 
   useEffect(() => {
-    console.log("outside");
-    console.log(saveSuccess);
-    console.log(error);
-    console.log(postTrans);
-    if (saveSuccess) {
-      console.log("inside");
-
+    if (savedSuccess) {
       setGoodAlert(true);
       setTimeout(function() {
         setGoodAlert(false);
       }, 3000);
     }
-  }, [saved]);
+    clear();
+  }, [savedSuccess, clear, saved]);
 
   const onChange = e => {
     setText(e.target.value);
@@ -351,7 +346,7 @@ const Landing = ({
     setBadAlert(true);
     setTimeout(function() {
       setBadAlert(false);
-    }, 7000);
+    }, 5000);
     if (error) {
       clear(err);
     }

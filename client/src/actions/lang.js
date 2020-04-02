@@ -12,8 +12,7 @@ import {
   DELETE_SAVED,
   PUSH_TRANS,
   ERROR,
-  CLEAR_ERROR,
-  SAVE_SUCCESS
+  CLEAR_ERROR
 } from "./types";
 import playSound from "../utils/playSound";
 
@@ -47,13 +46,6 @@ export const save = ({
           stored: true
         }
       });
-      dispatch({
-        type: SAVE_SUCCESS,
-        payload: {
-          saveSuccess: { success: true }
-        }
-      });
-      // dispatch(clear());
     }
   } catch (err) {
     console.log(err);
@@ -184,9 +176,11 @@ export const textToSpeech = data => async dispatch => {
           stored
         })
       );
-      throw new Error(
-        "There was a problem converting text to audio. TextToSpeech API limit might've been reached."
-      );
+      if (speaking) {
+        throw new Error(
+          "There was a problem converting text to audio. TextToSpeech API limit might've been reached."
+        );
+      }
     }
   } catch (err) {
     dispatch({
