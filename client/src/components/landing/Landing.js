@@ -378,7 +378,7 @@ const Landing = ({
                   placeholder="Enter text to be translated here..."
                   fullWidth
                   multiline
-                  rows={3}
+                  rows={5}
                   autoFocus
                   helperText={textError}
                   error={isTextError}
@@ -433,7 +433,7 @@ const Landing = ({
                   placeholder="Translated text will appear here..."
                   fullWidth
                   multiline
-                  rows={3}
+                  rows={5}
                   inputProps={{ readOnly: true }}
                 />
                 <Grid container>
@@ -488,7 +488,7 @@ const Landing = ({
                       placeholder="Transcribed text will appear here..."
                       fullWidth
                       multiline
-                      rows={3}
+                      rows={5}
                       inputProps={{ disabled: true }}
                     />
                     {!listening && (
@@ -531,7 +531,7 @@ const Landing = ({
                       placeholder="Translated transcription will appear here..."
                       fullWidth
                       multiline
-                      rows={3}
+                      rows={5}
                       inputProps={{ disabled: true }}
                     />
                   </Grid>
