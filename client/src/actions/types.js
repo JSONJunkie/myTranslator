@@ -7,3 +7,5 @@ export const SAVE = "SAVE";
 export const CLEAR = "CLEAR";
 export const DELETE_SAVED = "DELETE_SAVED";
 export const PUSH_TRANS = "PUSH_TRANS";
+export const ERROR = "ERROR";
+export const CLEAR_ERROR = "CLEAR_ERROR";

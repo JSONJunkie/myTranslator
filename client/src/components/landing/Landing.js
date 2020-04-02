@@ -105,7 +105,8 @@ const Landing = ({
     translatedAudio,
     saved,
     translations,
-    transId
+    transId,
+    error
   }
 }) => {
   const classes = useStyles();
@@ -236,6 +237,13 @@ const Landing = ({
     }
   }, [saved, isSaving, isUnstoring]);
 
+  useEffect(() => {
+    if (error) {
+      handleError(error);
+      setIsSaving(false);
+    }
+  }, [error]);
+
   const onChange = e => {
     setText(e.target.value);
   };
@@ -249,10 +257,10 @@ const Landing = ({
     // window.scrollTo(0, 0);
     try {
       if (preTrans && postTrans) {
-        setGoodAlert(true);
-        setTimeout(function() {
-          setGoodAlert(false);
-        }, 3000);
+        // setGoodAlert(true);
+        // setTimeout(function() {
+        //   setGoodAlert(false);
+        // }, 3000);
         if (translatedAudio) {
           save({ preTrans, postTrans, translatedAudio, transId, stored });
         } else {
@@ -264,6 +272,7 @@ const Landing = ({
             stored
           });
         }
+
         setIsSaving(true);
       } else {
         throw new Error(
@@ -330,7 +339,10 @@ const Landing = ({
     setBadAlert(true);
     setTimeout(function() {
       setBadAlert(false);
-    }, 3000);
+    }, 7000);
+    if (error) {
+      clear(err);
+    }
   };
 
   return (
@@ -383,6 +395,7 @@ const Landing = ({
                       variant="contained"
                       color="primary"
                       className={classes.button}
+                      disabled={goodAlert || badAlert}
                     >
                       Translate
                     </Button>
@@ -395,6 +408,7 @@ const Landing = ({
                       color="secondary"
                       className={classes.button}
                       onClick={e => handleCleanup(e)}
+                      disabled={goodAlert || badAlert}
                     >
                       Clear
                     </Button>
@@ -479,6 +493,7 @@ const Landing = ({
                             variant="contained"
                             color="primary"
                             className={classes.button}
+                            disabled={goodAlert || badAlert}
                           >
                             Listen
                           </Button>
@@ -558,6 +573,7 @@ const Landing = ({
                           />
                           <ListItemSecondaryAction>
                             <IconButton
+                              disabled={goodAlert || badAlert}
                               onClick={e =>
                                 handleSpeak({
                                   transId: translation.transId,
@@ -598,6 +614,7 @@ const Landing = ({
                           />
                           <ListItemSecondaryAction>
                             <IconButton
+                              disabled={goodAlert || badAlert}
                               onClick={e =>
                                 handleSpeak({
                                   transId: translation.transId,
@@ -668,6 +685,7 @@ const Landing = ({
                             />
                             <ListItemSecondaryAction>
                               <IconButton
+                                disabled={goodAlert || badAlert}
                                 onClick={e =>
                                   handleSpeak({
                                     transId: translation.transId,
@@ -722,6 +740,7 @@ const Landing = ({
                             />
                             <ListItemSecondaryAction>
                               <IconButton
+                                disabled={goodAlert || badAlert}
                                 onClick={e =>
                                   handleSpeak({
                                     transId: translation.transId,
@@ -782,7 +801,8 @@ Landing.propTypes = {
   translate: PropTypes.func.isRequired,
   speak: PropTypes.func.isRequired,
   textToSpeech: PropTypes.func.isRequired,
-  listen: PropTypes.func.isRequired
+  listen: PropTypes.func.isRequired,
+  lang: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

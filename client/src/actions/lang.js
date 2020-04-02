@@ -10,7 +10,9 @@ import {
   SAVE,
   CLEAR,
   DELETE_SAVED,
-  PUSH_TRANS
+  PUSH_TRANS,
+  ERROR,
+  CLEAR_ERROR
 } from "./types";
 import playSound from "../utils/playSound";
 
@@ -51,9 +53,13 @@ export const save = ({
   }
 };
 
-export const clear = () => dispatch => {
+export const clear = data => dispatch => {
   try {
-    dispatch({ type: CLEAR });
+    if (!data) {
+      dispatch({ type: CLEAR });
+    } else {
+      dispatch({ type: CLEAR_ERROR });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -90,10 +96,10 @@ export const translate = formData => async dispatch => {
 export const textToSpeech = data => async dispatch => {
   const { preTrans, postTrans, speaking, transId, stored } = data;
   try {
+    var result;
     var xhr = new XMLHttpRequest(),
       blob,
       fileReader = new FileReader();
-
     xhr.open("GET", "https://www.kozco.com/tech/piano2.wav", true);
     xhr.responseType = "arraybuffer";
     xhr.addEventListener(
@@ -101,7 +107,6 @@ export const textToSpeech = data => async dispatch => {
       function() {
         if (xhr.status === 200) {
           blob = new Blob([xhr.response], { type: "audio/webm" });
-
           fileReader.onload = function(evt) {
             var result = evt.target.result;
             dispatch({
@@ -163,8 +168,18 @@ export const textToSpeech = data => async dispatch => {
     //   }
     // };
     // fileReader.readAsDataURL(blob);
+    if (!result)
+      throw new Error(
+        "There was a problem converting text to audio. TextToSpeech API limit might've been reached."
+      );
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: {
+        name: err.name,
+        message: err.message
+      }
+    });
   }
 };
 
