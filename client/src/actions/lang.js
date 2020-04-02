@@ -53,7 +53,7 @@ export const save = ({
           saveSuccess: { success: true }
         }
       });
-      dispatch(clear());
+      // dispatch(clear());
     }
   } catch (err) {
     console.log(err);
