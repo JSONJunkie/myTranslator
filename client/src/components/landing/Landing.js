@@ -106,7 +106,8 @@ const Landing = ({
     saved,
     translations,
     transId,
-    error
+    error,
+    saveSuccess
   }
 }) => {
   const classes = useStyles();
@@ -244,6 +245,21 @@ const Landing = ({
     }
   }, [error]);
 
+  useEffect(() => {
+    console.log("outside");
+    console.log(saveSuccess);
+    console.log(error);
+    console.log(postTrans);
+    if (saveSuccess) {
+      console.log("inside");
+
+      setGoodAlert(true);
+      setTimeout(function() {
+        setGoodAlert(false);
+      }, 3000);
+    }
+  }, [saved]);
+
   const onChange = e => {
     setText(e.target.value);
   };
@@ -257,10 +273,6 @@ const Landing = ({
     // window.scrollTo(0, 0);
     try {
       if (preTrans && postTrans) {
-        // setGoodAlert(true);
-        // setTimeout(function() {
-        //   setGoodAlert(false);
-        // }, 3000);
         if (translatedAudio) {
           save({ preTrans, postTrans, translatedAudio, transId, stored });
         } else {
@@ -639,6 +651,7 @@ const Landing = ({
                               </IconButton>
                             ) : (
                               <IconButton
+                                disabled={goodAlert || badAlert}
                                 onClick={e =>
                                   handleSave({
                                     transId: translation.transId,
@@ -701,6 +714,7 @@ const Landing = ({
                                 <VolumeUpIcon />
                               </IconButton>
                               <IconButton
+                                disabled={goodAlert || badAlert}
                                 onClick={e =>
                                   handleSave({
                                     transId: translation.transId,
@@ -756,6 +770,7 @@ const Landing = ({
                                 <VolumeUpIcon />
                               </IconButton>
                               <IconButton
+                                disabled={goodAlert || badAlert}
                                 onClick={e =>
                                   handleSave({
                                     transId: translation.transId,

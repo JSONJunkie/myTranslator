@@ -9,7 +9,8 @@ import {
   DELETE_SAVED,
   PUSH_TRANS,
   ERROR,
-  CLEAR_ERROR
+  CLEAR_ERROR,
+  SAVE_SUCCESS
 } from "../actions/types";
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
   translatedTranscription: "",
   translations: [],
   saved: JSON.parse(localStorage.getItem("savedTranslations")) || [],
+  saveSuccess: "",
   error: "",
   loading: true
 };
@@ -67,10 +69,19 @@ export default function(state = initialState, action) {
           } else return translation;
         })
       };
+    case SAVE_SUCCESS:
+      const { saveSuccess } = payload;
+      return { ...state, saveSuccess };
     case PUSH_TRANS:
       return { ...state, translations: [...state.translations, payload] };
     case CLEAR:
-      return { ...state, preTrans: "", postTrans: "", translatedAudio: "" };
+      return {
+        ...state,
+        preTrans: "",
+        postTrans: "",
+        translatedAudio: "",
+        saveSuccess: ""
+      };
     case ERROR:
       return { ...state, error: payload };
     case CLEAR_ERROR:

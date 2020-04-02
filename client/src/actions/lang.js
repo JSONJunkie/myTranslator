@@ -12,7 +12,8 @@ import {
   DELETE_SAVED,
   PUSH_TRANS,
   ERROR,
-  CLEAR_ERROR
+  CLEAR_ERROR,
+  SAVE_SUCCESS
 } from "./types";
 import playSound from "../utils/playSound";
 
@@ -44,6 +45,12 @@ export const save = ({
           postTrans,
           translatedAudio,
           stored: true
+        }
+      });
+      dispatch({
+        type: SAVE_SUCCESS,
+        payload: {
+          saveSuccess: { success: true }
         }
       });
       dispatch(clear());
@@ -168,10 +175,19 @@ export const textToSpeech = data => async dispatch => {
     //   }
     // };
     // fileReader.readAsDataURL(blob);
-    if (!result)
+    if (!result) {
+      dispatch(
+        save({
+          preTrans,
+          postTrans,
+          transId,
+          stored
+        })
+      );
       throw new Error(
         "There was a problem converting text to audio. TextToSpeech API limit might've been reached."
       );
+    }
   } catch (err) {
     dispatch({
       type: ERROR,
