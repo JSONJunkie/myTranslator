@@ -14,10 +14,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Alert from "@material-ui/lab/Alert";
+import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
+import ClearIcon from "@material-ui/icons/Clear";
 import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
 
@@ -579,27 +581,34 @@ const Landing = ({
                             secondary={translation.postTrans}
                           />
                           <ListItemSecondaryAction>
-                            <IconButton
-                              disabled={goodAlert || badAlert}
-                              onClick={e =>
-                                handleSpeak({
-                                  transId: translation.transId,
-                                  preTrans: translation.preTrans,
-                                  postTrans: translation.postTrans,
-                                  translatedAudio: translation.translatedAudio,
-                                  stored: translation.stored
-                                })
-                              }
-                              aria-label="play"
-                            >
-                              <VolumeUpIcon />
-                            </IconButton>
-                            <IconButton
-                              onClick={e => handleUnstore(translation.transId)}
-                              aria-label="unstore"
-                            >
-                              <LockIcon />
-                            </IconButton>
+                            <Tooltip title="Play">
+                              <IconButton
+                                disabled={goodAlert || badAlert}
+                                onClick={e =>
+                                  handleSpeak({
+                                    transId: translation.transId,
+                                    preTrans: translation.preTrans,
+                                    postTrans: translation.postTrans,
+                                    translatedAudio:
+                                      translation.translatedAudio,
+                                    stored: translation.stored
+                                  })
+                                }
+                                aria-label="play"
+                              >
+                                <VolumeUpIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Remove">
+                              <IconButton
+                                onClick={e =>
+                                  handleUnstore(translation.transId)
+                                }
+                                aria-label="remove"
+                              >
+                                <ClearIcon />
+                              </IconButton>
+                            </Tooltip>
                           </ListItemSecondaryAction>
                         </ListItem>
                       ))}
@@ -620,35 +629,11 @@ const Landing = ({
                             secondary={translation.postTrans}
                           />
                           <ListItemSecondaryAction>
-                            <IconButton
-                              disabled={goodAlert || badAlert}
-                              onClick={e =>
-                                handleSpeak({
-                                  transId: translation.transId,
-                                  preTrans: translation.preTrans,
-                                  postTrans: translation.postTrans,
-                                  translatedAudio: translation.translatedAudio,
-                                  stored: translation.stored
-                                })
-                              }
-                              aria-label="play"
-                            >
-                              <VolumeUpIcon />
-                            </IconButton>
-                            {translation.stored ? (
-                              <IconButton
-                                onClick={e =>
-                                  handleUnstore(translation.transId)
-                                }
-                                aria-label="unstore"
-                              >
-                                <LockIcon />
-                              </IconButton>
-                            ) : (
+                            <Tooltip title="Play">
                               <IconButton
                                 disabled={goodAlert || badAlert}
                                 onClick={e =>
-                                  handleSave({
+                                  handleSpeak({
                                     transId: translation.transId,
                                     preTrans: translation.preTrans,
                                     postTrans: translation.postTrans,
@@ -657,10 +642,41 @@ const Landing = ({
                                     stored: translation.stored
                                   })
                                 }
-                                aria-label="save"
+                                aria-label="play"
                               >
-                                <LockOpenIcon />
+                                <VolumeUpIcon />
                               </IconButton>
+                            </Tooltip>
+                            {translation.stored ? (
+                              <Tooltip title="Remove">
+                                <IconButton
+                                  onClick={e =>
+                                    handleUnstore(translation.transId)
+                                  }
+                                  aria-label="remove"
+                                >
+                                  <LockIcon />
+                                </IconButton>
+                              </Tooltip>
+                            ) : (
+                              <Tooltip title="save">
+                                <IconButton
+                                  disabled={goodAlert || badAlert}
+                                  onClick={e =>
+                                    handleSave({
+                                      transId: translation.transId,
+                                      preTrans: translation.preTrans,
+                                      postTrans: translation.postTrans,
+                                      translatedAudio:
+                                        translation.translatedAudio,
+                                      stored: translation.stored
+                                    })
+                                  }
+                                  aria-label="save"
+                                >
+                                  <LockOpenIcon />
+                                </IconButton>
+                              </Tooltip>
                             )}
                           </ListItemSecondaryAction>
                         </ListItem>
@@ -692,38 +708,42 @@ const Landing = ({
                               secondary={translation.postTrans}
                             />
                             <ListItemSecondaryAction>
-                              <IconButton
-                                disabled={goodAlert || badAlert}
-                                onClick={e =>
-                                  handleSpeak({
-                                    transId: translation.transId,
-                                    preTrans: translation.preTrans,
-                                    postTrans: translation.postTrans,
-                                    translatedAudio:
-                                      translation.translatedAudio,
-                                    stored: translation.stored
-                                  })
-                                }
-                                aria-label="play"
-                              >
-                                <VolumeUpIcon />
-                              </IconButton>
-                              <IconButton
-                                disabled={goodAlert || badAlert}
-                                onClick={e =>
-                                  handleSave({
-                                    transId: translation.transId,
-                                    preTrans: translation.preTrans,
-                                    postTrans: translation.postTrans,
-                                    translatedAudio:
-                                      translation.translatedAudio,
-                                    stored: translation.stored
-                                  })
-                                }
-                                aria-label="save"
-                              >
-                                <LockOpenIcon />
-                              </IconButton>
+                              <Tooltip title="Play">
+                                <IconButton
+                                  disabled={goodAlert || badAlert}
+                                  onClick={e =>
+                                    handleSpeak({
+                                      transId: translation.transId,
+                                      preTrans: translation.preTrans,
+                                      postTrans: translation.postTrans,
+                                      translatedAudio:
+                                        translation.translatedAudio,
+                                      stored: translation.stored
+                                    })
+                                  }
+                                  aria-label="play"
+                                >
+                                  <VolumeUpIcon />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="Save">
+                                <IconButton
+                                  disabled={goodAlert || badAlert}
+                                  onClick={e =>
+                                    handleSave({
+                                      transId: translation.transId,
+                                      preTrans: translation.preTrans,
+                                      postTrans: translation.postTrans,
+                                      translatedAudio:
+                                        translation.translatedAudio,
+                                      stored: translation.stored
+                                    })
+                                  }
+                                  aria-label="save"
+                                >
+                                  <LockOpenIcon />
+                                </IconButton>
+                              </Tooltip>
                             </ListItemSecondaryAction>
                           </ListItem>
                         ))}
@@ -748,38 +768,42 @@ const Landing = ({
                               secondary={translation.postTrans}
                             />
                             <ListItemSecondaryAction>
-                              <IconButton
-                                disabled={goodAlert || badAlert}
-                                onClick={e =>
-                                  handleSpeak({
-                                    transId: translation.transId,
-                                    preTrans: translation.preTrans,
-                                    postTrans: translation.postTrans,
-                                    translatedAudio:
-                                      translation.translatedAudio,
-                                    stored: translation.stored
-                                  })
-                                }
-                                aria-label="play"
-                              >
-                                <VolumeUpIcon />
-                              </IconButton>
-                              <IconButton
-                                disabled={goodAlert || badAlert}
-                                onClick={e =>
-                                  handleSave({
-                                    transId: translation.transId,
-                                    preTrans: translation.preTrans,
-                                    postTrans: translation.postTrans,
-                                    translatedAudio:
-                                      translation.translatedAudio,
-                                    stored: translation.stored
-                                  })
-                                }
-                                aria-label="save"
-                              >
-                                <LockOpenIcon />
-                              </IconButton>
+                              <Tooltip title="Play">
+                                <IconButton
+                                  disabled={goodAlert || badAlert}
+                                  onClick={e =>
+                                    handleSpeak({
+                                      transId: translation.transId,
+                                      preTrans: translation.preTrans,
+                                      postTrans: translation.postTrans,
+                                      translatedAudio:
+                                        translation.translatedAudio,
+                                      stored: translation.stored
+                                    })
+                                  }
+                                  aria-label="play"
+                                >
+                                  <VolumeUpIcon />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="Save">
+                                <IconButton
+                                  disabled={goodAlert || badAlert}
+                                  onClick={e =>
+                                    handleSave({
+                                      transId: translation.transId,
+                                      preTrans: translation.preTrans,
+                                      postTrans: translation.postTrans,
+                                      translatedAudio:
+                                        translation.translatedAudio,
+                                      stored: translation.stored
+                                    })
+                                  }
+                                  aria-label="save"
+                                >
+                                  <LockOpenIcon />
+                                </IconButton>
+                              </Tooltip>
                             </ListItemSecondaryAction>
                           </ListItem>
                         ))}

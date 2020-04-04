@@ -178,7 +178,7 @@ export const textToSpeech = data => async dispatch => {
       );
       if (speaking) {
         throw new Error(
-          "There was a problem converting text to audio. TextToSpeech API limit might've been reached."
+          "There was a problem converting text to audio. TextToSpeech service unavailable."
         );
       }
     }
