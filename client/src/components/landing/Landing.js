@@ -591,7 +591,7 @@ const Landing = ({
                                     postTrans: translation.postTrans,
                                     translatedAudio:
                                       translation.translatedAudio,
-                                    stored: translation.stored
+                                    stored: "no and i dont want you to"
                                   })
                                 }
                                 aria-label="play"
@@ -639,7 +639,7 @@ const Landing = ({
                                     postTrans: translation.postTrans,
                                     translatedAudio:
                                       translation.translatedAudio,
-                                    stored: translation.stored
+                                    stored: "no and i dont want you to"
                                   })
                                 }
                                 aria-label="play"
@@ -718,7 +718,7 @@ const Landing = ({
                                       postTrans: translation.postTrans,
                                       translatedAudio:
                                         translation.translatedAudio,
-                                      stored: translation.stored
+                                      stored: "no and i dont want you to"
                                     })
                                   }
                                   aria-label="play"
@@ -778,7 +778,7 @@ const Landing = ({
                                       postTrans: translation.postTrans,
                                       translatedAudio:
                                         translation.translatedAudio,
-                                      stored: translation.stored
+                                      stored: "no and i dont want you to"
                                     })
                                   }
                                   aria-label="play"
