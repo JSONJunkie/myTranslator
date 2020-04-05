@@ -169,20 +169,17 @@ const Landing = ({
     (async () => {
       try {
         const constraints = { audio: true };
-        if (navigator.mediaDevices.getUserMedia === undefined) {
-          navigator.mediaDevices.getUserMedia = legacyGetUserMedia;
+        if (navigator.getUserMedia) {
+          setSupported(true);
+          setLoading(false);
+        } else {
+          setLoading(false);
         }
         if (!stream) {
           setStream(await navigator.mediaDevices.getUserMedia(constraints));
         }
         if (stream) {
           setMediaRecorder(new MediaRecorder(stream));
-        }
-        if (navigator.mediaDevices.getUserMedia) {
-          setSupported(true);
-          setLoading(false);
-        } else {
-          setLoading(false);
         }
       } catch (err) {
         console.log(err);
