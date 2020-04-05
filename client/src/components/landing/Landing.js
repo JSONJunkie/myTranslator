@@ -128,22 +128,7 @@ const Landing = ({
   const [goodAlert, setGoodAlert] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isUnstoring, setIsUnstoring] = useState(false);
-  const [maxStorage, setMaxStorage] = useState(() => {
-    var temp = localStorage.getItem("savedTranslations");
-    localStorage.clear();
-
-    var i = 0;
-    try {
-      for (i = 500; i <= 10000; i += 500) {
-        localStorage.setItem("test", new Array(i * 1024 + 1).join("a"));
-      }
-    } catch (e) {
-      localStorage.removeItem("test");
-      localStorage.setItem("savedTranslations", temp);
-      temp = "";
-      return (i - 500) * 2;
-    }
-  });
+  const [maxStorage, setMaxStorage] = useState(0);
   const [currentStorage, setCurrentStorage] = useState(() => {
     var total = 0,
       entryLength,
@@ -190,7 +175,7 @@ const Landing = ({
 
   useEffect(() => {
     if (mediaRecorder) {
-      mediaRecorder.ondataavailable = function(e) {
+      mediaRecorder.ondataavailable = e => {
         setChunks(prev => [...prev, e.data]);
         console.log("chunk collected");
       };
@@ -252,7 +237,7 @@ const Landing = ({
   useEffect(() => {
     if (savedSuccess) {
       setGoodAlert(true);
-      setTimeout(function() {
+      setTimeout(() => {
         setGoodAlert(false);
       }, 3000);
     }
@@ -334,7 +319,7 @@ const Landing = ({
     } else {
       mediaRecorder.stop();
       console.log("recording stopping");
-      stream.getTracks().forEach(function(track) {
+      stream.getTracks().forEach(track => {
         track.stop();
       });
       const blob = new Blob(chunks, { type: "audio/webm" });
@@ -348,7 +333,7 @@ const Landing = ({
   const handleError = err => {
     setErrorMessage(err.message);
     setBadAlert(true);
-    setTimeout(function() {
+    setTimeout(() => {
       setBadAlert(false);
     }, 5000);
     if (error) {
@@ -358,7 +343,7 @@ const Landing = ({
 
   return loading ? (
     <div className={classes.progress}>
-      <CircularProgress />
+      <CircularProgress disableShrink />
     </div>
   ) : (
     <div className={classes.root}>

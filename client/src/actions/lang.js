@@ -103,10 +103,10 @@ export const textToSpeech = data => async dispatch => {
     xhr.responseType = "arraybuffer";
     xhr.addEventListener(
       "load",
-      function() {
+      function () {
         if (xhr.status === 200) {
           blob = new Blob([xhr.response], { type: "audio/webm" });
-          fileReader.onload = function(evt) {
+          fileReader.onload = function (evt) {
             var result = evt.target.result;
             dispatch({
               type: STORE_TRANSLATED_AUDIO,
@@ -218,7 +218,7 @@ export const speak = data => async dispatch => {
         }
         return new Blob([u8arr], { type: mime });
       }
-      fileReader.onload = function(event) {
+      fileReader.onload = function (event) {
         const result = event.target.result;
         playSound(result);
       };
