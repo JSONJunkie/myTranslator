@@ -244,6 +244,28 @@ const Landing = ({
     clear();
   }, [savedSuccess, clear, saved]);
 
+  useEffect(() => {
+    const max = getMaxStorage();
+    setMaxStorage(prev => max);
+  }, []);
+
+  const getMaxStorage = () => {
+    var temp = localStorage.getItem("savedTranslations");
+    localStorage.clear();
+
+    var i = 0;
+    try {
+      for (i = 200; i <= 10000; i += 200) {
+        localStorage.setItem("test", new Array(i * 1024 + 1).join("a"));
+      }
+    } catch (e) {
+      localStorage.removeItem("test");
+      localStorage.setItem("savedTranslations", temp);
+      temp = "";
+      return (i - 200) * 2;
+    }
+  };
+
   const onChange = e => {
     setText(e.target.value);
   };
