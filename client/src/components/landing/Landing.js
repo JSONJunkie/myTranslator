@@ -89,6 +89,23 @@ const useStyles = makeStyles(theme => ({
   },
   storage: {
     marginBottom: theme.spacing(1)
+  },
+  progress: {
+    position: "absolute",
+    top: "50%",
+    left: "47%",
+    marginTop: -12,
+    marginLeft: -12
+  },
+  wrapper: {
+    position: "relative"
+  },
+  inner: {
+    position: "absolute",
+    top: "50%",
+    left: "39%",
+    marginTop: -12,
+    marginLeft: -12
   }
 }));
 
@@ -150,6 +167,8 @@ const Landing = ({
   const [textError, setTextError] = useState("");
   const [isTextError, setIsTextError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [transLWorking, setTransLWorking] = useState(false);
+  const [transSWorking, setTransSWorking] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -271,6 +290,9 @@ const Landing = ({
   };
 
   const handleTranslate = () => {
+    clear();
+
+    setTransLWorking(true);
     translate(text);
   };
 
@@ -348,6 +370,7 @@ const Landing = ({
       setChunks([]);
       setStream(null);
       setMediaRecorder(null);
+      setTransSWorking(true);
       listen(blob);
     }
   };
@@ -363,8 +386,16 @@ const Landing = ({
     }
   };
 
+  if (postTrans && transLWorking) {
+    setTransLWorking(false);
+  }
+
+  if (translatedTranscription && transSWorking) {
+    setTransSWorking(false);
+  }
+
   return loading ? (
-    <div className={classes.progress}>
+    <div>
       <CircularProgress disableShrink />
     </div>
   ) : (
@@ -417,7 +448,9 @@ const Landing = ({
                       variant="contained"
                       color="primary"
                       className={classes.button}
-                      disabled={goodAlert || badAlert}
+                      disabled={
+                        goodAlert || badAlert || transLWorking || transSWorking
+                      }
                     >
                       Translate
                     </Button>
@@ -430,7 +463,9 @@ const Landing = ({
                       color="secondary"
                       className={classes.button}
                       onClick={e => handleCleanup(e)}
-                      disabled={goodAlert || badAlert}
+                      disabled={
+                        goodAlert || badAlert || transLWorking || transSWorking
+                      }
                     >
                       Clear
                     </Button>
@@ -439,18 +474,27 @@ const Landing = ({
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <TextField
-                  aria-label="translated text"
-                  name="translated"
-                  label={preTrans}
-                  value={postTrans}
-                  variant="filled"
-                  placeholder="Translated text will appear here..."
-                  fullWidth
-                  multiline
-                  rows={5}
-                  inputProps={{ readOnly: true }}
-                />
+                <div className={classes.wrapper}>
+                  <TextField
+                    aria-label="translated text"
+                    name="translated"
+                    label={preTrans}
+                    value={postTrans}
+                    variant="filled"
+                    placeholder="Translated text will appear here..."
+                    fullWidth
+                    multiline
+                    rows={5}
+                    inputProps={{ readOnly: true }}
+                  />
+                  {transLWorking && (
+                    <CircularProgress
+                      disableShrink
+                      className={classes.progress}
+                    />
+                  )}
+                </div>
+
                 <Grid container>
                   <Grid item xs={6} className={classes.outterButton}>
                     <Button
@@ -467,7 +511,9 @@ const Landing = ({
                       variant="contained"
                       color="primary"
                       className={classes.button}
-                      disabled={goodAlert || badAlert}
+                      disabled={
+                        goodAlert || badAlert || transLWorking || transSWorking
+                      }
                     >
                       Speak
                     </Button>
@@ -486,7 +532,9 @@ const Landing = ({
                       variant="contained"
                       color="secondary"
                       className={classes.button}
-                      disabled={goodAlert || badAlert}
+                      disabled={
+                        goodAlert || badAlert || transLWorking || transSWorking
+                      }
                     >
                       Save
                     </Button>
@@ -496,16 +544,23 @@ const Landing = ({
               {supported ? (
                 <Fragment>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      aria-label="transcribed text"
-                      value={transcribed}
-                      variant={"filled"}
-                      placeholder="Transcribed text will appear here..."
-                      fullWidth
-                      multiline
-                      rows={5}
-                      inputProps={{ disabled: true }}
-                    />
+                    <div className={classes.wrapper}>
+                      <TextField
+                        aria-label="transcribed text"
+                        value={transcribed}
+                        variant={"filled"}
+                        placeholder="Transcribed text will appear here..."
+                        fullWidth
+                        multiline
+                        rows={5}
+                        inputProps={{ disabled: true }}
+                      />
+                      {listening && (
+                        <Typography variant="h6" className={classes.inner}>
+                          Listening...
+                        </Typography>
+                      )}
+                    </div>
                     {!listening && (
                       <Grid container>
                         <Grid item xs={12} className={classes.outterButton}>
@@ -515,7 +570,12 @@ const Landing = ({
                             variant="contained"
                             color="primary"
                             className={classes.button}
-                            disabled={goodAlert || badAlert}
+                            disabled={
+                              goodAlert ||
+                              badAlert ||
+                              transLWorking ||
+                              transSWorking
+                            }
                           >
                             Listen
                           </Button>
@@ -539,16 +599,24 @@ const Landing = ({
                     )}
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      aria-label="translated transcribed text"
-                      value={translatedTranscription}
-                      variant={"filled"}
-                      placeholder="Translated transcription will appear here..."
-                      fullWidth
-                      multiline
-                      rows={5}
-                      inputProps={{ disabled: true }}
-                    />
+                    <div className={classes.wrapper}>
+                      <TextField
+                        aria-label="translated transcribed text"
+                        value={translatedTranscription}
+                        variant={"filled"}
+                        placeholder="Translated transcription will appear here..."
+                        fullWidth
+                        multiline
+                        rows={5}
+                        inputProps={{ disabled: true }}
+                      />
+                      {transSWorking && (
+                        <CircularProgress
+                          disableShrink
+                          className={classes.progress}
+                        />
+                      )}
+                    </div>
                   </Grid>
                 </Fragment>
               ) : (
@@ -596,7 +664,12 @@ const Landing = ({
                           <ListItemSecondaryAction>
                             <Tooltip title="Play">
                               <IconButton
-                                disabled={goodAlert || badAlert}
+                                disabled={
+                                  goodAlert ||
+                                  badAlert ||
+                                  transLWorking ||
+                                  transSWorking
+                                }
                                 onClick={e =>
                                   handleSpeak({
                                     transId: translation.transId,
@@ -644,7 +717,12 @@ const Landing = ({
                           <ListItemSecondaryAction>
                             <Tooltip title="Play">
                               <IconButton
-                                disabled={goodAlert || badAlert}
+                                disabled={
+                                  goodAlert ||
+                                  badAlert ||
+                                  transLWorking ||
+                                  transSWorking
+                                }
                                 onClick={e =>
                                   handleSpeak({
                                     transId: translation.transId,
@@ -674,7 +752,12 @@ const Landing = ({
                             ) : (
                               <Tooltip title="save">
                                 <IconButton
-                                  disabled={goodAlert || badAlert}
+                                  disabled={
+                                    goodAlert ||
+                                    badAlert ||
+                                    transLWorking ||
+                                    transSWorking
+                                  }
                                   onClick={e =>
                                     handleSave({
                                       transId: translation.transId,
@@ -723,7 +806,12 @@ const Landing = ({
                             <ListItemSecondaryAction>
                               <Tooltip title="Play">
                                 <IconButton
-                                  disabled={goodAlert || badAlert}
+                                  disabled={
+                                    goodAlert ||
+                                    badAlert ||
+                                    transLWorking ||
+                                    transSWorking
+                                  }
                                   onClick={e =>
                                     handleSpeak({
                                       transId: translation.transId,
@@ -741,7 +829,12 @@ const Landing = ({
                               </Tooltip>
                               <Tooltip title="Save">
                                 <IconButton
-                                  disabled={goodAlert || badAlert}
+                                  disabled={
+                                    goodAlert ||
+                                    badAlert ||
+                                    transLWorking ||
+                                    transSWorking
+                                  }
                                   onClick={e =>
                                     handleSave({
                                       transId: translation.transId,
@@ -783,7 +876,12 @@ const Landing = ({
                             <ListItemSecondaryAction>
                               <Tooltip title="Play">
                                 <IconButton
-                                  disabled={goodAlert || badAlert}
+                                  disabled={
+                                    goodAlert ||
+                                    badAlert ||
+                                    transLWorking ||
+                                    transSWorking
+                                  }
                                   onClick={e =>
                                     handleSpeak({
                                       transId: translation.transId,
@@ -801,7 +899,12 @@ const Landing = ({
                               </Tooltip>
                               <Tooltip title="Save">
                                 <IconButton
-                                  disabled={goodAlert || badAlert}
+                                  disabled={
+                                    goodAlert ||
+                                    badAlert ||
+                                    transLWorking ||
+                                    transSWorking
+                                  }
                                   onClick={e =>
                                     handleSave({
                                       transId: translation.transId,
