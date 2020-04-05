@@ -8,6 +8,7 @@ import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import Backdrop from "@material-ui/core/Backdrop";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import List from "@material-ui/core/List";
@@ -106,6 +107,13 @@ const useStyles = makeStyles(theme => ({
     left: "39%",
     marginTop: -12,
     marginLeft: -12
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    background: "rgb(53, 53, 53, .9)",
+    color: "#fff",
+    display: "flex",
+    flexDirection: "column"
   }
 }));
 
@@ -135,6 +143,7 @@ const Landing = ({
   const { register, handleSubmit, errors } = useForm();
 
   let [stream, setStream] = useState(null);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [text, setText] = useState("");
@@ -178,6 +187,7 @@ const Landing = ({
           setSupported(true);
           setLoading(false);
         } else {
+          setOpen(true);
           setLoading(false);
         }
         if (!stream) {
@@ -373,6 +383,10 @@ const Landing = ({
       setTransSWorking(true);
       listen(blob);
     }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handleError = err => {
@@ -621,10 +635,19 @@ const Landing = ({
                 </Fragment>
               ) : (
                 <Fragment>
-                  <Typography component="h1" variant="caption">
-                    Browser not supported. Please use a laptop or computer
-                    browser for audio transcription support.
-                  </Typography>
+                  <Backdrop
+                    className={classes.backdrop}
+                    open={open}
+                    onClick={handleClose}
+                  >
+                    <Typography variant="h5">
+                      Please use the desktop version of Chrome, Safari, or
+                      Firefox for audio transcription support.
+                    </Typography>
+                    <Button color="inherit" size="large">
+                      Continue
+                    </Button>
+                  </Backdrop>
                 </Fragment>
               )}
             </Grid>
