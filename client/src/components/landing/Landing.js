@@ -117,6 +117,7 @@ const Landing = ({
   const { register, handleSubmit, errors } = useForm();
 
   let [stream, setStream] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
@@ -179,6 +180,9 @@ const Landing = ({
         }
         if (navigator.mediaDevices.getUserMedia) {
           setSupported(true);
+          setLoading(false);
+        } else {
+          setLoading(false);
         }
       } catch (err) {
         console.log(err);
@@ -355,299 +359,251 @@ const Landing = ({
   };
 
   return (
-    <div className={classes.root}>
-      <Container className={classes.content}>
-        <Container className={classes.alert}>
-          <Collapse in={goodAlert}>
-            <Alert severity="success">Translated text saved!</Alert>
-          </Collapse>
-          <Collapse in={badAlert}>
-            <Alert severity="error">{errorMessage}</Alert>
-          </Collapse>
-        </Container>
-        <Typography variant="h6">Welcome to the Translator! </Typography>
-        <Paper className={classes.paper}>
-          <form
-            className={classes.form}
-            onSubmit={handleSubmit(handleTranslate)}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  aria-label="untranslated text"
-                  name="text"
-                  variant="filled"
-                  placeholder="Enter text to be translated here..."
-                  fullWidth
-                  multiline
-                  rows={5}
-                  autoFocus
-                  helperText={textError}
-                  error={isTextError}
-                  inputRef={register({
-                    required: {
-                      value: true,
-                      message: "Please include some text to translate"
-                    },
-                    pattern: {
-                      value: /\b[^\d\W]+\b/,
-                      message: "Please only include words"
-                    }
-                  })}
-                  onChange={e => onChange(e)}
-                />
-                <Grid container>
-                  <Grid item xs={6} className={classes.outterButton}>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      disabled={goodAlert || badAlert}
-                    >
-                      Translate
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6} className={classes.outterButton}>
-                    <Button
-                      type="reset"
-                      fullWidth
-                      variant="contained"
-                      color="secondary"
-                      className={classes.button}
-                      onClick={e => handleCleanup(e)}
-                      disabled={goodAlert || badAlert}
-                    >
-                      Clear
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  aria-label="translated text"
-                  name="translated"
-                  label={preTrans}
-                  value={postTrans}
-                  variant="filled"
-                  placeholder="Translated text will appear here..."
-                  fullWidth
-                  multiline
-                  rows={5}
-                  inputProps={{ readOnly: true }}
-                />
-                <Grid container>
-                  <Grid item xs={6} className={classes.outterButton}>
-                    <Button
-                      onClick={e =>
-                        handleSpeak({
-                          transId,
-                          preTrans,
-                          postTrans,
-                          translatedAudio,
-                          stored: "no and i dont want you to"
-                        })
+    !loading && (
+      <div className={classes.root}>
+        <Container className={classes.content}>
+          <Container className={classes.alert}>
+            <Collapse in={goodAlert}>
+              <Alert severity="success">Translated text saved!</Alert>
+            </Collapse>
+            <Collapse in={badAlert}>
+              <Alert severity="error">{errorMessage}</Alert>
+            </Collapse>
+          </Container>
+          <Typography variant="h6">Welcome to the Translator! </Typography>
+          <Paper className={classes.paper}>
+            <form
+              className={classes.form}
+              onSubmit={handleSubmit(handleTranslate)}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    aria-label="untranslated text"
+                    name="text"
+                    variant="filled"
+                    placeholder="Enter text to be translated here..."
+                    fullWidth
+                    multiline
+                    rows={5}
+                    autoFocus
+                    helperText={textError}
+                    error={isTextError}
+                    inputRef={register({
+                      required: {
+                        value: true,
+                        message: "Please include some text to translate"
+                      },
+                      pattern: {
+                        value: /\b[^\d\W]+\b/,
+                        message: "Please only include words"
                       }
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      disabled={goodAlert || badAlert}
-                    >
-                      Speak
-                    </Button>
+                    })}
+                    onChange={e => onChange(e)}
+                  />
+                  <Grid container>
+                    <Grid item xs={6} className={classes.outterButton}>
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        disabled={goodAlert || badAlert}
+                      >
+                        Translate
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} className={classes.outterButton}>
+                      <Button
+                        type="reset"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        onClick={e => handleCleanup(e)}
+                        disabled={goodAlert || badAlert}
+                      >
+                        Clear
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6} className={classes.outterButton}>
-                    <Button
-                      onClick={e =>
-                        handleSave({
-                          transId,
-                          preTrans,
-                          postTrans,
-                          translatedAudio
-                        })
-                      }
-                      fullWidth
-                      variant="contained"
-                      color="secondary"
-                      className={classes.button}
-                      disabled={goodAlert || badAlert}
-                    >
-                      Save
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              {supported ? (
-                <Fragment>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      aria-label="transcribed text"
-                      value={transcribed}
-                      variant={"filled"}
-                      placeholder="Transcribed text will appear here..."
-                      fullWidth
-                      multiline
-                      rows={5}
-                      inputProps={{ disabled: true }}
-                    />
-                    {!listening && (
-                      <Grid container>
-                        <Grid item xs={12} className={classes.outterButton}>
-                          <Button
-                            onClick={e => handleClick3(e)}
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            disabled={goodAlert || badAlert}
-                          >
-                            Listen
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    )}
-                    {listening && (
-                      <Grid container>
-                        <Grid item xs={12} className={classes.outterButton}>
-                          <Button
-                            onClick={e => handleClick3(e)}
-                            fullWidth
-                            variant="contained"
-                            color="secondary"
-                            className={classes.button}
-                          >
-                            Stop!
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    )}
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      aria-label="translated transcribed text"
-                      value={translatedTranscription}
-                      variant={"filled"}
-                      placeholder="Translated transcription will appear here..."
-                      fullWidth
-                      multiline
-                      rows={5}
-                      inputProps={{ disabled: true }}
-                    />
-                  </Grid>
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <Typography component="h1" variant="caption">
-                    Browser not supported. Please use a laptop or computer
-                    browser for audio transcription support.
-                  </Typography>
-                </Fragment>
-              )}
-            </Grid>
-          </form>
-        </Paper>
-        <Typography variant="subtitle2">
-          Storage Remaining: {maxStorage - currentStorage} KB
-        </Typography>
-        <div className={classes.storage}>
-          <Grid container>
-            <Grid item xs>
-              <StorageProgress variant="determinate" value={percentage} />
-            </Grid>
-            <Grid item>
-              <Typography className={classes.barText} variant="subtitle2">
-                {Math.ceil((100 - percentage) * 100) / 100}%
-              </Typography>
-            </Grid>
-          </Grid>
-        </div>
-        <Paper className={classes.paperTwo}>
-          {translations.length > 0 || saved.length > 0 ? (
-            saved.length > 0 ? (
-              <Grid container>
-                <Grid item xs={12} md={6}>
-                  <Typography className={classes.barText} variant="subtitle2">
-                    Stored:
-                  </Typography>
-                  <div>
-                    <List disablePadding={true}>
-                      {saved.map(translation => (
-                        <ListItem key={translation.transId}>
-                          <ListItemText
-                            primary={translation.preTrans}
-                            secondary={translation.postTrans}
-                          />
-                          <ListItemSecondaryAction>
-                            <Tooltip title="Play">
-                              <IconButton
-                                disabled={goodAlert || badAlert}
-                                onClick={e =>
-                                  handleSpeak({
-                                    transId: translation.transId,
-                                    preTrans: translation.preTrans,
-                                    postTrans: translation.postTrans,
-                                    translatedAudio:
-                                      translation.translatedAudio,
-                                    stored: "no and i dont want you to"
-                                  })
-                                }
-                                aria-label="play"
-                              >
-                                <VolumeUpIcon />
-                              </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Remove">
-                              <IconButton
-                                onClick={e =>
-                                  handleUnstore(translation.transId)
-                                }
-                                aria-label="remove"
-                              >
-                                <ClearIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </div>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
-                  <Typography className={classes.barText} variant="subtitle2">
-                    History:
-                  </Typography>
-                  <div>
-                    <List disablePadding={true}>
-                      {translations.map(translation => (
-                        <ListItem key={translation.transId}>
-                          <ListItemText
-                            primary={translation.preTrans}
-                            secondary={translation.postTrans}
-                          />
-                          <ListItemSecondaryAction>
-                            <Tooltip title="Play">
-                              <IconButton
-                                disabled={goodAlert || badAlert}
-                                onClick={e =>
-                                  handleSpeak({
-                                    transId: translation.transId,
-                                    preTrans: translation.preTrans,
-                                    postTrans: translation.postTrans,
-                                    translatedAudio:
-                                      translation.translatedAudio,
-                                    stored: "no and i dont want you to"
-                                  })
-                                }
-                                aria-label="play"
-                              >
-                                <VolumeUpIcon />
-                              </IconButton>
-                            </Tooltip>
-                            {translation.stored ? (
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    aria-label="translated text"
+                    name="translated"
+                    label={preTrans}
+                    value={postTrans}
+                    variant="filled"
+                    placeholder="Translated text will appear here..."
+                    fullWidth
+                    multiline
+                    rows={5}
+                    inputProps={{ readOnly: true }}
+                  />
+                  <Grid container>
+                    <Grid item xs={6} className={classes.outterButton}>
+                      <Button
+                        onClick={e =>
+                          handleSpeak({
+                            transId,
+                            preTrans,
+                            postTrans,
+                            translatedAudio,
+                            stored: "no and i dont want you to"
+                          })
+                        }
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        disabled={goodAlert || badAlert}
+                      >
+                        Speak
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} className={classes.outterButton}>
+                      <Button
+                        onClick={e =>
+                          handleSave({
+                            transId,
+                            preTrans,
+                            postTrans,
+                            translatedAudio
+                          })
+                        }
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        disabled={goodAlert || badAlert}
+                      >
+                        Save
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {supported ? (
+                  <Fragment>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        aria-label="transcribed text"
+                        value={transcribed}
+                        variant={"filled"}
+                        placeholder="Transcribed text will appear here..."
+                        fullWidth
+                        multiline
+                        rows={5}
+                        inputProps={{ disabled: true }}
+                      />
+                      {!listening && (
+                        <Grid container>
+                          <Grid item xs={12} className={classes.outterButton}>
+                            <Button
+                              onClick={e => handleClick3(e)}
+                              fullWidth
+                              variant="contained"
+                              color="primary"
+                              className={classes.button}
+                              disabled={goodAlert || badAlert}
+                            >
+                              Listen
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      )}
+                      {listening && (
+                        <Grid container>
+                          <Grid item xs={12} className={classes.outterButton}>
+                            <Button
+                              onClick={e => handleClick3(e)}
+                              fullWidth
+                              variant="contained"
+                              color="secondary"
+                              className={classes.button}
+                            >
+                              Stop!
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        aria-label="translated transcribed text"
+                        value={translatedTranscription}
+                        variant={"filled"}
+                        placeholder="Translated transcription will appear here..."
+                        fullWidth
+                        multiline
+                        rows={5}
+                        inputProps={{ disabled: true }}
+                      />
+                    </Grid>
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <Typography component="h1" variant="caption">
+                      Browser not supported. Please use a laptop or computer
+                      browser for audio transcription support.
+                    </Typography>
+                  </Fragment>
+                )}
+              </Grid>
+            </form>
+          </Paper>
+          <Typography variant="subtitle2">
+            Storage Remaining: {maxStorage - currentStorage} KB
+          </Typography>
+          <div className={classes.storage}>
+            <Grid container>
+              <Grid item xs>
+                <StorageProgress variant="determinate" value={percentage} />
+              </Grid>
+              <Grid item>
+                <Typography className={classes.barText} variant="subtitle2">
+                  {Math.ceil((100 - percentage) * 100) / 100}%
+                </Typography>
+              </Grid>
+            </Grid>
+          </div>
+          <Paper className={classes.paperTwo}>
+            {translations.length > 0 || saved.length > 0 ? (
+              saved.length > 0 ? (
+                <Grid container>
+                  <Grid item xs={12} md={6}>
+                    <Typography className={classes.barText} variant="subtitle2">
+                      Stored:
+                    </Typography>
+                    <div>
+                      <List disablePadding={true}>
+                        {saved.map(translation => (
+                          <ListItem key={translation.transId}>
+                            <ListItemText
+                              primary={translation.preTrans}
+                              secondary={translation.postTrans}
+                            />
+                            <ListItemSecondaryAction>
+                              <Tooltip title="Play">
+                                <IconButton
+                                  disabled={goodAlert || badAlert}
+                                  onClick={e =>
+                                    handleSpeak({
+                                      transId: translation.transId,
+                                      preTrans: translation.preTrans,
+                                      postTrans: translation.postTrans,
+                                      translatedAudio:
+                                        translation.translatedAudio,
+                                      stored: "no and i dont want you to"
+                                    })
+                                  }
+                                  aria-label="play"
+                                >
+                                  <VolumeUpIcon />
+                                </IconButton>
+                              </Tooltip>
                               <Tooltip title="Remove">
                                 <IconButton
                                   onClick={e =>
@@ -655,53 +611,23 @@ const Landing = ({
                                   }
                                   aria-label="remove"
                                 >
-                                  <LockIcon />
+                                  <ClearIcon />
                                 </IconButton>
                               </Tooltip>
-                            ) : (
-                              <Tooltip title="save">
-                                <IconButton
-                                  disabled={goodAlert || badAlert}
-                                  onClick={e =>
-                                    handleSave({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: translation.stored
-                                    })
-                                  }
-                                  aria-label="save"
-                                >
-                                  <LockOpenIcon />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </div>
-                </Grid>
-              </Grid>
-            ) : (
-              <Grid container>
-                <Grid item xs={12}>
-                  <Typography className={classes.barText} variant="subtitle2">
-                    Stored:
-                  </Typography>
-                </Grid>
+                            </ListItemSecondaryAction>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </div>
+                  </Grid>
 
-                <Grid item xs={12} md={6}>
-                  <Typography className={classes.barText} variant="subtitle2">
-                    History:
-                  </Typography>
-                  <div>
-                    <List disablePadding={true}>
-                      {translations
-                        .filter((translation, index) => index % 2 === 0)
-                        .map(translation => (
+                  <Grid item xs={12} md={6}>
+                    <Typography className={classes.barText} variant="subtitle2">
+                      History:
+                    </Typography>
+                    <div>
+                      <List disablePadding={true}>
+                        {translations.map(translation => (
                           <ListItem key={translation.transId}>
                             <ListItemText
                               primary={translation.preTrans}
@@ -726,105 +652,185 @@ const Landing = ({
                                   <VolumeUpIcon />
                                 </IconButton>
                               </Tooltip>
-                              <Tooltip title="Save">
-                                <IconButton
-                                  disabled={goodAlert || badAlert}
-                                  onClick={e =>
-                                    handleSave({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: translation.stored
-                                    })
-                                  }
-                                  aria-label="save"
-                                >
-                                  <LockOpenIcon />
-                                </IconButton>
-                              </Tooltip>
+                              {translation.stored ? (
+                                <Tooltip title="Remove">
+                                  <IconButton
+                                    onClick={e =>
+                                      handleUnstore(translation.transId)
+                                    }
+                                    aria-label="remove"
+                                  >
+                                    <LockIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              ) : (
+                                <Tooltip title="save">
+                                  <IconButton
+                                    disabled={goodAlert || badAlert}
+                                    onClick={e =>
+                                      handleSave({
+                                        transId: translation.transId,
+                                        preTrans: translation.preTrans,
+                                        postTrans: translation.postTrans,
+                                        translatedAudio:
+                                          translation.translatedAudio,
+                                        stored: translation.stored
+                                      })
+                                    }
+                                    aria-label="save"
+                                  >
+                                    <LockOpenIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
                             </ListItemSecondaryAction>
                           </ListItem>
                         ))}
-                    </List>
-                  </div>
+                      </List>
+                    </div>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    className={classes.barTextHidden}
-                    variant="subtitle2"
-                  >
-                    History:
-                  </Typography>
-                  <div>
-                    <List disablePadding={true}>
-                      {translations
-                        .filter((translation, index) => index % 2 !== 0)
-                        .map(translation => (
-                          <ListItem key={translation.transId}>
-                            <ListItemText
-                              primary={translation.preTrans}
-                              secondary={translation.postTrans}
-                            />
-                            <ListItemSecondaryAction>
-                              <Tooltip title="Play">
-                                <IconButton
-                                  disabled={goodAlert || badAlert}
-                                  onClick={e =>
-                                    handleSpeak({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: "no and i dont want you to"
-                                    })
-                                  }
-                                  aria-label="play"
-                                >
-                                  <VolumeUpIcon />
-                                </IconButton>
-                              </Tooltip>
-                              <Tooltip title="Save">
-                                <IconButton
-                                  disabled={goodAlert || badAlert}
-                                  onClick={e =>
-                                    handleSave({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: translation.stored
-                                    })
-                                  }
-                                  aria-label="save"
-                                >
-                                  <LockOpenIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </ListItemSecondaryAction>
-                          </ListItem>
-                        ))}
-                    </List>
-                  </div>
+              ) : (
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Typography className={classes.barText} variant="subtitle2">
+                      Stored:
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Typography className={classes.barText} variant="subtitle2">
+                      History:
+                    </Typography>
+                    <div>
+                      <List disablePadding={true}>
+                        {translations
+                          .filter((translation, index) => index % 2 === 0)
+                          .map(translation => (
+                            <ListItem key={translation.transId}>
+                              <ListItemText
+                                primary={translation.preTrans}
+                                secondary={translation.postTrans}
+                              />
+                              <ListItemSecondaryAction>
+                                <Tooltip title="Play">
+                                  <IconButton
+                                    disabled={goodAlert || badAlert}
+                                    onClick={e =>
+                                      handleSpeak({
+                                        transId: translation.transId,
+                                        preTrans: translation.preTrans,
+                                        postTrans: translation.postTrans,
+                                        translatedAudio:
+                                          translation.translatedAudio,
+                                        stored: "no and i dont want you to"
+                                      })
+                                    }
+                                    aria-label="play"
+                                  >
+                                    <VolumeUpIcon />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Save">
+                                  <IconButton
+                                    disabled={goodAlert || badAlert}
+                                    onClick={e =>
+                                      handleSave({
+                                        transId: translation.transId,
+                                        preTrans: translation.preTrans,
+                                        postTrans: translation.postTrans,
+                                        translatedAudio:
+                                          translation.translatedAudio,
+                                        stored: translation.stored
+                                      })
+                                    }
+                                    aria-label="save"
+                                  >
+                                    <LockOpenIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                          ))}
+                      </List>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Typography
+                      className={classes.barTextHidden}
+                      variant="subtitle2"
+                    >
+                      History:
+                    </Typography>
+                    <div>
+                      <List disablePadding={true}>
+                        {translations
+                          .filter((translation, index) => index % 2 !== 0)
+                          .map(translation => (
+                            <ListItem key={translation.transId}>
+                              <ListItemText
+                                primary={translation.preTrans}
+                                secondary={translation.postTrans}
+                              />
+                              <ListItemSecondaryAction>
+                                <Tooltip title="Play">
+                                  <IconButton
+                                    disabled={goodAlert || badAlert}
+                                    onClick={e =>
+                                      handleSpeak({
+                                        transId: translation.transId,
+                                        preTrans: translation.preTrans,
+                                        postTrans: translation.postTrans,
+                                        translatedAudio:
+                                          translation.translatedAudio,
+                                        stored: "no and i dont want you to"
+                                      })
+                                    }
+                                    aria-label="play"
+                                  >
+                                    <VolumeUpIcon />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Save">
+                                  <IconButton
+                                    disabled={goodAlert || badAlert}
+                                    onClick={e =>
+                                      handleSave({
+                                        transId: translation.transId,
+                                        preTrans: translation.preTrans,
+                                        postTrans: translation.postTrans,
+                                        translatedAudio:
+                                          translation.translatedAudio,
+                                        stored: translation.stored
+                                      })
+                                    }
+                                    aria-label="save"
+                                  >
+                                    <LockOpenIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                          ))}
+                      </List>
+                    </div>
+                  </Grid>
                 </Grid>
-              </Grid>
-            )
-          ) : (
-            <Fragment>
-              <Typography className={classes.barText} variant="subtitle2">
-                Stored:
-              </Typography>
-              <Typography className={classes.barText} variant="subtitle2">
-                History:
-              </Typography>
-            </Fragment>
-          )}
-        </Paper>
-      </Container>
-    </div>
+              )
+            ) : (
+              <Fragment>
+                <Typography className={classes.barText} variant="subtitle2">
+                  Stored:
+                </Typography>
+                <Typography className={classes.barText} variant="subtitle2">
+                  History:
+                </Typography>
+              </Fragment>
+            )}
+          </Paper>
+        </Container>
+      </div>
+    )
   );
 };
 
