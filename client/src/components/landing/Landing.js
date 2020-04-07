@@ -557,7 +557,6 @@ const Landing = ({
                   </Grid>
                 </Grid>
               </Grid>
-
               <Grid item xs={12} sm={6}>
                 <div className={classes.wrapper}>
                   <TextField
@@ -626,111 +625,111 @@ const Landing = ({
                   </Grid>
                 </Grid>
               </Grid>
-              {supported ? (
-                <Grow in={transcribing}>
-                  <Fragment>
-                    <Grid item xs={12} sm={6}>
-                      <div className={classes.wrapper}>
-                        <TextField
-                          aria-label="transcribed text"
-                          value={transcribed}
-                          variant={"filled"}
-                          placeholder="Transcribed text will appear here..."
-                          fullWidth
-                          multiline
-                          rows={5}
-                          inputProps={{ disabled: true }}
-                        />
-                        {listening &&
-                          (mediaRecorder ? (
-                            <Typography variant="h6" className={classes.inner}>
-                              Listening...
-                            </Typography>
-                          ) : (
-                            <Typography variant="h6" className={classes.inner}>
-                              Please wait...
-                            </Typography>
-                          ))}
-                      </div>
-                      {!listening && (
-                        <Grid container>
-                          <Grid item xs={12} className={classes.outterButton}>
-                            <Button
-                              onClick={e => handleClick3(e)}
-                              fullWidth
-                              variant="contained"
-                              color="primary"
-                              className={classes.button}
-                              disabled={
-                                goodAlert ||
-                                badAlert ||
-                                transLWorking ||
-                                transSWorking
-                              }
-                            >
-                              Listen
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      )}
-                      {listening && (
-                        <Grid container>
-                          <Grid item xs={12} className={classes.outterButton}>
-                            <Button
-                              onClick={e => handleClick3(e)}
-                              fullWidth
-                              variant="contained"
-                              color="secondary"
-                              className={classes.button}
-                              disabled={delayStop}
-                            >
-                              Stop!
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      )}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <div className={classes.wrapper}>
-                        <TextField
-                          aria-label="translated transcribed text"
-                          value={translatedTranscription}
-                          variant={"filled"}
-                          placeholder="Translated transcription will appear here..."
-                          fullWidth
-                          multiline
-                          rows={5}
-                          inputProps={{ disabled: true }}
-                        />
-                        {transSWorking && (
-                          <CircularProgress
-                            disableShrink
-                            className={classes.progress}
-                          />
-                        )}
-                      </div>
-                    </Grid>
-                  </Fragment>
-                </Grow>
-              ) : (
-                <Fragment>
-                  <Backdrop
-                    className={classes.backdrop}
-                    open={open}
-                    onClick={handleClose}
-                  >
-                    <Typography variant="h5">
-                      Please use the desktop version of Chrome, Safari, or
-                      Firefox for audio transcription support.
-                    </Typography>
-                    <Button color="inherit" size="large">
-                      Continue
-                    </Button>
-                  </Backdrop>
-                </Fragment>
-              )}
             </Grid>
           </form>
+          {supported ? (
+            <Grow in={transcribing}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <div className={classes.wrapper}>
+                    <TextField
+                      aria-label="transcribed text"
+                      value={transcribed}
+                      variant={"filled"}
+                      placeholder="Transcribed text will appear here..."
+                      fullWidth
+                      multiline
+                      rows={5}
+                      inputProps={{ disabled: true }}
+                    />
+                    {listening &&
+                      (mediaRecorder ? (
+                        <Typography variant="h6" className={classes.inner}>
+                          Listening...
+                        </Typography>
+                      ) : (
+                        <Typography variant="h6" className={classes.inner}>
+                          Please wait...
+                        </Typography>
+                      ))}
+                  </div>
+                  {!listening && (
+                    <Grid container>
+                      <Grid item xs={12} className={classes.outterButton}>
+                        <Button
+                          onClick={e => handleClick3(e)}
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Listen
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {listening && (
+                    <Grid container>
+                      <Grid item xs={12} className={classes.outterButton}>
+                        <Button
+                          onClick={e => handleClick3(e)}
+                          fullWidth
+                          variant="contained"
+                          color="secondary"
+                          className={classes.button}
+                          disabled={delayStop}
+                        >
+                          Stop!
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <div className={classes.wrapper}>
+                    <TextField
+                      aria-label="translated transcribed text"
+                      value={translatedTranscription}
+                      variant={"filled"}
+                      placeholder="Translated transcription will appear here..."
+                      fullWidth
+                      multiline
+                      rows={5}
+                      inputProps={{ disabled: true }}
+                    />
+                    {transSWorking && (
+                      <CircularProgress
+                        disableShrink
+                        className={classes.progress}
+                      />
+                    )}
+                  </div>
+                </Grid>
+              </Grid>
+            </Grow>
+          ) : (
+            <Fragment>
+              <Backdrop
+                className={classes.backdrop}
+                open={open}
+                onClick={handleClose}
+              >
+                <Typography variant="h5">
+                  Please use the desktop version of Chrome, Safari, or Firefox
+                  for audio transcription support.
+                </Typography>
+                <Button color="inherit" size="large">
+                  Continue
+                </Button>
+              </Backdrop>
+            </Fragment>
+          )}
         </Paper>
         <Grow in={hist}>
           <div>
