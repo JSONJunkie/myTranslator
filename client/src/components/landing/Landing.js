@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
+import clsx from "clsx";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -80,11 +81,6 @@ const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1, 0, 1)
   },
-  paper: {
-    padding: theme.spacing(2),
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1)
-  },
   paperTwo: {
     padding: theme.spacing(2),
     marginTop: theme.spacing(1),
@@ -118,6 +114,23 @@ const useStyles = makeStyles(theme => ({
     color: "#fff",
     display: "flex",
     flexDirection: "column"
+  },
+  paper: {
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    transition: theme.transitions.create("height", {
+      easing: theme.transitions.easing.easeIn,
+      duration: 500
+    }),
+    height: "20vh"
+  },
+  paperShift: {
+    transition: theme.transitions.create("height", {
+      easing: theme.transitions.easing.easeIn,
+      duration: 500
+    }),
+    height: "35vh"
   }
 }));
 
@@ -495,7 +508,11 @@ const Landing = ({
             label="Save/History"
           />
         </FormGroup>
-        <Paper className={classes.paper}>
+        <Paper
+          className={clsx(classes.paper, {
+            [classes.paperShift]: !transcribing
+          })}
+        >
           <form
             className={classes.form}
             onSubmit={handleSubmit(handleTranslate)}
