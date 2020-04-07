@@ -77,7 +77,9 @@ export default function (state = initialState, action) {
         preTrans: "",
         postTrans: "",
         translatedAudio: "",
-        savedSuccess: ""
+        savedSuccess: "",
+        transcribed: "",
+        translatedTranscription: ""
       };
     case ERROR:
       return { ...state, error: payload };

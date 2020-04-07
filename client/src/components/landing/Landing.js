@@ -145,9 +145,11 @@ const Landing = ({
   let [stream, setStream] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [delayStop, setDelayStop] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
+  const [recorderState, setRecorderState] = useState(false);
   const [chunks, setChunks] = useState([]);
   const [supported, setSupported] = useState(false);
   const [badAlert, setBadAlert] = useState(false);
@@ -182,25 +184,52 @@ const Landing = ({
   useEffect(() => {
     (async () => {
       try {
-        const constraints = { audio: true };
-        if (navigator.getUserMedia) {
-          setSupported(true);
-          setLoading(false);
-        } else {
-          setOpen(true);
-          setLoading(false);
-        }
-        if (!stream) {
-          setStream(await navigator.mediaDevices.getUserMedia(constraints));
-        }
-        if (stream) {
-          setMediaRecorder(new MediaRecorder(stream));
+        if (navigator.getUserMedia && listening && !mediaRecorder) {
+          const constraints = { audio: true };
+          if (!stream) {
+            setStream(await navigator.mediaDevices.getUserMedia(constraints));
+          }
+          if (stream && !mediaRecorder) {
+            setMediaRecorder(new MediaRecorder(stream));
+          }
         }
       } catch (err) {
-        console.log(err);
+        handleError(err);
       }
     })();
-  }, [stream]);
+  }, [stream, mediaRecorder, listening]);
+
+  useEffect(() => {
+    console.log(transSWorking);
+    if (mediaRecorder) {
+      if (listening) {
+        clear();
+        mediaRecorder.start(200);
+        setRecorderState(true);
+        console.log("recorder starting...");
+      }
+
+      if (!listening && recorderState) {
+        handleStop();
+        setRecorderState(false);
+      }
+
+      if (listening && mediaRecorder) {
+        setDelayStop(true);
+        setTimeout(() => setDelayStop(false), 3000);
+      }
+    }
+  }, [listening, mediaRecorder]);
+
+  useEffect(() => {
+    if (navigator.getUserMedia) {
+      setSupported(true);
+      setLoading(false);
+    } else {
+      setOpen(true);
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (mediaRecorder) {
@@ -367,22 +396,21 @@ const Landing = ({
   const handleClick3 = e => {
     e.preventDefault();
     setListening(!listening);
-    if (!listening) {
-      mediaRecorder.start(200);
-      console.log("recording starting");
-    } else {
-      mediaRecorder.stop();
-      console.log("recording stopping");
-      stream.getTracks().forEach(track => {
-        track.stop();
-      });
-      const blob = new Blob(chunks, { type: "audio/webm" });
-      setChunks([]);
-      setStream(null);
-      setMediaRecorder(null);
-      setTransSWorking(true);
-      listen(blob);
-    }
+    setDelayStop(true);
+  };
+
+  const handleStop = () => {
+    mediaRecorder.stop();
+    console.log("recording stopping");
+    stream.getTracks().forEach(track => {
+      track.stop();
+    });
+    const blob = new Blob(chunks, { type: "audio/webm" });
+    setChunks([]);
+    setStream(null);
+    setMediaRecorder(null);
+    setTransSWorking(true);
+    listen(blob);
   };
 
   const handleClose = () => {
@@ -569,11 +597,16 @@ const Landing = ({
                         rows={5}
                         inputProps={{ disabled: true }}
                       />
-                      {listening && (
-                        <Typography variant="h6" className={classes.inner}>
-                          Listening...
-                        </Typography>
-                      )}
+                      {listening &&
+                        (mediaRecorder ? (
+                          <Typography variant="h6" className={classes.inner}>
+                            Listening...
+                          </Typography>
+                        ) : (
+                          <Typography variant="h6" className={classes.inner}>
+                            Please wait...
+                          </Typography>
+                        ))}
                     </div>
                     {!listening && (
                       <Grid container>
@@ -605,6 +638,7 @@ const Landing = ({
                             variant="contained"
                             color="secondary"
                             className={classes.button}
+                            disabled={delayStop}
                           >
                             Stop!
                           </Button>
