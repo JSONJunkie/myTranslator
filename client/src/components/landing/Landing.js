@@ -18,6 +18,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Switch from "@material-ui/core/Switch";
 import Grow from "@material-ui/core/Grow";
 import Alert from "@material-ui/lab/Alert";
@@ -123,14 +124,24 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeIn,
       duration: 500
     }),
-    height: "20vh"
+    [theme.breakpoints.down("xs")]: {
+      height: theme.spacing(108)
+    },
+    [theme.breakpoints.up("sm")]: {
+      height: theme.spacing(54)
+    }
   },
   paperShift: {
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.easeIn,
       duration: 500
     }),
-    height: "35vh"
+    [theme.breakpoints.down("xs")]: {
+      height: theme.spacing(54)
+    },
+    [theme.breakpoints.up("sm")]: {
+      height: theme.spacing(27)
+    }
   }
 }));
 
