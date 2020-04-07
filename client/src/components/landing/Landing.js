@@ -200,7 +200,6 @@ const Landing = ({
   }, [stream, mediaRecorder, listening]);
 
   useEffect(() => {
-    console.log(transSWorking);
     if (mediaRecorder) {
       if (listening) {
         clear();
@@ -237,7 +236,8 @@ const Landing = ({
         setChunks(prev => [...prev, e.data]);
         console.log("chunk collected");
       };
-      if (mediaRecorder.state === "inactive") {
+      if (!recorderState) {
+        console.log("resetting chunks");
         setChunks([]);
       }
     }
@@ -406,7 +406,6 @@ const Landing = ({
       track.stop();
     });
     const blob = new Blob(chunks, { type: "audio/webm" });
-    setChunks([]);
     setStream(null);
     setMediaRecorder(null);
     setTransSWorking(true);
