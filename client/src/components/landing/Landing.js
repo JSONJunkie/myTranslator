@@ -15,6 +15,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+import Grow from "@material-ui/core/Grow";
 import Alert from "@material-ui/lab/Alert";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -146,6 +150,8 @@ const Landing = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [delayStop, setDelayStop] = useState(false);
+  const [hist, setHist] = useState(true);
+  const [transcribing, setTranscribing] = useState(true);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
@@ -427,6 +433,16 @@ const Landing = ({
     }
   };
 
+  const handleSwitch = e => {
+    const target = e.target.name;
+    if (target === "hist") {
+      setHist(!hist);
+    }
+    if (target === "transcribing") {
+      setTranscribing(!transcribing);
+    }
+  };
+
   if (postTrans && transLWorking) {
     setTransLWorking(false);
   }
@@ -451,6 +467,34 @@ const Landing = ({
           </Collapse>
         </Container>
         <Typography variant="h6">Welcome to the Translator! </Typography>
+        <FormGroup row>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={transcribing}
+                onChange={e => {
+                  handleSwitch(e);
+                }}
+                name="transcribing"
+                color="primary"
+              />
+            }
+            label="Transcription"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={hist}
+                onChange={e => {
+                  handleSwitch(e);
+                }}
+                name="hist"
+                color="primary"
+              />
+            }
+            label="Save/History"
+          />
+        </FormGroup>
         <Paper className={classes.paper}>
           <form
             className={classes.form}
@@ -583,89 +627,91 @@ const Landing = ({
                 </Grid>
               </Grid>
               {supported ? (
-                <Fragment>
-                  <Grid item xs={12} sm={6}>
-                    <div className={classes.wrapper}>
-                      <TextField
-                        aria-label="transcribed text"
-                        value={transcribed}
-                        variant={"filled"}
-                        placeholder="Transcribed text will appear here..."
-                        fullWidth
-                        multiline
-                        rows={5}
-                        inputProps={{ disabled: true }}
-                      />
-                      {listening &&
-                        (mediaRecorder ? (
-                          <Typography variant="h6" className={classes.inner}>
-                            Listening...
-                          </Typography>
-                        ) : (
-                          <Typography variant="h6" className={classes.inner}>
-                            Please wait...
-                          </Typography>
-                        ))}
-                    </div>
-                    {!listening && (
-                      <Grid container>
-                        <Grid item xs={12} className={classes.outterButton}>
-                          <Button
-                            onClick={e => handleClick3(e)}
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            disabled={
-                              goodAlert ||
-                              badAlert ||
-                              transLWorking ||
-                              transSWorking
-                            }
-                          >
-                            Listen
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    )}
-                    {listening && (
-                      <Grid container>
-                        <Grid item xs={12} className={classes.outterButton}>
-                          <Button
-                            onClick={e => handleClick3(e)}
-                            fullWidth
-                            variant="contained"
-                            color="secondary"
-                            className={classes.button}
-                            disabled={delayStop}
-                          >
-                            Stop!
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    )}
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <div className={classes.wrapper}>
-                      <TextField
-                        aria-label="translated transcribed text"
-                        value={translatedTranscription}
-                        variant={"filled"}
-                        placeholder="Translated transcription will appear here..."
-                        fullWidth
-                        multiline
-                        rows={5}
-                        inputProps={{ disabled: true }}
-                      />
-                      {transSWorking && (
-                        <CircularProgress
-                          disableShrink
-                          className={classes.progress}
+                <Grow in={transcribing}>
+                  <Fragment>
+                    <Grid item xs={12} sm={6}>
+                      <div className={classes.wrapper}>
+                        <TextField
+                          aria-label="transcribed text"
+                          value={transcribed}
+                          variant={"filled"}
+                          placeholder="Transcribed text will appear here..."
+                          fullWidth
+                          multiline
+                          rows={5}
+                          inputProps={{ disabled: true }}
                         />
+                        {listening &&
+                          (mediaRecorder ? (
+                            <Typography variant="h6" className={classes.inner}>
+                              Listening...
+                            </Typography>
+                          ) : (
+                            <Typography variant="h6" className={classes.inner}>
+                              Please wait...
+                            </Typography>
+                          ))}
+                      </div>
+                      {!listening && (
+                        <Grid container>
+                          <Grid item xs={12} className={classes.outterButton}>
+                            <Button
+                              onClick={e => handleClick3(e)}
+                              fullWidth
+                              variant="contained"
+                              color="primary"
+                              className={classes.button}
+                              disabled={
+                                goodAlert ||
+                                badAlert ||
+                                transLWorking ||
+                                transSWorking
+                              }
+                            >
+                              Listen
+                            </Button>
+                          </Grid>
+                        </Grid>
                       )}
-                    </div>
-                  </Grid>
-                </Fragment>
+                      {listening && (
+                        <Grid container>
+                          <Grid item xs={12} className={classes.outterButton}>
+                            <Button
+                              onClick={e => handleClick3(e)}
+                              fullWidth
+                              variant="contained"
+                              color="secondary"
+                              className={classes.button}
+                              disabled={delayStop}
+                            >
+                              Stop!
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <div className={classes.wrapper}>
+                        <TextField
+                          aria-label="translated transcribed text"
+                          value={translatedTranscription}
+                          variant={"filled"}
+                          placeholder="Translated transcription will appear here..."
+                          fullWidth
+                          multiline
+                          rows={5}
+                          inputProps={{ disabled: true }}
+                        />
+                        {transSWorking && (
+                          <CircularProgress
+                            disableShrink
+                            className={classes.progress}
+                          />
+                        )}
+                      </div>
+                    </Grid>
+                  </Fragment>
+                </Grow>
               ) : (
                 <Fragment>
                   <Backdrop
@@ -686,315 +732,331 @@ const Landing = ({
             </Grid>
           </form>
         </Paper>
-        <Typography variant="subtitle2">
-          Storage Remaining: {maxStorage - currentStorage} KB
-        </Typography>
-        <div className={classes.storage}>
-          <Grid container>
-            <Grid item xs>
-              <StorageProgress variant="determinate" value={percentage} />
-            </Grid>
-            <Grid item>
-              <Typography className={classes.barText} variant="subtitle2">
-                {Math.ceil((100 - percentage) * 100) / 100}%
-              </Typography>
-            </Grid>
-          </Grid>
-        </div>
-        <Paper className={classes.paperTwo}>
-          {translations.length > 0 || saved.length > 0 ? (
-            saved.length > 0 ? (
+        <Grow in={hist}>
+          <div>
+            <Typography variant="subtitle2">
+              Storage Remaining: {maxStorage - currentStorage} KB
+            </Typography>
+            <div className={classes.storage}>
               <Grid container>
-                <Grid item xs={12} md={6}>
+                <Grid item xs>
+                  <StorageProgress variant="determinate" value={percentage} />
+                </Grid>
+                <Grid item>
+                  <Typography className={classes.barText} variant="subtitle2">
+                    {Math.ceil((100 - percentage) * 100) / 100}%
+                  </Typography>
+                </Grid>
+              </Grid>
+            </div>
+            <Paper className={classes.paperTwo}>
+              {translations.length > 0 || saved.length > 0 ? (
+                saved.length > 0 ? (
+                  <Grid container>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        className={classes.barText}
+                        variant="subtitle2"
+                      >
+                        Stored:
+                      </Typography>
+                      <div>
+                        <List disablePadding={true}>
+                          {saved.map(translation => (
+                            <ListItem key={translation.transId}>
+                              <ListItemText
+                                primary={translation.preTrans}
+                                secondary={translation.postTrans}
+                              />
+                              <ListItemSecondaryAction>
+                                <Tooltip title="Play">
+                                  <IconButton
+                                    disabled={
+                                      goodAlert ||
+                                      badAlert ||
+                                      transLWorking ||
+                                      transSWorking
+                                    }
+                                    onClick={e =>
+                                      handleSpeak({
+                                        transId: translation.transId,
+                                        preTrans: translation.preTrans,
+                                        postTrans: translation.postTrans,
+                                        translatedAudio:
+                                          translation.translatedAudio,
+                                        stored: "no and i dont want you to"
+                                      })
+                                    }
+                                    aria-label="play"
+                                  >
+                                    <VolumeUpIcon />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Remove">
+                                  <IconButton
+                                    onClick={e =>
+                                      handleUnstore(translation.transId)
+                                    }
+                                    aria-label="remove"
+                                  >
+                                    <ClearIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                          ))}
+                        </List>
+                      </div>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        className={classes.barText}
+                        variant="subtitle2"
+                      >
+                        History:
+                      </Typography>
+                      <div>
+                        <List disablePadding={true}>
+                          {translations.map(translation => (
+                            <ListItem key={translation.transId}>
+                              <ListItemText
+                                primary={translation.preTrans}
+                                secondary={translation.postTrans}
+                              />
+                              <ListItemSecondaryAction>
+                                <Tooltip title="Play">
+                                  <IconButton
+                                    disabled={
+                                      goodAlert ||
+                                      badAlert ||
+                                      transLWorking ||
+                                      transSWorking
+                                    }
+                                    onClick={e =>
+                                      handleSpeak({
+                                        transId: translation.transId,
+                                        preTrans: translation.preTrans,
+                                        postTrans: translation.postTrans,
+                                        translatedAudio:
+                                          translation.translatedAudio,
+                                        stored: "no and i dont want you to"
+                                      })
+                                    }
+                                    aria-label="play"
+                                  >
+                                    <VolumeUpIcon />
+                                  </IconButton>
+                                </Tooltip>
+                                {translation.stored ? (
+                                  <Tooltip title="Remove">
+                                    <IconButton
+                                      onClick={e =>
+                                        handleUnstore(translation.transId)
+                                      }
+                                      aria-label="remove"
+                                    >
+                                      <LockIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                ) : (
+                                  <Tooltip title="save">
+                                    <IconButton
+                                      disabled={
+                                        goodAlert ||
+                                        badAlert ||
+                                        transLWorking ||
+                                        transSWorking
+                                      }
+                                      onClick={e =>
+                                        handleSave({
+                                          transId: translation.transId,
+                                          preTrans: translation.preTrans,
+                                          postTrans: translation.postTrans,
+                                          translatedAudio:
+                                            translation.translatedAudio,
+                                          stored: translation.stored
+                                        })
+                                      }
+                                      aria-label="save"
+                                    >
+                                      <LockOpenIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                )}
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                          ))}
+                        </List>
+                      </div>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <Typography
+                        className={classes.barText}
+                        variant="subtitle2"
+                      >
+                        Stored:
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        className={classes.barText}
+                        variant="subtitle2"
+                      >
+                        History:
+                      </Typography>
+                      <div>
+                        <List disablePadding={true}>
+                          {translations
+                            .filter((translation, index) => index % 2 === 0)
+                            .map(translation => (
+                              <ListItem key={translation.transId}>
+                                <ListItemText
+                                  primary={translation.preTrans}
+                                  secondary={translation.postTrans}
+                                />
+                                <ListItemSecondaryAction>
+                                  <Tooltip title="Play">
+                                    <IconButton
+                                      disabled={
+                                        goodAlert ||
+                                        badAlert ||
+                                        transLWorking ||
+                                        transSWorking
+                                      }
+                                      onClick={e =>
+                                        handleSpeak({
+                                          transId: translation.transId,
+                                          preTrans: translation.preTrans,
+                                          postTrans: translation.postTrans,
+                                          translatedAudio:
+                                            translation.translatedAudio,
+                                          stored: "no and i dont want you to"
+                                        })
+                                      }
+                                      aria-label="play"
+                                    >
+                                      <VolumeUpIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                  <Tooltip title="Save">
+                                    <IconButton
+                                      disabled={
+                                        goodAlert ||
+                                        badAlert ||
+                                        transLWorking ||
+                                        transSWorking
+                                      }
+                                      onClick={e =>
+                                        handleSave({
+                                          transId: translation.transId,
+                                          preTrans: translation.preTrans,
+                                          postTrans: translation.postTrans,
+                                          translatedAudio:
+                                            translation.translatedAudio,
+                                          stored: translation.stored
+                                        })
+                                      }
+                                      aria-label="save"
+                                    >
+                                      <LockOpenIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                </ListItemSecondaryAction>
+                              </ListItem>
+                            ))}
+                        </List>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        className={classes.barTextHidden}
+                        variant="subtitle2"
+                      >
+                        History:
+                      </Typography>
+                      <div>
+                        <List disablePadding={true}>
+                          {translations
+                            .filter((translation, index) => index % 2 !== 0)
+                            .map(translation => (
+                              <ListItem key={translation.transId}>
+                                <ListItemText
+                                  primary={translation.preTrans}
+                                  secondary={translation.postTrans}
+                                />
+                                <ListItemSecondaryAction>
+                                  <Tooltip title="Play">
+                                    <IconButton
+                                      disabled={
+                                        goodAlert ||
+                                        badAlert ||
+                                        transLWorking ||
+                                        transSWorking
+                                      }
+                                      onClick={e =>
+                                        handleSpeak({
+                                          transId: translation.transId,
+                                          preTrans: translation.preTrans,
+                                          postTrans: translation.postTrans,
+                                          translatedAudio:
+                                            translation.translatedAudio,
+                                          stored: "no and i dont want you to"
+                                        })
+                                      }
+                                      aria-label="play"
+                                    >
+                                      <VolumeUpIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                  <Tooltip title="Save">
+                                    <IconButton
+                                      disabled={
+                                        goodAlert ||
+                                        badAlert ||
+                                        transLWorking ||
+                                        transSWorking
+                                      }
+                                      onClick={e =>
+                                        handleSave({
+                                          transId: translation.transId,
+                                          preTrans: translation.preTrans,
+                                          postTrans: translation.postTrans,
+                                          translatedAudio:
+                                            translation.translatedAudio,
+                                          stored: translation.stored
+                                        })
+                                      }
+                                      aria-label="save"
+                                    >
+                                      <LockOpenIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                </ListItemSecondaryAction>
+                              </ListItem>
+                            ))}
+                        </List>
+                      </div>
+                    </Grid>
+                  </Grid>
+                )
+              ) : (
+                <Fragment>
                   <Typography className={classes.barText} variant="subtitle2">
                     Stored:
                   </Typography>
-                  <div>
-                    <List disablePadding={true}>
-                      {saved.map(translation => (
-                        <ListItem key={translation.transId}>
-                          <ListItemText
-                            primary={translation.preTrans}
-                            secondary={translation.postTrans}
-                          />
-                          <ListItemSecondaryAction>
-                            <Tooltip title="Play">
-                              <IconButton
-                                disabled={
-                                  goodAlert ||
-                                  badAlert ||
-                                  transLWorking ||
-                                  transSWorking
-                                }
-                                onClick={e =>
-                                  handleSpeak({
-                                    transId: translation.transId,
-                                    preTrans: translation.preTrans,
-                                    postTrans: translation.postTrans,
-                                    translatedAudio:
-                                      translation.translatedAudio,
-                                    stored: "no and i dont want you to"
-                                  })
-                                }
-                                aria-label="play"
-                              >
-                                <VolumeUpIcon />
-                              </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Remove">
-                              <IconButton
-                                onClick={e =>
-                                  handleUnstore(translation.transId)
-                                }
-                                aria-label="remove"
-                              >
-                                <ClearIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </div>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
                   <Typography className={classes.barText} variant="subtitle2">
                     History:
                   </Typography>
-                  <div>
-                    <List disablePadding={true}>
-                      {translations.map(translation => (
-                        <ListItem key={translation.transId}>
-                          <ListItemText
-                            primary={translation.preTrans}
-                            secondary={translation.postTrans}
-                          />
-                          <ListItemSecondaryAction>
-                            <Tooltip title="Play">
-                              <IconButton
-                                disabled={
-                                  goodAlert ||
-                                  badAlert ||
-                                  transLWorking ||
-                                  transSWorking
-                                }
-                                onClick={e =>
-                                  handleSpeak({
-                                    transId: translation.transId,
-                                    preTrans: translation.preTrans,
-                                    postTrans: translation.postTrans,
-                                    translatedAudio:
-                                      translation.translatedAudio,
-                                    stored: "no and i dont want you to"
-                                  })
-                                }
-                                aria-label="play"
-                              >
-                                <VolumeUpIcon />
-                              </IconButton>
-                            </Tooltip>
-                            {translation.stored ? (
-                              <Tooltip title="Remove">
-                                <IconButton
-                                  onClick={e =>
-                                    handleUnstore(translation.transId)
-                                  }
-                                  aria-label="remove"
-                                >
-                                  <LockIcon />
-                                </IconButton>
-                              </Tooltip>
-                            ) : (
-                              <Tooltip title="save">
-                                <IconButton
-                                  disabled={
-                                    goodAlert ||
-                                    badAlert ||
-                                    transLWorking ||
-                                    transSWorking
-                                  }
-                                  onClick={e =>
-                                    handleSave({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: translation.stored
-                                    })
-                                  }
-                                  aria-label="save"
-                                >
-                                  <LockOpenIcon />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </div>
-                </Grid>
-              </Grid>
-            ) : (
-              <Grid container>
-                <Grid item xs={12}>
-                  <Typography className={classes.barText} variant="subtitle2">
-                    Stored:
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Typography className={classes.barText} variant="subtitle2">
-                    History:
-                  </Typography>
-                  <div>
-                    <List disablePadding={true}>
-                      {translations
-                        .filter((translation, index) => index % 2 === 0)
-                        .map(translation => (
-                          <ListItem key={translation.transId}>
-                            <ListItemText
-                              primary={translation.preTrans}
-                              secondary={translation.postTrans}
-                            />
-                            <ListItemSecondaryAction>
-                              <Tooltip title="Play">
-                                <IconButton
-                                  disabled={
-                                    goodAlert ||
-                                    badAlert ||
-                                    transLWorking ||
-                                    transSWorking
-                                  }
-                                  onClick={e =>
-                                    handleSpeak({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: "no and i dont want you to"
-                                    })
-                                  }
-                                  aria-label="play"
-                                >
-                                  <VolumeUpIcon />
-                                </IconButton>
-                              </Tooltip>
-                              <Tooltip title="Save">
-                                <IconButton
-                                  disabled={
-                                    goodAlert ||
-                                    badAlert ||
-                                    transLWorking ||
-                                    transSWorking
-                                  }
-                                  onClick={e =>
-                                    handleSave({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: translation.stored
-                                    })
-                                  }
-                                  aria-label="save"
-                                >
-                                  <LockOpenIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </ListItemSecondaryAction>
-                          </ListItem>
-                        ))}
-                    </List>
-                  </div>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    className={classes.barTextHidden}
-                    variant="subtitle2"
-                  >
-                    History:
-                  </Typography>
-                  <div>
-                    <List disablePadding={true}>
-                      {translations
-                        .filter((translation, index) => index % 2 !== 0)
-                        .map(translation => (
-                          <ListItem key={translation.transId}>
-                            <ListItemText
-                              primary={translation.preTrans}
-                              secondary={translation.postTrans}
-                            />
-                            <ListItemSecondaryAction>
-                              <Tooltip title="Play">
-                                <IconButton
-                                  disabled={
-                                    goodAlert ||
-                                    badAlert ||
-                                    transLWorking ||
-                                    transSWorking
-                                  }
-                                  onClick={e =>
-                                    handleSpeak({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: "no and i dont want you to"
-                                    })
-                                  }
-                                  aria-label="play"
-                                >
-                                  <VolumeUpIcon />
-                                </IconButton>
-                              </Tooltip>
-                              <Tooltip title="Save">
-                                <IconButton
-                                  disabled={
-                                    goodAlert ||
-                                    badAlert ||
-                                    transLWorking ||
-                                    transSWorking
-                                  }
-                                  onClick={e =>
-                                    handleSave({
-                                      transId: translation.transId,
-                                      preTrans: translation.preTrans,
-                                      postTrans: translation.postTrans,
-                                      translatedAudio:
-                                        translation.translatedAudio,
-                                      stored: translation.stored
-                                    })
-                                  }
-                                  aria-label="save"
-                                >
-                                  <LockOpenIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </ListItemSecondaryAction>
-                          </ListItem>
-                        ))}
-                    </List>
-                  </div>
-                </Grid>
-              </Grid>
-            )
-          ) : (
-            <Fragment>
-              <Typography className={classes.barText} variant="subtitle2">
-                Stored:
-              </Typography>
-              <Typography className={classes.barText} variant="subtitle2">
-                History:
-              </Typography>
-            </Fragment>
-          )}
-        </Paper>
+                </Fragment>
+              )}
+            </Paper>
+          </div>
+        </Grow>
       </Container>
     </div>
   );
