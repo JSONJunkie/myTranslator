@@ -18,7 +18,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Switch from "@material-ui/core/Switch";
 import Grow from "@material-ui/core/Grow";
 import Alert from "@material-ui/lab/Alert";
@@ -40,7 +39,6 @@ import {
   speak,
   listen
 } from "../../actions/lang";
-import legacyGetUserMedia from "../../utils/legacyRecording";
 
 const StorageProgress = withStyles({
   root: {
@@ -221,146 +219,6 @@ const Landing = ({
   const [transLWorking, setTransLWorking] = useState(false);
   const [transSWorking, setTransSWorking] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (navigator.getUserMedia && listening && !mediaRecorder) {
-          const constraints = { audio: true };
-          if (!stream) {
-            setStream(await navigator.mediaDevices.getUserMedia(constraints));
-          }
-          if (stream && !mediaRecorder) {
-            setMediaRecorder(new MediaRecorder(stream));
-          }
-        }
-      } catch (err) {
-        handleError(err);
-      }
-    })();
-  }, [stream, mediaRecorder, listening]);
-
-  useEffect(() => {
-    if (mediaRecorder) {
-      if (listening) {
-        clear();
-        mediaRecorder.start(200);
-        setRecorderState(true);
-        console.log("recorder starting...");
-      }
-
-      if (!listening && recorderState) {
-        handleStop();
-        setRecorderState(false);
-      }
-
-      if (listening && mediaRecorder) {
-        setDelayStop(true);
-        setTimeout(() => setDelayStop(false), 3000);
-      }
-    }
-  }, [listening, mediaRecorder]);
-
-  useEffect(() => {
-    if (navigator.getUserMedia) {
-      setSupported(true);
-      setLoading(false);
-    } else {
-      setOpen(true);
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (mediaRecorder) {
-      mediaRecorder.ondataavailable = e => {
-        setChunks(prev => [...prev, e.data]);
-        console.log("chunk collected");
-      };
-      if (!recorderState) {
-        console.log("resetting chunks");
-        setChunks([]);
-      }
-    }
-  }, [mediaRecorder]);
-
-  useEffect(() => {
-    if (errors.text) {
-      setTextError(errors.text.message);
-      setIsTextError(true);
-    } else {
-      setTextError("");
-      setIsTextError(false);
-    }
-  }, [errors.text]);
-
-  useEffect(() => {
-    if (!loading) {
-      const prefs = { hist, transcribing };
-      localStorage.setItem("prefs", JSON.stringify(prefs));
-    }
-  }, [hist, transcribing]);
-
-  useEffect(() => {
-    if (localStorage.prefs) {
-      const prefs = JSON.parse(localStorage.getItem("prefs"));
-      setHist(prev => prefs.hist);
-      setTranscribing(prev => prefs.transcribing);
-    }
-
-    localStorage.setItem("savedTranslations", JSON.stringify(saved));
-
-    if (isSaving && saved.length > 0) {
-      setCurrentStorage(
-        prev =>
-          prev +
-          Math.ceil(
-            ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024) * 100
-          ) /
-            100
-      );
-      setIsSaving(false);
-    }
-
-    if (isUnstoring && saved.length > 0) {
-      setCurrentStorage(
-        prev =>
-          prev -
-          Math.ceil(
-            ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024) * 100
-          ) /
-            100
-      );
-      setIsUnstoring(false);
-    }
-
-    if (isUnstoring && saved.length === 0) {
-      setCurrentStorage(prev => 0);
-      setIsUnstoring(false);
-    }
-  }, [saved, isSaving, isUnstoring]);
-
-  useEffect(() => {
-    if (error) {
-      handleError(error);
-      setIsSaving(false);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (savedSuccess) {
-      setGoodAlert(true);
-      setTimeout(() => {
-        setGoodAlert(false);
-      }, 3000);
-    }
-    clear();
-  }, [savedSuccess, clear, saved]);
-
-  useEffect(() => {
-    const max = getMaxStorage();
-    setMaxStorage(prev => max);
-  }, []);
-
   const getMaxStorage = () => {
     const prefs = { hist, transcribing };
     localStorage.setItem("prefs", JSON.stringify(prefs));
@@ -503,6 +361,136 @@ const Landing = ({
   if (translatedTranscription && transSWorking) {
     setTransSWorking(false);
   }
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (navigator.getUserMedia && listening && !mediaRecorder) {
+          const constraints = { audio: true };
+          if (!stream) {
+            setStream(await navigator.mediaDevices.getUserMedia(constraints));
+          }
+          if (stream && !mediaRecorder) {
+            setMediaRecorder(new MediaRecorder(stream));
+          }
+        }
+      } catch (err) {
+        handleError(err);
+      }
+    })();
+  }, [stream, mediaRecorder, listening]);
+
+  useEffect(() => {
+    if (mediaRecorder) {
+      if (listening) {
+        clear();
+        mediaRecorder.start(200);
+        setRecorderState(true);
+        console.log("recorder starting...");
+      }
+
+      if (!listening && recorderState) {
+        handleStop();
+        setRecorderState(false);
+      }
+
+      if (listening && mediaRecorder) {
+        setDelayStop(true);
+        setTimeout(() => setDelayStop(false), 3000);
+      }
+    }
+
+    if (mediaRecorder) {
+      mediaRecorder.ondataavailable = e => {
+        setChunks(prev => [...prev, e.data]);
+        console.log("chunk collected");
+      };
+      if (!recorderState) {
+        console.log("resetting chunks");
+        setChunks([]);
+      }
+    }
+  }, [listening, mediaRecorder, clear, recorderState]);
+
+  useEffect(() => {
+    if (errors.text) {
+      setTextError(errors.text.message);
+      setIsTextError(true);
+    } else {
+      setTextError("");
+      setIsTextError(false);
+    }
+    if (error) {
+      handleError(error);
+      setIsSaving(false);
+    }
+  }, [errors.text, error]);
+
+  useEffect(() => {
+    if (!loading) {
+      const prefs = { hist, transcribing };
+      localStorage.setItem("prefs", JSON.stringify(prefs));
+    }
+  }, [hist, transcribing, loading]);
+
+  useEffect(() => {
+    if (localStorage.prefs) {
+      const prefs = JSON.parse(localStorage.getItem("prefs"));
+      setHist(prev => prefs.hist);
+      setTranscribing(prev => prefs.transcribing);
+    }
+
+    localStorage.setItem("savedTranslations", JSON.stringify(saved));
+
+    if (isSaving && saved.length > 0) {
+      setCurrentStorage(
+        prev =>
+          prev +
+          Math.ceil(
+            ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024) * 100
+          ) /
+            100
+      );
+      setIsSaving(false);
+    }
+
+    if (isUnstoring && saved.length > 0) {
+      setCurrentStorage(
+        prev =>
+          prev -
+          Math.ceil(
+            ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024) * 100
+          ) /
+            100
+      );
+      setIsUnstoring(false);
+    }
+
+    if (isUnstoring && saved.length === 0) {
+      setCurrentStorage(prev => 0);
+      setIsUnstoring(false);
+    }
+
+    if (savedSuccess) {
+      setGoodAlert(true);
+      setTimeout(() => {
+        setGoodAlert(false);
+      }, 3000);
+      clear();
+    }
+  }, [saved, isSaving, isUnstoring, savedSuccess, clear]);
+
+  useEffect(() => {
+    const max = getMaxStorage();
+    setMaxStorage(prev => max);
+    if (navigator.getUserMedia) {
+      setSupported(true);
+      setLoading(false);
+    } else {
+      setOpen(true);
+      setLoading(false);
+    }
+  }, []);
 
   return loading ? (
     <div>

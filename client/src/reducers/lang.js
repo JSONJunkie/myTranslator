@@ -22,8 +22,7 @@ const initialState = {
   translations: [],
   saved: JSON.parse(localStorage.getItem("savedTranslations")) || [],
   savedSuccess: "",
-  error: "",
-  loading: true
+  error: ""
 };
 
 export default function (state = initialState, action) {
