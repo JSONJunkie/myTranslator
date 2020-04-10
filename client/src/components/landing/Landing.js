@@ -301,9 +301,11 @@ const Landing = ({
   }, [hist, transcribing]);
 
   useEffect(() => {
-    const prefs = JSON.parse(localStorage.getItem("prefs"));
-    setHist(prev => prefs.hist);
-    setTranscribing(prev => prefs.transcribing);
+    if (localStorage.prefs) {
+      const prefs = JSON.parse(localStorage.getItem("prefs"));
+      setHist(prev => prefs.hist);
+      setTranscribing(prev => prefs.transcribing);
+    }
 
     localStorage.setItem("savedTranslations", JSON.stringify(saved));
 
@@ -360,6 +362,8 @@ const Landing = ({
   }, []);
 
   const getMaxStorage = () => {
+    const prefs = { hist, transcribing };
+    localStorage.setItem("prefs", JSON.stringify(prefs));
     var temp = localStorage.getItem("savedTranslations");
     var temp2 = localStorage.getItem("prefs");
     localStorage.clear();
