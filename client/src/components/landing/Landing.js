@@ -294,7 +294,19 @@ const Landing = ({
   }, [errors.text]);
 
   useEffect(() => {
+    if (!loading) {
+      const prefs = { hist, transcribing };
+      localStorage.setItem("prefs", JSON.stringify(prefs));
+    }
+  }, [hist, transcribing]);
+
+  useEffect(() => {
+    const prefs = JSON.parse(localStorage.getItem("prefs"));
+    setHist(prev => prefs.hist);
+    setTranscribing(prev => prefs.transcribing);
+
     localStorage.setItem("savedTranslations", JSON.stringify(saved));
+
     if (isSaving && saved.length > 0) {
       setCurrentStorage(
         prev =>
@@ -349,6 +361,7 @@ const Landing = ({
 
   const getMaxStorage = () => {
     var temp = localStorage.getItem("savedTranslations");
+    var temp2 = localStorage.getItem("prefs");
     localStorage.clear();
 
     var i = 0;
@@ -359,7 +372,9 @@ const Landing = ({
     } catch (e) {
       localStorage.removeItem("test");
       localStorage.setItem("savedTranslations", temp);
+      localStorage.setItem("prefs", temp2);
       temp = "";
+      temp2 = "";
       return (i - 200) * 2;
     }
   };
