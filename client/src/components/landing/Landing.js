@@ -268,7 +268,6 @@ const Landing = ({
 
   const handleSave = data => {
     const { transId, preTrans, postTrans, translatedAudio, stored } = data;
-    // window.scrollTo(0, 0);
     try {
       if (preTrans && postTrans) {
         if (translatedAudio) {
@@ -350,6 +349,10 @@ const Landing = ({
 
   if (translatedTranscription && transSWorking) {
     setTransSWorking(false);
+  }
+
+  if (loading) {
+    window.scrollTo(0, 0);
   }
 
   useEffect(() => {
@@ -458,6 +461,8 @@ const Landing = ({
 
   useEffect(() => {
     if (error) {
+      window.scrollTo(0, 0);
+
       setErrorMessage(error.message);
       setBadAlert(true);
       setTimeout(() => {
@@ -467,6 +472,8 @@ const Landing = ({
       clear(error);
     }
     if (localError) {
+      window.scrollTo(0, 0);
+
       setErrorMessage(localError.message);
       setBadAlert(true);
       setTimeout(() => {
@@ -475,6 +482,8 @@ const Landing = ({
       setLocalError("");
     }
     if (errors.text) {
+      window.scrollTo(0, 0);
+
       setTextError(errors.text.message);
       setIsTextError(true);
     } else {
