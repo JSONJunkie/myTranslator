@@ -65,6 +65,17 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     paddingTop: theme.spacing(1)
   },
+  rootUnsup: {
+    display: "flex",
+    width: "100%"
+  },
+  contentUnsup: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+    paddingTop: theme.spacing(1),
+    minHeight: "108vh"
+  },
   alert: {
     position: "absolute",
     top: theme.spacing(1),
@@ -90,7 +101,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
-    minHeight: "35vh",
+    maxHeight: "35vh",
     overflow: "auto"
   },
   storage: {
@@ -145,6 +156,33 @@ const useStyles = makeStyles(theme => ({
     },
     [theme.breakpoints.up("sm")]: {
       height: theme.spacing(27)
+    }
+  },
+  paperUnsup: {
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    transition: theme.transitions.create("height", {
+      easing: theme.transitions.easing.easeIn,
+      duration: 500
+    }),
+    [theme.breakpoints.down("xs")]: {
+      height: theme.spacing(54)
+    },
+    [theme.breakpoints.up("sm")]: {
+      height: theme.spacing(27)
+    }
+  },
+  paperShiftUnsup: {
+    transition: theme.transitions.create("height", {
+      easing: theme.transitions.easing.easeIn,
+      duration: 500
+    }),
+    [theme.breakpoints.down("xs")]: {
+      height: theme.spacing(27)
+    },
+    [theme.breakpoints.up("sm")]: {
+      height: theme.spacing(14)
     }
   },
   switch: {
@@ -502,6 +540,9 @@ const Landing = ({
       const max = getMaxStorage();
       setMaxStorage(prev => max);
     }
+  }, [getMaxStorage, maxStorage, hist, transcribing]);
+
+  useEffect(() => {
     if (navigator.getUserMedia) {
       setSupported(true);
       setLoading(false);
@@ -509,7 +550,7 @@ const Landing = ({
       setOpen(true);
       setLoading(false);
     }
-  }, [getMaxStorage, hist, transcribing, maxStorage]);
+  }, []);
 
   return loading ? (
     <div>
@@ -517,8 +558,16 @@ const Landing = ({
     </div>
   ) : (
     <Grow in={true} {...{ timeout: 1500 }}>
-      <div className={classes.root}>
-        <Container className={classes.content}>
+      <div
+        className={clsx(classes.root, {
+          [classes.rootUnsup]: !supported
+        })}
+      >
+        <Container
+          className={clsx(classes.content, {
+            [classes.contentUnsup]: !supported
+          })}
+        >
           <Container className={classes.alert}>
             <Collapse in={goodAlert}>
               <Alert severity="success">Translated text saved!</Alert>
@@ -567,155 +616,155 @@ const Landing = ({
               </FormGroup>
             </Grid>
           </Grid>
-          <Paper
-            className={clsx(classes.paper, {
-              [classes.paperShift]: !transcribing
-            })}
-          >
-            <form
-              className={classes.form}
-              onSubmit={handleSubmit(handleTranslate)}
+          {supported ? (
+            <Paper
+              className={clsx(classes.paper, {
+                [classes.paperShift]: !transcribing
+              })}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    aria-label="untranslated text"
-                    name="text"
-                    variant="filled"
-                    placeholder="Enter text to be translated here..."
-                    fullWidth
-                    multiline
-                    rows={5}
-                    autoFocus
-                    helperText={textError}
-                    error={isTextError}
-                    inputRef={register({
-                      required: {
-                        value: true,
-                        message: "Please include some text to translate"
-                      },
-                      pattern: {
-                        value: /\b[^\d\W]+\b/,
-                        message: "Please only include words"
-                      }
-                    })}
-                    onChange={e => onChange(e)}
-                  />
-                  <Grid container>
-                    <Grid item xs={6} className={classes.outterButton}>
-                      <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                        disabled={
-                          goodAlert ||
-                          badAlert ||
-                          transLWorking ||
-                          transSWorking
-                        }
-                      >
-                        Translate
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6} className={classes.outterButton}>
-                      <Button
-                        type="reset"
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        onClick={e => handleCleanup(e)}
-                        disabled={
-                          goodAlert ||
-                          badAlert ||
-                          transLWorking ||
-                          transSWorking
-                        }
-                      >
-                        Clear
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <div className={classes.wrapper}>
+              <form
+                className={classes.form}
+                onSubmit={handleSubmit(handleTranslate)}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
-                      aria-label="translated text"
-                      name="translated"
-                      label={preTrans}
-                      value={postTrans}
+                      aria-label="untranslated text"
+                      name="text"
                       variant="filled"
-                      placeholder="Translated text will appear here..."
+                      placeholder="Enter text to be translated here..."
                       fullWidth
                       multiline
                       rows={5}
-                      inputProps={{ readOnly: true }}
+                      autoFocus
+                      helperText={textError}
+                      error={isTextError}
+                      inputRef={register({
+                        required: {
+                          value: true,
+                          message: "Please include some text to translate"
+                        },
+                        pattern: {
+                          value: /\b[^\d\W]+\b/,
+                          message: "Please only include words"
+                        }
+                      })}
+                      onChange={e => onChange(e)}
                     />
-                    {transLWorking && (
-                      <CircularProgress
-                        disableShrink
-                        className={classes.progress}
-                      />
-                    )}
-                  </div>
-
-                  <Grid container>
-                    <Grid item xs={6} className={classes.outterButton}>
-                      <Button
-                        onClick={e =>
-                          handleSpeak({
-                            transId,
-                            preTrans,
-                            postTrans,
-                            translatedAudio,
-                            stored: "no and i dont want you to"
-                          })
-                        }
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                        disabled={
-                          goodAlert ||
-                          badAlert ||
-                          transLWorking ||
-                          transSWorking
-                        }
-                      >
-                        Speak
-                      </Button>
+                    <Grid container>
+                      <Grid item xs={6} className={classes.outterButton}>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Translate
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6} className={classes.outterButton}>
+                        <Button
+                          type="reset"
+                          fullWidth
+                          variant="contained"
+                          color="secondary"
+                          className={classes.button}
+                          onClick={e => handleCleanup(e)}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Clear
+                        </Button>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={6} className={classes.outterButton}>
-                      <Button
-                        onClick={e =>
-                          handleSave({
-                            transId,
-                            preTrans,
-                            postTrans,
-                            translatedAudio
-                          })
-                        }
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <div className={classes.wrapper}>
+                      <TextField
+                        aria-label="translated text"
+                        name="translated"
+                        label={preTrans}
+                        value={postTrans}
+                        variant="filled"
+                        placeholder="Translated text will appear here..."
                         fullWidth
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        disabled={
-                          goodAlert ||
-                          badAlert ||
-                          transLWorking ||
-                          transSWorking
-                        }
-                      >
-                        Save
-                      </Button>
+                        multiline
+                        rows={5}
+                        inputProps={{ readOnly: true }}
+                      />
+                      {transLWorking && (
+                        <CircularProgress
+                          disableShrink
+                          className={classes.progress}
+                        />
+                      )}
+                    </div>
+
+                    <Grid container>
+                      <Grid item xs={6} className={classes.outterButton}>
+                        <Button
+                          onClick={e =>
+                            handleSpeak({
+                              transId,
+                              preTrans,
+                              postTrans,
+                              translatedAudio,
+                              stored: "no and i dont want you to"
+                            })
+                          }
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Speak
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6} className={classes.outterButton}>
+                        <Button
+                          onClick={e =>
+                            handleSave({
+                              transId,
+                              preTrans,
+                              postTrans,
+                              translatedAudio
+                            })
+                          }
+                          fullWidth
+                          variant="contained"
+                          color="secondary"
+                          className={classes.button}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Save
+                        </Button>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </form>
-            {supported ? (
+              </form>
               <Grow in={transcribing} {...{ timeout: 1500 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
@@ -801,24 +850,175 @@ const Landing = ({
                   </Grid>
                 </Grid>
               </Grow>
-            ) : (
-              <Fragment>
-                <Backdrop
-                  className={classes.backdrop}
-                  open={open}
-                  onClick={handleClose}
-                >
-                  <Typography variant="h5">
-                    Please use the desktop version of Chrome, or Firefox for
-                    audio transcription support.
-                  </Typography>
-                  <Button color="inherit" size="large">
-                    Continue
-                  </Button>
-                </Backdrop>
-              </Fragment>
-            )}
-          </Paper>
+            </Paper>
+          ) : (
+            <Paper
+              className={clsx(classes.paperUnsup, {
+                [classes.paperShiftUnsup]: !transcribing
+              })}
+            >
+              <form
+                className={classes.form}
+                onSubmit={handleSubmit(handleTranslate)}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      aria-label="untranslated text"
+                      name="text"
+                      variant="filled"
+                      placeholder="Enter text to be translated here..."
+                      fullWidth
+                      multiline
+                      rows={5}
+                      autoFocus
+                      helperText={textError}
+                      error={isTextError}
+                      inputRef={register({
+                        required: {
+                          value: true,
+                          message: "Please include some text to translate"
+                        },
+                        pattern: {
+                          value: /\b[^\d\W]+\b/,
+                          message: "Please only include words"
+                        }
+                      })}
+                      onChange={e => onChange(e)}
+                    />
+                    <Grid container>
+                      <Grid item xs={6} className={classes.outterButton}>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Translate
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6} className={classes.outterButton}>
+                        <Button
+                          type="reset"
+                          fullWidth
+                          variant="contained"
+                          color="secondary"
+                          className={classes.button}
+                          onClick={e => handleCleanup(e)}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Clear
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <div className={classes.wrapper}>
+                      <TextField
+                        aria-label="translated text"
+                        name="translated"
+                        label={preTrans}
+                        value={postTrans}
+                        variant="filled"
+                        placeholder="Translated text will appear here..."
+                        fullWidth
+                        multiline
+                        rows={5}
+                        inputProps={{ readOnly: true }}
+                      />
+                      {transLWorking && (
+                        <CircularProgress
+                          disableShrink
+                          className={classes.progress}
+                        />
+                      )}
+                    </div>
+
+                    <Grid container>
+                      <Grid item xs={6} className={classes.outterButton}>
+                        <Button
+                          onClick={e =>
+                            handleSpeak({
+                              transId,
+                              preTrans,
+                              postTrans,
+                              translatedAudio,
+                              stored: "no and i dont want you to"
+                            })
+                          }
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Speak
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6} className={classes.outterButton}>
+                        <Button
+                          onClick={e =>
+                            handleSave({
+                              transId,
+                              preTrans,
+                              postTrans,
+                              translatedAudio
+                            })
+                          }
+                          fullWidth
+                          variant="contained"
+                          color="secondary"
+                          className={classes.button}
+                          disabled={
+                            goodAlert ||
+                            badAlert ||
+                            transLWorking ||
+                            transSWorking
+                          }
+                        >
+                          Save
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </form>
+              {!supported && (
+                <Fragment>
+                  <Backdrop
+                    className={classes.backdrop}
+                    open={open}
+                    onClick={handleClose}
+                  >
+                    <Typography variant="h5">
+                      Please use the desktop version of Chrome, or Firefox for
+                      audio transcription support.
+                    </Typography>
+                    <Button color="inherit" size="large">
+                      Continue
+                    </Button>
+                  </Backdrop>
+                </Fragment>
+              )}
+            </Paper>
+          )}
           <Grow in={hist} {...{ timeout: 1500 }} unmountOnExit={true}>
             <div>
               <Typography variant="subtitle2">
