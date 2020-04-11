@@ -33,7 +33,15 @@ export default function (state = initialState, action) {
       return { ...state, transId: payload.transId, preTrans, postTrans };
     case STORE_TRANSLATED_AUDIO:
       const { translatedAudio } = payload;
-      return { ...state, translatedAudio };
+      return {
+        ...state,
+        translatedAudio,
+        translations: state.translations.map(translation => {
+          if (translation.transId === payload.transId) {
+            return { ...translation, translatedAudio };
+          } else return translation;
+        })
+      };
     case LISTEN:
       const { transcribed } = payload;
       return { ...state, transcribed };

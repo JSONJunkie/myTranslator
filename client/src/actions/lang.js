@@ -128,7 +128,7 @@ export const textToSpeech = data => async dispatch => {
       if (result) {
         dispatch({
           type: STORE_TRANSLATED_AUDIO,
-          payload: { translatedAudio: result }
+          payload: { translatedAudio: result, transId }
         });
         if (speaking) {
           dispatch(
