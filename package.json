@@ -2,6 +2,9 @@
   "name": "mytranslator",
   "version": "1.0.0",
   "description": "Teacher friendly translator",
+  "engines": {
+    "node": "13.8.x"
+  },
   "main": "server.js",
   "scripts": {
     "start": "node server",
