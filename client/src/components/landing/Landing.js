@@ -194,7 +194,7 @@ const Landing = ({
   const [goodAlert, setGoodAlert] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isUnstoring, setIsUnstoring] = useState(false);
-  const [maxStorage, setMaxStorage] = useState(0);
+  const [maxStorage, setMaxStorage] = useState("");
   const [currentStorage, setCurrentStorage] = useState(() => {
     var total = 0,
       entryLength,
@@ -234,8 +234,6 @@ const Landing = ({
   }, [chunks, listen, mediaRecorder, stream]);
 
   const getMaxStorage = useCallback(() => {
-    const prefs = { hist, transcribing };
-    localStorage.setItem("prefs", JSON.stringify(prefs));
     var temp = localStorage.getItem("savedTranslations");
     var temp2 = localStorage.getItem("prefs");
     localStorage.clear();
@@ -253,7 +251,7 @@ const Landing = ({
       temp2 = "";
       return (i - 200) * 2;
     }
-  }, [hist, transcribing]);
+  }, []);
 
   const onChange = e => {
     setText(e.target.value);
@@ -491,8 +489,12 @@ const Landing = ({
   }, [clear, error, localError, errors.text]);
 
   useEffect(() => {
-    const max = getMaxStorage();
-    setMaxStorage(prev => max);
+    const prefs = { hist, transcribing };
+    localStorage.setItem("prefs", JSON.stringify(prefs));
+    if (!maxStorage) {
+      const max = getMaxStorage();
+      setMaxStorage(prev => max);
+    }
     if (navigator.getUserMedia) {
       setSupported(true);
       setLoading(false);
@@ -500,7 +502,7 @@ const Landing = ({
       setOpen(true);
       setLoading(false);
     }
-  }, [getMaxStorage]);
+  }, [getMaxStorage, hist, transcribing, maxStorage]);
 
   return loading ? (
     <div>
