@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useCallback } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import clsx from "clsx";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -216,6 +216,7 @@ const Landing = ({
   const [textError, setTextError] = useState("");
   const [isTextError, setIsTextError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [localError, setLocalError] = useState("");
   const [transLWorking, setTransLWorking] = useState(false);
   const [transSWorking, setTransSWorking] = useState(false);
 
@@ -276,7 +277,7 @@ const Landing = ({
         );
       }
     } catch (err) {
-      handleError(err);
+      setLocalError(prev => err);
     }
   };
 
@@ -301,7 +302,7 @@ const Landing = ({
         textToSpeech({ preTrans, postTrans, speaking: true, transId, stored });
       }
     } catch (err) {
-      handleError(err);
+      setLocalError(prev => err);
     }
   };
 
@@ -332,17 +333,6 @@ const Landing = ({
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleError = useCallback(
-    err => {
-      setErrorMessage(err.message);
-      setBadAlert(true);
-      setTimeout(() => {
-        setBadAlert(false);
-      }, 5000);
-    },
-    [clear, error]
-  );
 
   const handleSwitch = e => {
     const target = e.target.name;
@@ -375,10 +365,10 @@ const Landing = ({
           }
         }
       } catch (err) {
-        handleError(err);
+        setLocalError(prev => err);
       }
     })();
-  }, [stream, mediaRecorder, listening, handleError]);
+  }, [stream, mediaRecorder, listening]);
 
   useEffect(() => {
     if (mediaRecorder) {
@@ -411,21 +401,6 @@ const Landing = ({
       }
     }
   }, [listening, mediaRecorder, clear, recorderState]);
-
-  useEffect(() => {
-    if (errors.text) {
-      setTextError(errors.text.message);
-      setIsTextError(true);
-    } else {
-      setTextError("");
-      setIsTextError(false);
-    }
-    if (error) {
-      handleError(error);
-      clear(error);
-      setIsSaving(false);
-    }
-  }, [errors.text, error, handleError]);
 
   useEffect(() => {
     if (!loading) {
@@ -480,6 +455,33 @@ const Landing = ({
       clear();
     }
   }, [saved, isSaving, isUnstoring, savedSuccess, clear]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error.message);
+      setBadAlert(true);
+      setTimeout(() => {
+        setBadAlert(false);
+      }, 5000);
+      setIsSaving(false);
+      clear(error);
+    }
+    if (localError) {
+      setErrorMessage(localError.message);
+      setBadAlert(true);
+      setTimeout(() => {
+        setBadAlert(false);
+      }, 5000);
+      setLocalError("");
+    }
+    if (errors.text) {
+      setTextError(errors.text.message);
+      setIsTextError(true);
+    } else {
+      setTextError("");
+      setIsTextError(false);
+    }
+  }, [clear, error, localError, errors.text]);
 
   useEffect(() => {
     const max = getMaxStorage();
