@@ -335,15 +335,11 @@ const Landing = ({
 
   const handleError = useCallback(
     err => {
-      console.log(err);
       setErrorMessage(err.message);
       setBadAlert(true);
       setTimeout(() => {
         setBadAlert(false);
       }, 5000);
-      if (error) {
-        clear(err);
-      }
     },
     [clear, error]
   );
@@ -426,6 +422,7 @@ const Landing = ({
     }
     if (error) {
       handleError(error);
+      clear(error);
       setIsSaving(false);
     }
   }, [errors.text, error, handleError]);
