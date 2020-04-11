@@ -95,93 +95,66 @@ export const translate = formData => async dispatch => {
 export const textToSpeech = data => async dispatch => {
   const { preTrans, postTrans, speaking, transId, stored } = data;
   try {
-    var result;
-    var xhr = new XMLHttpRequest(),
-      blob,
-      fileReader = new FileReader();
-    xhr.open("GET", "https://www.kozco.com/tech/piano2.wav", true);
-    xhr.responseType = "arraybuffer";
-    xhr.addEventListener(
-      "load",
-      function () {
-        if (xhr.status === 200) {
-          blob = new Blob([xhr.response], { type: "audio/webm" });
-          fileReader.onload = function (evt) {
-            var result = evt.target.result;
-            dispatch({
-              type: STORE_TRANSLATED_AUDIO,
-              payload: { translatedAudio: result }
-            });
-            if (speaking) {
-              dispatch(
-                speak({
-                  preTrans,
-                  postTrans,
-                  translatedAudio: result,
-                  speaking,
-                  transId,
-                  stored
-                })
-              );
-            } else {
-              dispatch(
-                save({
-                  preTrans,
-                  postTrans,
-                  translatedAudio: result,
-                  transId,
-                  stored
-                })
-              );
-            }
-          };
-          fileReader.readAsDataURL(blob);
-        }
-      },
-      false
-    );
-    xhr.send();
-    // const synthesizeParams = {
-    //   text: postTrans,
-    //   accept: "audio/mp3",
-    //   voice: "es-ES_LauraVoice"
-    // };
-    // const config = {
-    //   responseType: "arraybuffer"
-    // };
-    // const body = synthesizeParams;
-    // const res = await axios.post("/api/translator/speak", body, config);
-    // const audio = res.data;
-    // const fileReader = new FileReader();
-    // const blob = new Blob([audio], { type: "audio/webm" });
-    // fileReader.onload = function(event) {
-    //   const result = event.target.result;
-    //   dispatch({
-    //     type: STORE_TRANSLATED_AUDIO,
-    //     payload: { translatedAudio: result }
-    //   });
-    //   if (speaking) {
-    //     dispatch(speak(preTrans, postTrans, result, speaking));
-    //   } else {
-    //     dispatch(save({ preTrans, postTrans, translatedAudio: result }));
-    //   }
-    // };
-    // fileReader.readAsDataURL(blob);
-    if (!result) {
-      dispatch(
-        save({
-          preTrans,
-          postTrans,
-          transId,
-          stored
-        })
-      );
-      if (speaking) {
-        throw new Error(
-          "There was a problem converting text to audio. TextToSpeech service unavailable."
+    const synthesizeParams = {
+      text: postTrans,
+      accept: "audio/mp3",
+      voice: "es-ES_LauraVoice"
+    };
+    const config = {
+      responseType: "arraybuffer"
+    };
+    const body = synthesizeParams;
+    const res = await axios.post("/api/translator/speak", body, config);
+    const audio = res.data;
+    const fileReader = new FileReader();
+    const blob = new Blob([audio], { type: "audio/webm" });
+    fileReader.onload = function (event) {
+      const result = event.target.result;
+      if (!result) {
+        dispatch(
+          save({
+            preTrans,
+            postTrans,
+            transId,
+            stored
+          })
         );
+        if (speaking) {
+          throw new Error(
+            "There was a problem converting text to audio. TextToSpeech service unavailable."
+          );
+        }
       }
-    }
+      if (result) {
+        dispatch({
+          type: STORE_TRANSLATED_AUDIO,
+          payload: { translatedAudio: result }
+        });
+        if (speaking) {
+          dispatch(
+            speak({
+              preTrans,
+              postTrans,
+              translatedAudio: result,
+              speaking,
+              transId,
+              stored
+            })
+          );
+        } else {
+          dispatch(
+            save({
+              preTrans,
+              postTrans,
+              translatedAudio: result,
+              transId,
+              stored
+            })
+          );
+        }
+      }
+    };
+    fileReader.readAsDataURL(blob);
   } catch (err) {
     dispatch({
       type: ERROR,
