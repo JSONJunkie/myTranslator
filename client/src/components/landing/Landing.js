@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useCallback } from "react";
 import clsx from "clsx";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -220,7 +220,20 @@ const Landing = ({
   const [transLWorking, setTransLWorking] = useState(false);
   const [transSWorking, setTransSWorking] = useState(false);
 
-  const getMaxStorage = () => {
+  const handleStop = useCallback(() => {
+    mediaRecorder.stop();
+    console.log("recording stopping");
+    stream.getTracks().forEach(track => {
+      track.stop();
+    });
+    const blob = new Blob(chunks, { type: "audio/webm" });
+    setStream(null);
+    setMediaRecorder(null);
+    setTransSWorking(true);
+    listen(blob);
+  }, [chunks, listen, mediaRecorder, stream]);
+
+  const getMaxStorage = useCallback(() => {
     const prefs = { hist, transcribing };
     localStorage.setItem("prefs", JSON.stringify(prefs));
     var temp = localStorage.getItem("savedTranslations");
@@ -240,7 +253,7 @@ const Landing = ({
       temp2 = "";
       return (i - 200) * 2;
     }
-  };
+  }, [hist, transcribing]);
 
   const onChange = e => {
     setText(e.target.value);
@@ -317,19 +330,6 @@ const Landing = ({
     setDelayStop(true);
   };
 
-  const handleStop = () => {
-    mediaRecorder.stop();
-    console.log("recording stopping");
-    stream.getTracks().forEach(track => {
-      track.stop();
-    });
-    const blob = new Blob(chunks, { type: "audio/webm" });
-    setStream(null);
-    setMediaRecorder(null);
-    setTransSWorking(true);
-    listen(blob);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -400,7 +400,7 @@ const Landing = ({
         setChunks([]);
       }
     }
-  }, [listening, mediaRecorder, clear, recorderState]);
+  }, [listening, mediaRecorder, clear, recorderState, handleStop]);
 
   useEffect(() => {
     if (!loading) {
@@ -493,7 +493,7 @@ const Landing = ({
       setOpen(true);
       setLoading(false);
     }
-  }, []);
+  }, [getMaxStorage]);
 
   return loading ? (
     <div>
