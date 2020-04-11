@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useEffect, useCallback } from "react";
+import React, {
+  Fragment,
+  useState,
+  useEffect,
+  useCallback,
+  useRef
+} from "react";
 import clsx from "clsx";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -220,18 +226,22 @@ const Landing = ({
   const [transLWorking, setTransLWorking] = useState(false);
   const [transSWorking, setTransSWorking] = useState(false);
 
-  const handleStop = useCallback(() => {
-    mediaRecorder.stop();
-    console.log("recording stopping");
-    stream.getTracks().forEach(track => {
-      track.stop();
-    });
-    const blob = new Blob(chunks, { type: "audio/webm" });
-    setStream(null);
-    setMediaRecorder(null);
-    setTransSWorking(true);
-    listen(blob);
-  }, [chunks, listen, mediaRecorder, stream]);
+  const recorderControl = useRef();
+
+  recorderControl.current = {
+    stop() {
+      mediaRecorder.stop();
+      console.log("recording stopping");
+      stream.getTracks().forEach(track => {
+        track.stop();
+      });
+      const blob = new Blob(chunks, { type: "audio/webm" });
+      setStream(null);
+      setMediaRecorder(null);
+      setTransSWorking(true);
+      listen(blob);
+    }
+  };
 
   const getMaxStorage = useCallback(() => {
     var temp = localStorage.getItem("savedTranslations");
@@ -369,24 +379,21 @@ const Landing = ({
 
   useEffect(() => {
     if (mediaRecorder) {
-      if (listening) {
+      if (listening && !recorderState) {
         clear();
         mediaRecorder.start(200);
         setRecorderState(true);
+        setDelayStop(true);
+        setTimeout(() => setDelayStop(false), 1500);
         console.log("recorder starting...");
       }
 
       if (!listening && recorderState) {
-        handleStop();
+        recorderControl.current.stop();
         setRecorderState(false);
       }
-
-      if (listening && mediaRecorder) {
-        setDelayStop(true);
-        setTimeout(() => setDelayStop(false), 3000);
-      }
     }
-  }, [listening, mediaRecorder, recorderState, clear, handleStop]);
+  }, [listening, mediaRecorder, recorderState, clear]);
 
   useEffect(() => {
     if (mediaRecorder) {
