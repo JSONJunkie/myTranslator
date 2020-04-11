@@ -558,6 +558,7 @@ const Landing = ({
                       }}
                       name="transcribing"
                       color="primary"
+                      disabled={!supported}
                     />
                   }
                   label="Transcription"
@@ -808,8 +809,8 @@ const Landing = ({
                   onClick={handleClose}
                 >
                   <Typography variant="h5">
-                    Please use the desktop version of Chrome, Safari, or Firefox
-                    for audio transcription support.
+                    Please use the desktop version of Chrome, or Firefox for
+                    audio transcription support.
                   </Typography>
                   <Button color="inherit" size="large">
                     Continue
@@ -849,49 +850,47 @@ const Landing = ({
                         <div>
                           <List disablePadding={true}>
                             {saved.map(translation => (
-                              <Grow in={true} {...{ timeout: 1000 }}>
-                                <ListItem key={translation.transId}>
-                                  <ListItemText
-                                    primary={translation.preTrans}
-                                    secondary={translation.postTrans}
-                                  />
-                                  <ListItemSecondaryAction>
-                                    <Tooltip title="Play">
-                                      <IconButton
-                                        disabled={
-                                          goodAlert ||
-                                          badAlert ||
-                                          transLWorking ||
-                                          transSWorking
-                                        }
-                                        onClick={e =>
-                                          handleSpeak({
-                                            transId: translation.transId,
-                                            preTrans: translation.preTrans,
-                                            postTrans: translation.postTrans,
-                                            translatedAudio:
-                                              translation.translatedAudio,
-                                            stored: "no and i dont want you to"
-                                          })
-                                        }
-                                        aria-label="play"
-                                      >
-                                        <VolumeUpIcon />
-                                      </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Remove">
-                                      <IconButton
-                                        onClick={e =>
-                                          handleUnstore(translation.transId)
-                                        }
-                                        aria-label="remove"
-                                      >
-                                        <ClearIcon />
-                                      </IconButton>
-                                    </Tooltip>
-                                  </ListItemSecondaryAction>
-                                </ListItem>
-                              </Grow>
+                              <ListItem key={translation.transId}>
+                                <ListItemText
+                                  primary={translation.preTrans}
+                                  secondary={translation.postTrans}
+                                />
+                                <ListItemSecondaryAction>
+                                  <Tooltip title="Play">
+                                    <IconButton
+                                      disabled={
+                                        goodAlert ||
+                                        badAlert ||
+                                        transLWorking ||
+                                        transSWorking
+                                      }
+                                      onClick={e =>
+                                        handleSpeak({
+                                          transId: translation.transId,
+                                          preTrans: translation.preTrans,
+                                          postTrans: translation.postTrans,
+                                          translatedAudio:
+                                            translation.translatedAudio,
+                                          stored: "no and i dont want you to"
+                                        })
+                                      }
+                                      aria-label="play"
+                                    >
+                                      <VolumeUpIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                  <Tooltip title="Remove">
+                                    <IconButton
+                                      onClick={e =>
+                                        handleUnstore(translation.transId)
+                                      }
+                                      aria-label="remove"
+                                    >
+                                      <ClearIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                </ListItemSecondaryAction>
+                              </ListItem>
                             ))}
                           </List>
                         </div>
@@ -907,14 +906,48 @@ const Landing = ({
                         <div>
                           <List disablePadding={true}>
                             {translations.map(translation => (
-                              <Grow in={true} {...{ timeout: 1000 }}>
-                                <ListItem key={translation.transId}>
-                                  <ListItemText
-                                    primary={translation.preTrans}
-                                    secondary={translation.postTrans}
-                                  />
-                                  <ListItemSecondaryAction>
-                                    <Tooltip title="Play">
+                              <ListItem key={translation.transId}>
+                                <ListItemText
+                                  primary={translation.preTrans}
+                                  secondary={translation.postTrans}
+                                />
+                                <ListItemSecondaryAction>
+                                  <Tooltip title="Play">
+                                    <IconButton
+                                      disabled={
+                                        goodAlert ||
+                                        badAlert ||
+                                        transLWorking ||
+                                        transSWorking
+                                      }
+                                      onClick={e =>
+                                        handleSpeak({
+                                          transId: translation.transId,
+                                          preTrans: translation.preTrans,
+                                          postTrans: translation.postTrans,
+                                          translatedAudio:
+                                            translation.translatedAudio,
+                                          stored: "no and i dont want you to"
+                                        })
+                                      }
+                                      aria-label="play"
+                                    >
+                                      <VolumeUpIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                  {translation.stored ? (
+                                    <Tooltip title="Remove">
+                                      <IconButton
+                                        onClick={e =>
+                                          handleUnstore(translation.transId)
+                                        }
+                                        aria-label="remove"
+                                      >
+                                        <LockIcon />
+                                      </IconButton>
+                                    </Tooltip>
+                                  ) : (
+                                    <Tooltip title="save">
                                       <IconButton
                                         disabled={
                                           goodAlert ||
@@ -923,59 +956,23 @@ const Landing = ({
                                           transSWorking
                                         }
                                         onClick={e =>
-                                          handleSpeak({
+                                          handleSave({
                                             transId: translation.transId,
                                             preTrans: translation.preTrans,
                                             postTrans: translation.postTrans,
                                             translatedAudio:
                                               translation.translatedAudio,
-                                            stored: "no and i dont want you to"
+                                            stored: translation.stored
                                           })
                                         }
-                                        aria-label="play"
+                                        aria-label="save"
                                       >
-                                        <VolumeUpIcon />
+                                        <LockOpenIcon />
                                       </IconButton>
                                     </Tooltip>
-                                    {translation.stored ? (
-                                      <Tooltip title="Remove">
-                                        <IconButton
-                                          onClick={e =>
-                                            handleUnstore(translation.transId)
-                                          }
-                                          aria-label="remove"
-                                        >
-                                          <LockIcon />
-                                        </IconButton>
-                                      </Tooltip>
-                                    ) : (
-                                      <Tooltip title="save">
-                                        <IconButton
-                                          disabled={
-                                            goodAlert ||
-                                            badAlert ||
-                                            transLWorking ||
-                                            transSWorking
-                                          }
-                                          onClick={e =>
-                                            handleSave({
-                                              transId: translation.transId,
-                                              preTrans: translation.preTrans,
-                                              postTrans: translation.postTrans,
-                                              translatedAudio:
-                                                translation.translatedAudio,
-                                              stored: translation.stored
-                                            })
-                                          }
-                                          aria-label="save"
-                                        >
-                                          <LockOpenIcon />
-                                        </IconButton>
-                                      </Tooltip>
-                                    )}
-                                  </ListItemSecondaryAction>
-                                </ListItem>
-                              </Grow>
+                                  )}
+                                </ListItemSecondaryAction>
+                              </ListItem>
                             ))}
                           </List>
                         </div>
@@ -1004,63 +1001,60 @@ const Landing = ({
                             {translations
                               .filter((translation, index) => index % 2 === 0)
                               .map(translation => (
-                                <Grow in={true} {...{ timeout: 1000 }}>
-                                  <ListItem key={translation.transId}>
-                                    <ListItemText
-                                      primary={translation.preTrans}
-                                      secondary={translation.postTrans}
-                                    />
-                                    <ListItemSecondaryAction>
-                                      <Tooltip title="Play">
-                                        <IconButton
-                                          disabled={
-                                            goodAlert ||
-                                            badAlert ||
-                                            transLWorking ||
-                                            transSWorking
-                                          }
-                                          onClick={e =>
-                                            handleSpeak({
-                                              transId: translation.transId,
-                                              preTrans: translation.preTrans,
-                                              postTrans: translation.postTrans,
-                                              translatedAudio:
-                                                translation.translatedAudio,
-                                              stored:
-                                                "no and i dont want you to"
-                                            })
-                                          }
-                                          aria-label="play"
-                                        >
-                                          <VolumeUpIcon />
-                                        </IconButton>
-                                      </Tooltip>
-                                      <Tooltip title="Save">
-                                        <IconButton
-                                          disabled={
-                                            goodAlert ||
-                                            badAlert ||
-                                            transLWorking ||
-                                            transSWorking
-                                          }
-                                          onClick={e =>
-                                            handleSave({
-                                              transId: translation.transId,
-                                              preTrans: translation.preTrans,
-                                              postTrans: translation.postTrans,
-                                              translatedAudio:
-                                                translation.translatedAudio,
-                                              stored: translation.stored
-                                            })
-                                          }
-                                          aria-label="save"
-                                        >
-                                          <LockOpenIcon />
-                                        </IconButton>
-                                      </Tooltip>
-                                    </ListItemSecondaryAction>
-                                  </ListItem>
-                                </Grow>
+                                <ListItem key={translation.transId}>
+                                  <ListItemText
+                                    primary={translation.preTrans}
+                                    secondary={translation.postTrans}
+                                  />
+                                  <ListItemSecondaryAction>
+                                    <Tooltip title="Play">
+                                      <IconButton
+                                        disabled={
+                                          goodAlert ||
+                                          badAlert ||
+                                          transLWorking ||
+                                          transSWorking
+                                        }
+                                        onClick={e =>
+                                          handleSpeak({
+                                            transId: translation.transId,
+                                            preTrans: translation.preTrans,
+                                            postTrans: translation.postTrans,
+                                            translatedAudio:
+                                              translation.translatedAudio,
+                                            stored: "no and i dont want you to"
+                                          })
+                                        }
+                                        aria-label="play"
+                                      >
+                                        <VolumeUpIcon />
+                                      </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Save">
+                                      <IconButton
+                                        disabled={
+                                          goodAlert ||
+                                          badAlert ||
+                                          transLWorking ||
+                                          transSWorking
+                                        }
+                                        onClick={e =>
+                                          handleSave({
+                                            transId: translation.transId,
+                                            preTrans: translation.preTrans,
+                                            postTrans: translation.postTrans,
+                                            translatedAudio:
+                                              translation.translatedAudio,
+                                            stored: translation.stored
+                                          })
+                                        }
+                                        aria-label="save"
+                                      >
+                                        <LockOpenIcon />
+                                      </IconButton>
+                                    </Tooltip>
+                                  </ListItemSecondaryAction>
+                                </ListItem>
                               ))}
                           </List>
                         </div>
@@ -1077,63 +1071,60 @@ const Landing = ({
                             {translations
                               .filter((translation, index) => index % 2 !== 0)
                               .map(translation => (
-                                <Grow in={true} {...{ timeout: 1000 }}>
-                                  <ListItem key={translation.transId}>
-                                    <ListItemText
-                                      primary={translation.preTrans}
-                                      secondary={translation.postTrans}
-                                    />
-                                    <ListItemSecondaryAction>
-                                      <Tooltip title="Play">
-                                        <IconButton
-                                          disabled={
-                                            goodAlert ||
-                                            badAlert ||
-                                            transLWorking ||
-                                            transSWorking
-                                          }
-                                          onClick={e =>
-                                            handleSpeak({
-                                              transId: translation.transId,
-                                              preTrans: translation.preTrans,
-                                              postTrans: translation.postTrans,
-                                              translatedAudio:
-                                                translation.translatedAudio,
-                                              stored:
-                                                "no and i dont want you to"
-                                            })
-                                          }
-                                          aria-label="play"
-                                        >
-                                          <VolumeUpIcon />
-                                        </IconButton>
-                                      </Tooltip>
-                                      <Tooltip title="Save">
-                                        <IconButton
-                                          disabled={
-                                            goodAlert ||
-                                            badAlert ||
-                                            transLWorking ||
-                                            transSWorking
-                                          }
-                                          onClick={e =>
-                                            handleSave({
-                                              transId: translation.transId,
-                                              preTrans: translation.preTrans,
-                                              postTrans: translation.postTrans,
-                                              translatedAudio:
-                                                translation.translatedAudio,
-                                              stored: translation.stored
-                                            })
-                                          }
-                                          aria-label="save"
-                                        >
-                                          <LockOpenIcon />
-                                        </IconButton>
-                                      </Tooltip>
-                                    </ListItemSecondaryAction>
-                                  </ListItem>
-                                </Grow>
+                                <ListItem key={translation.transId}>
+                                  <ListItemText
+                                    primary={translation.preTrans}
+                                    secondary={translation.postTrans}
+                                  />
+                                  <ListItemSecondaryAction>
+                                    <Tooltip title="Play">
+                                      <IconButton
+                                        disabled={
+                                          goodAlert ||
+                                          badAlert ||
+                                          transLWorking ||
+                                          transSWorking
+                                        }
+                                        onClick={e =>
+                                          handleSpeak({
+                                            transId: translation.transId,
+                                            preTrans: translation.preTrans,
+                                            postTrans: translation.postTrans,
+                                            translatedAudio:
+                                              translation.translatedAudio,
+                                            stored: "no and i dont want you to"
+                                          })
+                                        }
+                                        aria-label="play"
+                                      >
+                                        <VolumeUpIcon />
+                                      </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Save">
+                                      <IconButton
+                                        disabled={
+                                          goodAlert ||
+                                          badAlert ||
+                                          transLWorking ||
+                                          transSWorking
+                                        }
+                                        onClick={e =>
+                                          handleSave({
+                                            transId: translation.transId,
+                                            preTrans: translation.preTrans,
+                                            postTrans: translation.postTrans,
+                                            translatedAudio:
+                                              translation.translatedAudio,
+                                            stored: translation.stored
+                                          })
+                                        }
+                                        aria-label="save"
+                                      >
+                                        <LockOpenIcon />
+                                      </IconButton>
+                                    </Tooltip>
+                                  </ListItemSecondaryAction>
+                                </ListItem>
                               ))}
                           </List>
                         </div>
