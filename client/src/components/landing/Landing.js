@@ -351,10 +351,6 @@ const Landing = ({
     setTransSWorking(false);
   }
 
-  if (loading) {
-    window.scrollTo(0, 0);
-  }
-
   useEffect(() => {
     (async () => {
       try {
@@ -392,7 +388,9 @@ const Landing = ({
         setTimeout(() => setDelayStop(false), 3000);
       }
     }
+  }, [listening, mediaRecorder, recorderState, clear, handleStop]);
 
+  useEffect(() => {
     if (mediaRecorder) {
       mediaRecorder.ondataavailable = e => {
         setChunks(prev => [...prev, e.data]);
@@ -403,7 +401,7 @@ const Landing = ({
         setChunks([]);
       }
     }
-  }, [listening, mediaRecorder, clear, recorderState, handleStop]);
+  }, [mediaRecorder, recorderState]);
 
   useEffect(() => {
     if (!loading) {
@@ -449,20 +447,22 @@ const Landing = ({
       setCurrentStorage(prev => 0);
       setIsUnstoring(false);
     }
+  }, [saved, isSaving, isUnstoring]);
 
+  useEffect(() => {
     if (savedSuccess) {
+      window.scrollTo(0, 0);
       setGoodAlert(true);
       setTimeout(() => {
         setGoodAlert(false);
       }, 3000);
-      clear();
     }
-  }, [saved, isSaving, isUnstoring, savedSuccess, clear]);
+    clear();
+  }, [savedSuccess, clear, saved]);
 
   useEffect(() => {
     if (error) {
       window.scrollTo(0, 0);
-
       setErrorMessage(error.message);
       setBadAlert(true);
       setTimeout(() => {
@@ -473,7 +473,6 @@ const Landing = ({
     }
     if (localError) {
       window.scrollTo(0, 0);
-
       setErrorMessage(localError.message);
       setBadAlert(true);
       setTimeout(() => {
@@ -483,7 +482,6 @@ const Landing = ({
     }
     if (errors.text) {
       window.scrollTo(0, 0);
-
       setTextError(errors.text.message);
       setIsTextError(true);
     } else {

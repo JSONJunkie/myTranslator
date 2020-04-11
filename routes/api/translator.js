@@ -80,12 +80,12 @@ router.post("/listen", async (req, res) => {
 
     recognizeStream.on("data", function (event) {
       onEvent("Data:", event);
-      console.log(event);
+      // console.log(event);
       res.send(event.results[0].alternatives[0].transcript);
     });
     recognizeStream.on("error", function (event) {
       onEvent("Error:", event.raw.data);
-      console.log(event.raw.data);
+      // console.log(event.raw.data);
     });
     recognizeStream.on("close", function (event) {
       onEvent("Close:", event);
