@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useCallback } from "react";
 import clsx from "clsx";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -333,16 +333,20 @@ const Landing = ({
     setOpen(false);
   };
 
-  const handleError = err => {
-    setErrorMessage(err.message);
-    setBadAlert(true);
-    setTimeout(() => {
-      setBadAlert(false);
-    }, 5000);
-    if (error) {
-      clear(err);
-    }
-  };
+  const handleError = useCallback(
+    err => {
+      console.log(err);
+      setErrorMessage(err.message);
+      setBadAlert(true);
+      setTimeout(() => {
+        setBadAlert(false);
+      }, 5000);
+      if (error) {
+        clear(err);
+      }
+    },
+    [clear, error]
+  );
 
   const handleSwitch = e => {
     const target = e.target.name;
@@ -378,7 +382,7 @@ const Landing = ({
         handleError(err);
       }
     })();
-  }, [stream, mediaRecorder, listening]);
+  }, [stream, mediaRecorder, listening, handleError]);
 
   useEffect(() => {
     if (mediaRecorder) {
@@ -424,7 +428,7 @@ const Landing = ({
       handleError(error);
       setIsSaving(false);
     }
-  }, [errors.text, error]);
+  }, [errors.text, error, handleError]);
 
   useEffect(() => {
     if (!loading) {
