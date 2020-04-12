@@ -233,6 +233,7 @@ const Landing = ({
   const [listening, setListening] = useState(false);
   const [recorderState, setRecorderState] = useState(false);
   const [chunks, setChunks] = useState([]);
+  const [audioContext, setAudioContext] = useState(null);
   const [supported, setSupported] = useState(false);
   const [badAlert, setBadAlert] = useState(false);
   const [goodAlert, setGoodAlert] = useState(false);
@@ -324,7 +325,8 @@ const Landing = ({
             postTrans,
             speaking: false,
             transId,
-            stored
+            stored,
+            audioContext
           });
         }
 
@@ -354,10 +356,18 @@ const Landing = ({
           translatedAudio,
           speaking: true,
           transId,
-          stored
+          stored,
+          audioContext
         });
       } else {
-        textToSpeech({ preTrans, postTrans, speaking: true, transId, stored });
+        textToSpeech({
+          preTrans,
+          postTrans,
+          speaking: true,
+          transId,
+          stored,
+          audioContext
+        });
       }
     } catch (err) {
       setLocalError(prev => err);
@@ -541,6 +551,10 @@ const Landing = ({
       setMaxStorage(prev => max);
     }
   }, [getMaxStorage, maxStorage, hist, transcribing]);
+
+  useEffect(() => {
+    setAudioContext(new (window.AudioContext || window.webkitAudioContext)());
+  }, []);
 
   useEffect(() => {
     if (navigator.getUserMedia) {

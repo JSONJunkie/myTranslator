@@ -93,7 +93,7 @@ export const translate = formData => async dispatch => {
 };
 
 export const textToSpeech = data => async dispatch => {
-  const { preTrans, postTrans, speaking, transId, stored } = data;
+  const { preTrans, postTrans, speaking, transId, stored, audioContext } = data;
   try {
     const synthesizeParams = {
       text: postTrans,
@@ -138,7 +138,8 @@ export const textToSpeech = data => async dispatch => {
               translatedAudio: result,
               speaking,
               transId,
-              stored
+              stored,
+              audioContext
             })
           );
         } else {
@@ -173,7 +174,8 @@ export const speak = data => async dispatch => {
     translatedAudio,
     speaking,
     transId,
-    stored
+    stored,
+    audioContext
   } = data;
   try {
     if (!speaking) {
@@ -193,7 +195,7 @@ export const speak = data => async dispatch => {
       }
       fileReader.onload = function (event) {
         const result = event.target.result;
-        playSound(result);
+        playSound(audioContext, result);
       };
       fileReader.readAsArrayBuffer(dataURLtoBlob(translatedAudio));
       dispatch({
