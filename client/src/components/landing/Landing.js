@@ -346,6 +346,7 @@ const Landing = ({
   };
 
   const handleSpeak = data => {
+    audioContext.resume();
     const { preTrans, postTrans, translatedAudio, transId, stored } = data;
     try {
       if (!postTrans) throw new Error("You need to make a translation first!");
