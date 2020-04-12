@@ -1,6 +1,6 @@
 export default function playSound(audio) {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  // const audioCtx = new AudioContext();
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioContext();
   const buffer = audioCtx.createBuffer(1, 1, 22050);
   const source = audioCtx.createBufferSource();
   source.buffer = buffer;
