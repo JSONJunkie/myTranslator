@@ -184,16 +184,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("sm")]: {
       height: theme.spacing(14)
     }
-  },
-  switch: {
-    [theme.breakpoints.down("xs")]: {
-      paddingLeft: theme.spacing(7)
-    }
-  },
-  title: {
-    [theme.breakpoints.down("xs")]: {
-      paddingLeft: theme.spacing(7)
-    }
   }
 }));
 
@@ -591,46 +581,44 @@ const Landing = ({
               <Alert severity="error">{errorMessage}</Alert>
             </Collapse>
           </Container>
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item xs={6} sm={9} md={10}>
-              <Typography className={classes.title} variant="h6">
-                Welcome to the Translator!
-              </Typography>
+          <Container>
+            <Grid container alignItems="center">
+              <Grid item xs>
+                <Typography variant="h6">Welcome to the Translator!</Typography>
+              </Grid>
+              <Grid item>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={hist}
+                        onChange={e => {
+                          handleSwitch(e);
+                        }}
+                        name="hist"
+                        color="primary"
+                      />
+                    }
+                    label="Save/History"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={transcribing}
+                        onChange={e => {
+                          handleSwitch(e);
+                        }}
+                        name="transcribing"
+                        color="primary"
+                        disabled={!supported}
+                      />
+                    }
+                    label="Transcription"
+                  />
+                </FormGroup>
+              </Grid>
             </Grid>
-            <Grid item xs={6} sm={3} md={2}>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={hist}
-                      onChange={e => {
-                        handleSwitch(e);
-                      }}
-                      name="hist"
-                      color="primary"
-                    />
-                  }
-                  label="Save/History"
-                  className={classes.switch}
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={transcribing}
-                      onChange={e => {
-                        handleSwitch(e);
-                      }}
-                      name="transcribing"
-                      color="primary"
-                      disabled={!supported}
-                    />
-                  }
-                  label="Transcription"
-                  className={classes.switch}
-                />
-              </FormGroup>
-            </Grid>
-          </Grid>
+          </Container>
           {supported ? (
             <Paper
               className={clsx(classes.paper, {
