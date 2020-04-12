@@ -1010,7 +1010,7 @@ const Landing = ({
                     open={open}
                     onClick={handleClose}
                   >
-                    <Typography variant="h5">
+                    <Typography variant="h5" align="center">
                       Please use the desktop version of Chrome, or Firefox for
                       audio transcription support.
                     </Typography>
