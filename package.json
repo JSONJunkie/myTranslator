@@ -9,9 +9,12 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
+    "debug-server": "nodemon --inspect server",
     "client": "npm start --prefix client",
-    "br": "/Applications/Brave\\ Browser.app/Contents/MacOS/Brave\\ Browser --remote-debugging-port=9222 --user-data-dir=/tmp/brave-debug",
-    "debug": "concurrently \"npm run br\" \"npm run client\"",
+    "brMac": "/Applications/Brave\\ Browser.app/Contents/MacOS/Brave\\ Browser --remote-debugging-port=9222 --user-data-dir=/tmp/brave-debug",
+    "brWin": "start brave.exe localhost:3000 --remote-debugging-port=9222 --user-data-dir=c:/tmp/debug-profile",
+    "debugMac": "concurrently \"npm run brMac\" \"npm run client\"",
+    "debugWin": "concurrently \"npm run brWin\" \"npm run client\" \"npm run debug-server\"",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
