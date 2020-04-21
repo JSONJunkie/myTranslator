@@ -1,5 +1,6 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import Rollbar from "rollbar";
 
 import {
   TRANSLATE,
@@ -15,6 +16,12 @@ import {
   CLEAR_ERROR
 } from "./types";
 import playSound from "../utils/playSound";
+
+const rollbar = new Rollbar({
+  accessToken: "589f75cdf3664555b9b778a76ab2a226",
+  captureUncaught: true,
+  captureUnhandledRejections: true
+});
 
 export const deleteSaved = transId => dispatch => {
   try {

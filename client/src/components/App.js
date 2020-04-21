@@ -14,7 +14,7 @@ const flexContainer = {
 function App() {
   const [rollbar] = useState(
     new Rollbar({
-      accessToken: "3bfb54869cfc4d8bbde4bf35b652fed6",
+      accessToken: "589f75cdf3664555b9b778a76ab2a226",
       captureUncaught: true,
       captureUnhandledRejections: true
     })
