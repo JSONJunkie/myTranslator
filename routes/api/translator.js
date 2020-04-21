@@ -3,8 +3,15 @@ const LanguageTranslatorV3 = require("ibm-watson/language-translator/v3");
 const TextToSpeechV1 = require("ibm-watson/text-to-speech/v1");
 const SpeechToTextV1 = require("ibm-watson/speech-to-text/v1");
 const { IamAuthenticator } = require("ibm-watson/auth");
+const Rollbar = require("rollbar");
 
 const router = express.Router();
+
+const rollbar = new Rollbar({
+  accessToken: "31432b4b831a4991bc8726210f1eb03e",
+  captureUncaught: true,
+  captureUnhandledRejections: true
+});
 
 const languageTranslator = new LanguageTranslatorV3({
   version: "2018-05-01",
@@ -39,13 +46,16 @@ const speechToText = new SpeechToTextV1({
 
 router.post("/", async (req, res) => {
   try {
-    const translateParams = req.body;
-    const translationResult = await languageTranslator.translate(
-      translateParams
-    );
-    const result = translationResult.result.translations[0].translation;
-    res.json(result);
+    // const translateParams = req.body;
+    // const translationResult = await languageTranslator.translate(
+    //   translateParams
+    // );
+    // const result = translationResult.result.translations[0].translation;
+    // res.json(result);
+    throw new Error("serverside test!");
   } catch (err) {
+    rollbar.error("serverside test!");
+
     console.log(err);
   }
 });
