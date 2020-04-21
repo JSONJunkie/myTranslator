@@ -46,13 +46,12 @@ const speechToText = new SpeechToTextV1({
 
 router.post("/", async (req, res) => {
   try {
-    // const translateParams = req.body;
-    // const translationResult = await languageTranslator.translate(
-    //   translateParams
-    // );
-    // const result = translationResult.result.translations[0].translation;
-    // res.json(result);
-    throw new Error("serverside test!");
+    const translateParams = req.body;
+    const translationResult = await languageTranslator.translate(
+      translateParams
+    );
+    const result = translationResult.result.translations[0].translation;
+    res.json(result);
   } catch (err) {
     rollbar.error("serverside test!");
 
