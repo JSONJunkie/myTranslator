@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
+import Rollbar from "rollbar";
 
 import Landing from "./landing/Landing";
 
@@ -11,10 +12,28 @@ const flexContainer = {
 };
 
 function App() {
+  const [rollbar] = useState(
+    new Rollbar({
+      accessToken: "3bfb54869cfc4d8bbde4bf35b652fed6",
+      captureUncaught: true,
+      captureUnhandledRejections: true
+    })
+  );
+
+  const logInfo = () => {
+    rollbar.info("react test log");
+  };
+
+  const throwError = () => {
+    throw new Error("react test error");
+  };
+
   return (
     <Fragment>
       <div style={flexContainer}>
         <Landing />
+        <button onClick={logInfo}>Log Info</button>
+        <button onClick={throwError}>Throw Error</button>
       </div>
     </Fragment>
   );
