@@ -73,28 +73,27 @@ export const clear = data => dispatch => {
 
 export const translate = formData => async dispatch => {
   try {
-    rollbar.error("test");
-    // const translateParams = {
-    //   text: formData,
-    //   modelId: "en-es"
-    // };
-    // const transId = uuidv4();
-    // const body = translateParams;
-    // const res = await axios.post("/api/translator", body);
-    // dispatch({
-    //   type: TRANSLATE,
-    //   payload: { transId, preTrans: formData, postTrans: res.data }
-    // });
-    // dispatch({
-    //   type: PUSH_TRANS,
-    //   payload: {
-    //     transId,
-    //     preTrans: formData,
-    //     postTrans: res.data,
-    //     translatedAudio: "",
-    //     stored: false
-    //   }
-    // });
+    const translateParams = {
+      text: formData,
+      modelId: "en-es"
+    };
+    const transId = uuidv4();
+    const body = translateParams;
+    const res = await axios.post("/api/translator", body);
+    dispatch({
+      type: TRANSLATE,
+      payload: { transId, preTrans: formData, postTrans: res.data }
+    });
+    dispatch({
+      type: PUSH_TRANS,
+      payload: {
+        transId,
+        preTrans: formData,
+        postTrans: res.data,
+        translatedAudio: "",
+        stored: false
+      }
+    });
   } catch (err) {
     console.log(err);
   }

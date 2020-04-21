@@ -53,8 +53,6 @@ router.post("/", async (req, res) => {
     const result = translationResult.result.translations[0].translation;
     res.json(result);
   } catch (err) {
-    rollbar.error("serverside test!");
-
     console.log(err);
   }
 });
