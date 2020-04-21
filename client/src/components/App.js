@@ -20,10 +20,16 @@ function App() {
     })
   );
 
+  const throwError = () => {
+    throw new Error("react test error");
+  };
+
   return (
     <Fragment>
       <div style={flexContainer}>
         <Landing rollbar={rollbar} />
+        {/* <button onClick={logInfo}>Log Info</button> */}
+        <button onClick={throwError}>Throw Error</button>
       </div>
     </Fragment>
   );
