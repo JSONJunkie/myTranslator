@@ -16,8 +16,7 @@ function App() {
     new Rollbar({
       accessToken: "589f75cdf3664555b9b778a76ab2a226",
       captureUncaught: true,
-      captureUnhandledRejections: true,
-      root: "/"
+      captureUnhandledRejections: true
     })
   );
 

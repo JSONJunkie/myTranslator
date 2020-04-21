@@ -10,8 +10,7 @@ const router = express.Router();
 const rollbar = new Rollbar({
   accessToken: "31432b4b831a4991bc8726210f1eb03e",
   captureUncaught: true,
-  captureUnhandledRejections: true,
-  root: "/"
+  captureUnhandledRejections: true
 });
 
 const languageTranslator = new LanguageTranslatorV3({
