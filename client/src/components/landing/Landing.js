@@ -206,7 +206,8 @@ const Landing = ({
     transId,
     error,
     savedSuccess
-  }
+  },
+  rollbar
 }) => {
   const classes = useStyles();
 
@@ -254,6 +255,7 @@ const Landing = ({
   const [localError, setLocalError] = useState("");
   const [transLWorking, setTransLWorking] = useState(false);
   const [transSWorking, setTransSWorking] = useState(false);
+  const [rbObj] = useState(rollbar);
 
   const recorderControl = useRef();
 
@@ -327,6 +329,7 @@ const Landing = ({
         );
       }
     } catch (err) {
+      rbObj.error(err.message);
       setLocalError(prev => err);
     }
   };

@@ -20,9 +20,9 @@ function App() {
     })
   );
 
-  const logInfo = () => {
-    rollbar.info("react test log");
-  };
+  // const logInfo = () => {
+  //   rollbar.info("react test log");
+  // };
 
   const throwError = () => {
     throw new Error("react test error");
@@ -31,8 +31,8 @@ function App() {
   return (
     <Fragment>
       <div style={flexContainer}>
-        <Landing />
-        <button onClick={logInfo}>Log Info</button>
+        <Landing rollbar={rollbar} />
+        {/* <button onClick={logInfo}>Log Info</button> */}
         <button onClick={throwError}>Throw Error</button>
       </div>
     </Fragment>
