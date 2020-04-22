@@ -53,9 +53,9 @@ router.post("/", async (req, res) => {
     if (validator.isEmpty(req.body.text)) {
       throw new Error("Please include some text to translate");
     }
-    if (!validator.isAlpha(req.body.text)) {
-      throw new Error("Please only include words");
-    }
+    // if (!validator.isAlpha(req.body.text)) {
+    //   throw new Error("Please only include words");
+    // }
 
     const translationResult = await languageTranslator.translate(
       translateParams
