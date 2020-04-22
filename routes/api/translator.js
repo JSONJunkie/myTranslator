@@ -88,6 +88,7 @@ router.post("/listen", async (req, res) => {
       objectMode: true,
       contentType: "audio/webm",
       model: "es-ES_BroadbandModel",
+      interimResults: true,
       maxAlternatives: 1
     };
     // var params = {
@@ -103,7 +104,7 @@ router.post("/listen", async (req, res) => {
     recognizeStream.on("data", function (event) {
       onEvent("Data:", event);
       // console.log(event);
-      res.send(event.results[0].alternatives[0].transcript);
+      // res.send(event.results[0].alternatives[0].transcript);
     });
     recognizeStream.on("error", function (event) {
       onEvent("Error:", event.raw.data);
@@ -114,7 +115,7 @@ router.post("/listen", async (req, res) => {
     });
 
     function onEvent(name, event) {
-      // console.log(name, JSON.stringify(event, null, 2));
+      console.log(name, JSON.stringify(event, null, 2));
     }
   } catch (err) {
     res.status(400).json({ errors: { name: err.name, message: err.message } });
