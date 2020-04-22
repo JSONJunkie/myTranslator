@@ -110,6 +110,18 @@ export const translate = ({ formData, rollbar }) => async dispatch => {
       }
     });
   } catch (err) {
+    if (err.response) {
+      const errors = err.response.data.errors;
+      if (errors) {
+        return dispatch({
+          type: ERROR,
+          payload: {
+            name: errors.name,
+            message: errors.message
+          }
+        });
+      }
+    }
     rollbar.error(err);
     dispatch({
       type: ERROR,
@@ -186,6 +198,18 @@ export const textToSpeech = ({ data, rollbar }) => async dispatch => {
     };
     fileReader.readAsDataURL(blob);
   } catch (err) {
+    if (err.response) {
+      const errors = err.response.data.errors;
+      if (errors) {
+        return dispatch({
+          type: ERROR,
+          payload: {
+            name: errors.name,
+            message: errors.message
+          }
+        });
+      }
+    }
     rollbar.error(err);
     dispatch({
       type: ERROR,
@@ -272,6 +296,18 @@ export const listen = ({ blob, rollbar }) => async dispatch => {
       payload: { translatedTranscription: translatedRes.data }
     });
   } catch (err) {
+    if (err.response) {
+      const errors = err.response.data.errors;
+      if (errors) {
+        return dispatch({
+          type: ERROR,
+          payload: {
+            name: errors.name,
+            message: errors.message
+          }
+        });
+      }
+    }
     rollbar.error(err);
     dispatch({
       type: ERROR,
