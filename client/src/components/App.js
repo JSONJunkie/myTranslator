@@ -9,8 +9,7 @@ function getRollbar() {
       accessToken: "589f75cdf3664555b9b778a76ab2a226",
       captureUncaught: true,
       captureUnhandledRejections: true,
-      environment: "development",
-      server: { root: "/" }
+      environment: "development"
     });
     return rollbar;
   }
@@ -20,8 +19,7 @@ function getRollbar() {
       accessToken: "589f75cdf3664555b9b778a76ab2a226",
       captureUncaught: true,
       captureUnhandledRejections: true,
-      environment: "production",
-      server: { root: "/" }
+      environment: "production"
     });
     return rollbar;
   }
