@@ -664,7 +664,7 @@ const Landing = ({
                       error={isTextError}
                       inputRef={register({
                         required: {
-                          value: true,
+                          value: false,
                           message: "Please include some text to translate"
                         },
                         pattern: {
@@ -899,7 +899,7 @@ const Landing = ({
                       error={isTextError}
                       inputRef={register({
                         required: {
-                          value: true,
+                          value: false,
                           message: "Please include some text to translate"
                         },
                         pattern: {
