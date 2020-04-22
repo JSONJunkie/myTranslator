@@ -266,11 +266,11 @@ const Landing = ({
       stream.getTracks().forEach(track => {
         track.stop();
       });
-      const blob = new Blob(chunks, { type: "audio/webm" });
+      // const blob = new Blob(chunks, { type: "audio/webm" });
       setStream(null);
       setMediaRecorder(null);
       setTransSWorking(true);
-      listen({ blob, rollbar });
+      // listen({ blob, rollbar });
     }
   };
 
@@ -457,8 +457,11 @@ const Landing = ({
   useEffect(() => {
     if (mediaRecorder) {
       mediaRecorder.ondataavailable = e => {
-        setChunks(prev => [...prev, e.data]);
+        // setChunks(prev => [...prev, e.data]);
+        var b = [e.data];
         console.log("chunk collected");
+        var blob = new Blob(chunks, { type: "audio/webm" });
+        listen({ blob, rollbar });
       };
       if (!recorderState) {
         console.log("resetting chunks");
