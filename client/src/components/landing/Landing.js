@@ -345,6 +345,7 @@ const Landing = ({
   };
 
   const handleCleanup = e => {
+    setText("");
     clear({ rollbar });
   };
 
