@@ -7,11 +7,29 @@ const Rollbar = require("rollbar");
 
 const router = express.Router();
 
-const rollbar = new Rollbar({
-  accessToken: "31432b4b831a4991bc8726210f1eb03e",
-  captureUncaught: true,
-  captureUnhandledRejections: true
-});
+function getRollbar() {
+  if (process.env.NODE_ENV === "development") {
+    const rollbar = new Rollbar({
+      accessToken: "31432b4b831a4991bc8726210f1eb03e",
+      captureUncaught: true,
+      captureUnhandledRejections: true,
+      environment: "development"
+    });
+    return rollbar;
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    const rollbar = new Rollbar({
+      accessToken: "31432b4b831a4991bc8726210f1eb03e",
+      captureUncaught: true,
+      captureUnhandledRejections: true,
+      environment: "production"
+    });
+    return rollbar;
+  }
+}
+
+const rollbar = getRollbar();
 
 const languageTranslator = new LanguageTranslatorV3({
   version: "2018-05-01",

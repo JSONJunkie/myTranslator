@@ -9,12 +9,6 @@ function getRollbar() {
       accessToken: "589f75cdf3664555b9b778a76ab2a226",
       captureUncaught: true,
       captureUnhandledRejections: true,
-      client: {
-        javascript: {
-          source_map_enabled: true,
-          guess_uncaught_frames: true
-        }
-      },
       environment: "development"
     });
     return rollbar;
@@ -25,12 +19,6 @@ function getRollbar() {
       accessToken: "589f75cdf3664555b9b778a76ab2a226",
       captureUncaught: true,
       captureUnhandledRejections: true,
-      client: {
-        javascript: {
-          source_map_enabled: true,
-          guess_uncaught_frames: true
-        }
-      },
       environment: "production"
     });
     return rollbar;
