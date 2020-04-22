@@ -49,6 +49,14 @@ const speechToText = new SpeechToTextV1({
 router.post("/", async (req, res) => {
   try {
     const translateParams = req.body;
+
+    if (validator.isEmpty(req.body.text)) {
+      throw new Error("Please include some text to translate");
+    }
+    if (!validator.isAlpha(req.body.text)) {
+      throw new Error("Please only include words");
+    }
+
     const translationResult = await languageTranslator.translate(
       translateParams
     );
