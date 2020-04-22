@@ -1,6 +1,5 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-// import Rollbar from "rollbar";
 
 import {
   TRANSLATE,
@@ -16,30 +15,6 @@ import {
   CLEAR_ERROR
 } from "./types";
 import playSound from "../utils/playSound";
-
-// function getRollbar() {
-//   if (process.env.NODE_ENV === "development") {
-//     const rollbar = new Rollbar({
-//       accessToken: "589f75cdf3664555b9b778a76ab2a226",
-//       captureUncaught: true,
-//       captureUnhandledRejections: true,
-//       environment: "development"
-//     });
-//     return rollbar;
-//   }
-
-//   if (process.env.NODE_ENV === "production") {
-//     const rollbar = new Rollbar({
-//       accessToken: "589f75cdf3664555b9b778a76ab2a226",
-//       captureUncaught: true,
-//       captureUnhandledRejections: true,
-//       environment: "production"
-//     });
-//     return rollbar;
-//   }
-// }
-
-// const rollbar = getRollbar();
 
 export const deleteSaved = transId => dispatch => {
   try {
@@ -89,7 +64,7 @@ export const clear = data => dispatch => {
   }
 };
 
-export const translate = formData => async dispatch => {
+export const translate = ({ formData, rollbar }) => async dispatch => {
   try {
     const translateParams = {
       text: formData,
@@ -113,7 +88,7 @@ export const translate = formData => async dispatch => {
       }
     });
   } catch (err) {
-    console.log(err);
+    rollbar.error(err);
   }
 };
 

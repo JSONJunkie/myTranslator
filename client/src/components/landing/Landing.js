@@ -302,7 +302,7 @@ const Landing = ({
     clear();
 
     setTransLWorking(true);
-    translate(text);
+    translate({ formData: text, rollbar });
   };
 
   const handleSave = data => {
