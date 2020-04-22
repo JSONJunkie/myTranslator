@@ -48,7 +48,7 @@ const speechToText = new SpeechToTextV1({
 router.post("/", async (req, res) => {
   try {
     const translateParams = req.body;
-    const translationResult = await laguageTranslator.translate(
+    const translationResult = await languageTranslator.translate(
       translateParams
     );
     const result = translationResult.result.translations[0].translation;
