@@ -4,6 +4,7 @@ const TextToSpeechV1 = require("ibm-watson/text-to-speech/v1");
 const SpeechToTextV1 = require("ibm-watson/speech-to-text/v1");
 const { IamAuthenticator } = require("ibm-watson/auth");
 const Rollbar = require("rollbar");
+const validator = require("validator");
 
 const router = express.Router();
 
@@ -54,6 +55,7 @@ router.post("/", async (req, res) => {
     const result = translationResult.result.translations[0].translation;
     res.json(result);
   } catch (err) {
+    res.status(400).json({ errors: { name: err.name, message: err.message } });
     rollbar.error(err);
   }
 });
@@ -64,6 +66,7 @@ router.post("/speak", async (req, res) => {
     const audio = await textToSpeech.synthesize(synthesizeParams);
     await audio.result.pipe(res);
   } catch (err) {
+    res.status(400).json({ errors: { name: err.name, message: err.message } });
     rollbar.error(err);
   }
 });
@@ -103,6 +106,7 @@ router.post("/listen", async (req, res) => {
       // console.log(name, JSON.stringify(event, null, 2));
     }
   } catch (err) {
+    res.status(400).json({ errors: { name: err.name, message: err.message } });
     rollbar.error(err);
   }
 });
