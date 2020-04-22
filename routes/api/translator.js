@@ -7,29 +7,12 @@ const Rollbar = require("rollbar");
 
 const router = express.Router();
 
-function getRollbar() {
-  if (process.env.NODE_ENV === "development") {
-    const rollbar = new Rollbar({
-      accessToken: "31432b4b831a4991bc8726210f1eb03e",
-      captureUncaught: true,
-      captureUnhandledRejections: true,
-      environment: "development"
-    });
-    return rollbar;
-  }
-
-  if (process.env.NODE_ENV === "production") {
-    const rollbar = new Rollbar({
-      accessToken: "31432b4b831a4991bc8726210f1eb03e",
-      captureUncaught: true,
-      captureUnhandledRejections: true,
-      environment: "production"
-    });
-    return rollbar;
-  }
-}
-
-const rollbar = getRollbar();
+const rollbar = new Rollbar({
+  accessToken: "31432b4b831a4991bc8726210f1eb03e",
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  environment: process.env.NODE_ENV
+});
 
 const languageTranslator = new LanguageTranslatorV3({
   version: "2018-05-01",
@@ -65,13 +48,13 @@ const speechToText = new SpeechToTextV1({
 router.post("/", async (req, res) => {
   try {
     const translateParams = req.body;
-    const translationResult = await languageTranslator.translate(
+    const translationResult = await laguageTranslator.translate(
       translateParams
     );
     const result = translationResult.result.translations[0].translation;
     res.json(result);
   } catch (err) {
-    console.log(err);
+    rollbar.error(err);
   }
 });
 
