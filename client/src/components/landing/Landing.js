@@ -270,7 +270,7 @@ const Landing = ({
       setStream(null);
       setMediaRecorder(null);
       setTransSWorking(true);
-      listen(blob);
+      listen({ blob, rollbar });
     }
   };
 
@@ -299,7 +299,7 @@ const Landing = ({
   };
 
   const handleTranslate = () => {
-    clear();
+    clear({ rollbar });
 
     setTransLWorking(true);
     translate({ formData: text, rollbar });
@@ -310,15 +310,25 @@ const Landing = ({
     try {
       if (preTrans && postTrans) {
         if (translatedAudio) {
-          save({ preTrans, postTrans, translatedAudio, transId, stored });
-        } else {
-          textToSpeech({
+          save({
             preTrans,
             postTrans,
-            speaking: false,
+            translatedAudio,
             transId,
             stored,
-            audioContext
+            rollbar
+          });
+        } else {
+          textToSpeech({
+            data: {
+              preTrans,
+              postTrans,
+              speaking: false,
+              transId,
+              stored,
+              audioContext
+            },
+            rollbar
           });
         }
 
@@ -335,7 +345,7 @@ const Landing = ({
   };
 
   const handleCleanup = e => {
-    clear();
+    clear({ rollbar });
   };
 
   const handleSpeak = data => {
@@ -345,22 +355,28 @@ const Landing = ({
       if (!postTrans) throw new Error("You need to make a translation first!");
       if (translatedAudio) {
         speak({
-          preTrans,
-          postTrans,
-          translatedAudio,
-          speaking: true,
-          transId,
-          stored,
-          audioContext
+          data: {
+            preTrans,
+            postTrans,
+            translatedAudio,
+            speaking: true,
+            transId,
+            stored,
+            audioContext
+          },
+          rollbar
         });
       } else {
         textToSpeech({
-          preTrans,
-          postTrans,
-          speaking: true,
-          transId,
-          stored,
-          audioContext
+          data: {
+            preTrans,
+            postTrans,
+            speaking: true,
+            transId,
+            stored,
+            audioContext
+          },
+          rollbar
         });
       }
     } catch (err) {
@@ -369,7 +385,7 @@ const Landing = ({
   };
 
   const handleUnstore = data => {
-    deleteSaved(data);
+    deleteSaved({ transId: data, rollbar });
     setIsUnstoring(true);
   };
 
@@ -422,7 +438,7 @@ const Landing = ({
   useEffect(() => {
     if (mediaRecorder) {
       if (listening && !recorderState) {
-        clear();
+        clear({ rollbar });
         mediaRecorder.start(200);
         setRecorderState(true);
         setDelayStop(true);
@@ -435,7 +451,7 @@ const Landing = ({
         setRecorderState(false);
       }
     }
-  }, [listening, mediaRecorder, recorderState, clear]);
+  }, [listening, mediaRecorder, recorderState, clear, rollbar]);
 
   useEffect(() => {
     if (mediaRecorder) {
@@ -504,8 +520,8 @@ const Landing = ({
         setGoodAlert(false);
       }, 3000);
     }
-    clear();
-  }, [savedSuccess, clear, saved]);
+    clear({ rollbar });
+  }, [savedSuccess, clear, saved, rollbar]);
 
   useEffect(() => {
     if (error) {
@@ -516,7 +532,7 @@ const Landing = ({
         setBadAlert(false);
       }, 5000);
       setIsSaving(false);
-      clear(error);
+      clear({ data: error, rollbar });
     }
     if (localError) {
       window.scrollTo(0, 0);
@@ -535,7 +551,7 @@ const Landing = ({
       setTextError("");
       setIsTextError(false);
     }
-  }, [clear, error, localError, errors.text]);
+  }, [clear, error, localError, errors.text, rollbar]);
 
   useEffect(() => {
     const prefs = { hist, transcribing };

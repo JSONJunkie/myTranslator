@@ -16,13 +16,14 @@ import {
 } from "./types";
 import playSound from "../utils/playSound";
 
-export const deleteSaved = transId => dispatch => {
+export const deleteSaved = ({ transId, rollbar }) => dispatch => {
   try {
     dispatch({
       type: DELETE_SAVED,
       payload: { transId }
     });
   } catch (err) {
+    rollbar.error(err);
     dispatch({
       type: ERROR,
       payload: {
@@ -38,7 +39,8 @@ export const save = ({
   postTrans,
   translatedAudio,
   transId,
-  stored
+  stored,
+  rollbar
 }) => dispatch => {
   try {
     if (!stored) {
@@ -54,6 +56,7 @@ export const save = ({
       });
     }
   } catch (err) {
+    rollbar.error(err);
     dispatch({
       type: ERROR,
       payload: {
@@ -64,7 +67,7 @@ export const save = ({
   }
 };
 
-export const clear = data => dispatch => {
+export const clear = ({ data, rollbar }) => dispatch => {
   try {
     if (!data) {
       dispatch({ type: CLEAR });
@@ -72,6 +75,7 @@ export const clear = data => dispatch => {
       dispatch({ type: CLEAR_ERROR });
     }
   } catch (err) {
+    rollbar.error(err);
     dispatch({
       type: ERROR,
       payload: {
@@ -117,7 +121,7 @@ export const translate = ({ formData, rollbar }) => async dispatch => {
   }
 };
 
-export const textToSpeech = data => async dispatch => {
+export const textToSpeech = ({ data, rollbar }) => async dispatch => {
   const { preTrans, postTrans, speaking, transId, stored, audioContext } = data;
   try {
     const synthesizeParams = {
@@ -182,6 +186,7 @@ export const textToSpeech = data => async dispatch => {
     };
     fileReader.readAsDataURL(blob);
   } catch (err) {
+    rollbar.error(err);
     dispatch({
       type: ERROR,
       payload: {
@@ -192,7 +197,7 @@ export const textToSpeech = data => async dispatch => {
   }
 };
 
-export const speak = data => async dispatch => {
+export const speak = ({ data, rollbar }) => async dispatch => {
   const {
     preTrans,
     postTrans,
@@ -229,6 +234,7 @@ export const speak = data => async dispatch => {
       dispatch(save({ preTrans, postTrans, translatedAudio, transId, stored }));
     }
   } catch (err) {
+    rollbar.error(err);
     dispatch({
       type: ERROR,
       payload: {
@@ -239,7 +245,7 @@ export const speak = data => async dispatch => {
   }
 };
 
-export const listen = blob => async dispatch => {
+export const listen = ({ blob, rollbar }) => async dispatch => {
   try {
     const config = {
       headers: {
@@ -266,6 +272,7 @@ export const listen = blob => async dispatch => {
       payload: { translatedTranscription: translatedRes.data }
     });
   } catch (err) {
+    rollbar.error(err);
     dispatch({
       type: ERROR,
       payload: {
