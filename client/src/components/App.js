@@ -14,7 +14,8 @@ function getRollbar() {
           source_map_enabled: true,
           guess_uncaught_frames: true
         }
-      }
+      },
+      environment: "development"
     });
     return rollbar;
   }
@@ -29,7 +30,8 @@ function getRollbar() {
           source_map_enabled: true,
           guess_uncaught_frames: true
         }
-      }
+      },
+      environment: "production"
     });
     return rollbar;
   }
