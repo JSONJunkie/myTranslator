@@ -64,7 +64,7 @@ router.post("/speak", async (req, res) => {
     const audio = await textToSpeech.synthesize(synthesizeParams);
     await audio.result.pipe(res);
   } catch (err) {
-    console.log(err);
+    rollbar.error(err);
   }
 });
 
@@ -103,7 +103,7 @@ router.post("/listen", async (req, res) => {
       // console.log(name, JSON.stringify(event, null, 2));
     }
   } catch (err) {
-    console.log(err);
+    rollbar.error(err);
   }
 });
 
