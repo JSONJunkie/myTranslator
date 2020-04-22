@@ -23,7 +23,13 @@ export const deleteSaved = transId => dispatch => {
       payload: { transId }
     });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: {
+        name: err.name,
+        message: err.message
+      }
+    });
   }
 };
 
@@ -48,7 +54,13 @@ export const save = ({
       });
     }
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: {
+        name: err.name,
+        message: err.message
+      }
+    });
   }
 };
 
@@ -60,7 +72,13 @@ export const clear = data => dispatch => {
       dispatch({ type: CLEAR_ERROR });
     }
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: {
+        name: err.name,
+        message: err.message
+      }
+    });
   }
 };
 
@@ -89,6 +107,13 @@ export const translate = ({ formData, rollbar }) => async dispatch => {
     });
   } catch (err) {
     rollbar.error(err);
+    dispatch({
+      type: ERROR,
+      payload: {
+        name: err.name,
+        message: err.message
+      }
+    });
   }
 };
 
@@ -204,7 +229,13 @@ export const speak = data => async dispatch => {
       dispatch(save({ preTrans, postTrans, translatedAudio, transId, stored }));
     }
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: {
+        name: err.name,
+        message: err.message
+      }
+    });
   }
 };
 
@@ -235,6 +266,12 @@ export const listen = blob => async dispatch => {
       payload: { translatedTranscription: translatedRes.data }
     });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: {
+        name: err.name,
+        message: err.message
+      }
+    });
   }
 };
