@@ -71,6 +71,9 @@ router.post("/", async (req, res) => {
 router.post("/speak", async (req, res) => {
   try {
     const synthesizeParams = req.body;
+    if (validator.isEmpty(req.body.text)) {
+      throw new Error("You need to make a translation first");
+    }
     const audio = await textToSpeech.synthesize(synthesizeParams);
     await audio.result.pipe(res);
   } catch (err) {
