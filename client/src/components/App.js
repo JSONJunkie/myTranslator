@@ -8,7 +8,13 @@ function getRollbar() {
     const rollbar = new Rollbar({
       accessToken: "589f75cdf3664555b9b778a76ab2a226",
       captureUncaught: true,
-      captureUnhandledRejections: true
+      captureUnhandledRejections: true,
+      client: {
+        javascript: {
+          source_map_enabled: true,
+          guess_uncaught_frames: true
+        }
+      }
     });
     return rollbar;
   }
@@ -17,7 +23,13 @@ function getRollbar() {
     const rollbar = new Rollbar({
       accessToken: "589f75cdf3664555b9b778a76ab2a226",
       captureUncaught: true,
-      captureUnhandledRejections: true
+      captureUnhandledRejections: true,
+      client: {
+        javascript: {
+          source_map_enabled: true,
+          guess_uncaught_frames: true
+        }
+      }
     });
     return rollbar;
   }
