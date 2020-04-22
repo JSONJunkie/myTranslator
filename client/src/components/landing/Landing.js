@@ -410,11 +410,11 @@ const Landing = ({
     }
   };
 
-  if (postTrans && transLWorking) {
+  if ((postTrans && transLWorking) || (error && transLWorking)) {
     setTransLWorking(false);
   }
 
-  if (translatedTranscription && transSWorking) {
+  if ((translatedTranscription && transSWorking) || (error && transSWorking)) {
     setTransSWorking(false);
   }
 
