@@ -5,12 +5,11 @@ import { IamAuthenticator } from "ibm-watson/auth";
 // import Rollbar from "rollbar";
 import validator from "validator";
 
-const Enes = ({ result }) => {
+const Post = ({ result }) => {
   const router = useRouter();
   const { translation } = router.query;
-  console.log(router);
+
   if (router.isFallback) {
-    console.log("loading");
     return <div>Loading...</div>;
   }
 
@@ -60,4 +59,4 @@ export async function getStaticPaths() {
   };
 }
 
-export default Enes;
+export default Post;
