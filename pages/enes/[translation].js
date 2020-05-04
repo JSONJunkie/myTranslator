@@ -8,7 +8,7 @@ import validator from "validator";
 const Enes = ({ result }) => {
   const router = useRouter();
   const { translation } = router.query;
-  console.log(result);
+  console.log(router);
   if (router.isFallback) {
     console.log("loading");
     return <div>Loading...</div>;
