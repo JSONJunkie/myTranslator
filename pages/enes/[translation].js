@@ -7,6 +7,7 @@ import validator from "validator";
 
 const Post = ({ result }) => {
   const router = useRouter();
+  console.log(router);
   const { translation } = router.query;
 
   if (router.isFallback) {
@@ -20,42 +21,44 @@ const Post = ({ result }) => {
   );
 };
 
-export async function getStaticProps(context) {
+export async function getStaticProps({ query }) {
   // const rollbar = new Rollbar({
   //   // accessToken: process.env.ROLLBAR_SERVER_TOKEN,
   //   captureUncaught: true,
   //   captureUnhandledRejections: true
   // });
-  const languageTranslator = new LanguageTranslatorV3({
-    version: "2018-05-01",
-    authenticator: new IamAuthenticator({
-      apikey: process.env.TRANSLATE_KEY
-    }),
-    url: process.env.TRANSLATE_URL,
-    headers: {
-      "X-Watson-Learning-Opt-Out": "true"
-    }
-  });
+  console.log(query);
 
-  const translateParams = {
-    text: context.params.translation,
-    modelId: "en-es"
-  };
+  // const languageTranslator = new LanguageTranslatorV3({
+  //   version: "2018-05-01",
+  //   authenticator: new IamAuthenticator({
+  //     apikey: process.env.TRANSLATE_KEY
+  //   }),
+  //   url: process.env.TRANSLATE_URL,
+  //   headers: {
+  //     "X-Watson-Learning-Opt-Out": "true"
+  //   }
+  // });
 
-  if (validator.isEmpty(translateParams.text)) {
-    throw new Error("Please include some text to translate");
-  }
+  // const translateParams = {
+  //   text: context.params.translation,
+  //   modelId: "en-es"
+  // };
 
-  const translationResult = await languageTranslator.translate(translateParams);
-  const result = translationResult.result.translations[0].translation;
+  // if (validator.isEmpty(translateParams.text)) {
+  //   throw new Error("Please include some text to translate");
+  // }
 
-  return { props: { result } };
+  // const translationResult = await languageTranslator.translate(translateParams);
+  // const result = translationResult.result.translations[0].translation;
+
+  return { props: {} };
 }
 
 export async function getStaticPaths() {
   return {
     paths: [{ params: { translation: "hello" } }],
-    fallback: true
+    fallback: false
   };
 }
 
