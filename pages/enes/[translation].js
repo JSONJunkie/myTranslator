@@ -49,7 +49,7 @@ export async function getStaticProps(context) {
   }
 
   const translationResult = await languageTranslator.translate(translateParams);
-  const result = await translationResult.result.translations[0].translation;
+  const result = translationResult.result.translations[0].translation;
 
   return { props: { result } };
 }
