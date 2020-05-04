@@ -16,9 +16,12 @@ const Index = () => {
         placeholder="Enter text to be translated here..."
         onChange={e => onChange(e)}
       />
-      <Link href="/enes/[translation]" as={`/enes/${text}`}>
+      <Link href={`/enes/${text}`} as={`/enes/${text}`}>
         <a>Translate</a>
       </Link>
+      {/* <Link href="/enes/[translation]" as={`/enes/${text}`}>
+        <a>Translate</a>
+      </Link> */}
     </div>
   );
 };
