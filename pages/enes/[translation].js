@@ -9,7 +9,6 @@ const Enes = ({ result }) => {
   const router = useRouter();
   const { translation } = router.query;
   console.log(result);
-
   if (router.isFallback) {
     console.log("loading");
     return <div>Loading...</div>;
