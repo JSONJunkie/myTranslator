@@ -29,7 +29,7 @@ function getRollbar() {
     return rollbar;
   }
 }
-function MyApp({ Component, store }) {
+function MyApp({ Component, pageProps, store }) {
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
@@ -52,7 +52,7 @@ function MyApp({ Component, store }) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component rollbar={rollbar} />
+        <Component rollbar={rollbar} {...pageProps} />
       </ThemeProvider>
     </React.Fragment>
   );
