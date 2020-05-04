@@ -58,7 +58,7 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   return {
     paths: [{ params: { translation: "hello" } }],
-    fallback: false
+    fallback: true
   };
 }
 
