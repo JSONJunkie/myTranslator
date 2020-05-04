@@ -21,13 +21,13 @@ const Post = ({ result }) => {
   );
 };
 
-export async function getStaticProps({ query }) {
+export async function getStaticProps(context) {
   // const rollbar = new Rollbar({
   //   // accessToken: process.env.ROLLBAR_SERVER_TOKEN,
   //   captureUncaught: true,
   //   captureUnhandledRejections: true
   // });
-  console.log(query);
+  console.log(context);
 
   // const languageTranslator = new LanguageTranslatorV3({
   //   version: "2018-05-01",
