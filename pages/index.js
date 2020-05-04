@@ -11,6 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
 import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 import { clear, translate } from "../src/actions/lang";
 
@@ -138,16 +139,17 @@ const Index = ({
                 />
                 <Grid container>
                   <Grid item xs={6} className={classes.outterButton}>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      disabled={badAlert}
-                    >
-                      Translate
-                    </Button>
+                    <Link href="/enes/[translation]" as={`/enes/${text}`}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        disabled={badAlert}
+                      >
+                        Translate
+                      </Button>
+                    </Link>
                   </Grid>
                   <Grid item xs={6} className={classes.outterButton}>
                     <Button
