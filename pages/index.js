@@ -184,6 +184,9 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("sm")]: {
       height: theme.spacing(14)
     }
+  },
+  loader: {
+    marginTop: theme.spacing(20)
   }
 }));
 
@@ -579,9 +582,9 @@ const Index = ({
   }, []);
 
   return loading ? (
-    <div>
-      <CircularProgress disableShrink />
-    </div>
+    <Grid container justify="center" alignItems="center">
+      <CircularProgress disableShrink className={classes.loader} />
+    </Grid>
   ) : (
     <Grow in={true} {...{ timeout: 1500 }}>
       <div
