@@ -16,11 +16,11 @@ const Index = () => {
         placeholder="Enter text to be translated here..."
         onChange={e => onChange(e)}
       />
-      <div>
-        <Link href={`/enes/${text}`} as={`/enes/${text}`}>
+      {/* <div>
+        <Link prefetch={false} href={`/enes/${text}`} as={`/enes/${text}`}>
           <a>tem Translate</a>
         </Link>
-      </div>
+      </div> */}
       <div>
         <Link prefetch={false} href="/enes/[translation]" as={`/enes/${text}`}>
           <a>brack Translate</a>
