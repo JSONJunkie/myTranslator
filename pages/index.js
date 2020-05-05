@@ -22,7 +22,7 @@ const Index = () => {
         </Link>
       </div>
       <div>
-        <Link href="/enes/[translation]" as={`/enes/${text}`}>
+        <Link prefetch={false} href="/enes/[translation]" as={`/enes/${text}`}>
           <a>brack Translate</a>
         </Link>
       </div>
