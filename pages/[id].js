@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 
+import validator from "validator";
+
 import connectToMongo from "../database";
 
 const Post = ({ result }) => {
@@ -16,21 +18,22 @@ const Post = ({ result }) => {
 
 export async function getStaticPaths() {
   return {
-    paths: [{ params: { id: "test" } }],
+    paths: [],
     fallback: true
   };
 }
 
 export async function getStaticProps(context) {
+  // if (validator.isEmpty(context.params.id)) {
+  //   console.log("empty params/query");
+  //   throw new Error("No query");
+  // }
   const { connection, models } = await connectToMongo();
   const { Translations } = models;
 
   const docs = await Translations.find({ preTrans: context.params.id });
   console.log(docs);
   if (docs.length === 0) {
-    // if (validator.isEmpty(req.body.comment)) {
-    //   throw new Error("Please write something!");
-    // }
     console.log("no docs");
     const translation = context.params.id;
     const entry = new Translations({
