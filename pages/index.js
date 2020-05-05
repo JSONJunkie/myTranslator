@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 
 import Link from "next/link";
 
@@ -11,60 +11,25 @@ const Index = () => {
 
   return (
     <div>
-      <input
-        name="text"
-        placeholder="Enter text to be translated here..."
-        onChange={e => onChange(e)}
-      />
-      {/* <div>
-        <Link prefetch={false} href={`/enes/${text}`} as={`/enes/${text}`}>
-          <a>tem Translate</a>
-        </Link>
-      </div> */}
+      <div>ssg rendered paths: "test"</div>
+      <div>type "test" for path that doesnt need fallback</div>
+      <div>type anything else for path that does need fallback</div>
+      <input name="text" onChange={e => onChange(e)} />
       <div>
-        <Link prefetch={false} href="/enes/[translation]" as={"/enes/" + text}>
-          <a>{"/enes/" + text}</a>
+        <Link prefetch={false} href="/ex/[id]" as={"/ex/" + text}>
+          <a>Correct (client side navigation, page doesnt refresh)</a>
         </Link>
       </div>
       <div>
-        <Link prefetch={false} href="/enes/[translation]" as={"/enes/" + text}>
-          <a>input</a>
-        </Link>
-      </div>
-      {/* <div>
-        <Link prefetch={false} href="/enes/test">
-          <a>test</a>
+        <Link prefetch={false} href={"/ex/" + text} as={"/ex/" + text}>
+          <a>Incorrect(not clientside, page refreshes)</a>
         </Link>
       </div>
       <div>
-        <Link prefetch={false} href="/enes/hello">
-          <a>hello</a>
-        </Link>
-      </div> */}
-      {/* <div>
-        <Link prefetch={false} href="/enes/loot">
-          <a>loot</a>
-        </Link>
-      </div> */}
-      {/* <div>
-        <Link prefetch={false} href="/enes/loot" as={`/enes/${text}`}>
-          <a>loot input</a>
-        </Link>
-      </div> */}
-      <div>
-        <Link prefetch={false} href="/enes/[translation]" as="/enes/loot">
-          <a>loot dynamic?</a>
-        </Link>
-      </div>
-      <div>
-        <Link prefetch={false} href="/enes/loot" as="/enes/loot">
-          <a>loot as</a>
-        </Link>
-      </div>
-      <div>
-        <Link prefetch={false} href="/enes/goobye">
-          <a>goodbye</a>
-        </Link>
+        client side navigation from index to a non ssg route never shows the
+        fallback. fallback only shows if navigation from index is done
+        incorrectly (and page refreshes) or if the route is typed directly into
+        the address bar as a url from anywhere (new/fresh page loads)
       </div>
     </div>
   );
