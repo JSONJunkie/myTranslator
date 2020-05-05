@@ -51,8 +51,10 @@ export async function getStaticProps(context) {
 
   // const translationResult = await languageTranslator.translate(translateParams);
   // const result = translationResult.result.translations[0].translation;
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
-  return { props: {} };
+  const result = context.params.id;
+  return { props: { result } };
 }
 
 export async function getStaticPaths() {
