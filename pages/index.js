@@ -23,6 +23,11 @@ const Index = () => {
       </div> */}
       <div>
         <Link prefetch={false} href="/enes/[translation]" as={"/enes/" + text}>
+          <a>{"/enes/" + text}</a>
+        </Link>
+      </div>
+      <div>
+        <Link prefetch={false} href="/enes/[translation]" as={"/enes/" + text}>
           <a>input</a>
         </Link>
       </div>
