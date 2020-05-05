@@ -27,7 +27,6 @@
     "ibm-watson": "^5.4.0",
     "mongoose": "^5.9.12",
     "next": "^9.3.4",
-    "next-connect": "^0.6.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-markdown": "^4.3.1",
