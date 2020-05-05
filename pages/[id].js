@@ -36,7 +36,6 @@ export async function getStaticProps(context) {
     const entry = new Translations({
       preTrans: translation,
       postTrans: translation,
-      id: uuidv4(),
       date: new Date()
     });
     await entry.save();
