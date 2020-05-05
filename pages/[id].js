@@ -4,16 +4,22 @@ import validator from "validator";
 
 import connectToMongo from "../database";
 
-const Post = ({ result }) => {
+const Post = ({ docs }) => {
   const router = useRouter();
   // console.log(router);
   // console.log(result);
+
+  var data;
+
+  if (docs) {
+    data = JSON.parse(docs);
+  }
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
-  return <p>{result}</p>;
+  return <p>{data.postTrans}</p>;
 };
 
 export async function getStaticPaths() {
@@ -32,7 +38,6 @@ export async function getStaticProps(context) {
   const { Translations } = models;
 
   const docs = await Translations.find({ preTrans: context.params.id });
-  console.log(docs);
   if (docs.length === 0) {
     console.log("no docs");
     const translation = context.params.id;
@@ -43,12 +48,11 @@ export async function getStaticProps(context) {
     });
     await entry.save();
     connection.close();
-    return { props: {} };
   }
   console.log("docs found");
 
   connection.close();
-  return { props: { result: docs[0].postTrans } };
+  return { props: { docs: JSON.stringify(docs[0]) } };
 }
 
 export default Post;
