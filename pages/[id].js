@@ -22,32 +22,31 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  // const { connection, models } = await connectToMongo();
-  // const { Translations } = models;
+  const { connection, models } = await connectToMongo();
+  const { Translations } = models;
 
-  // const docs = await Translations.find();
-  // console.log(docs);
-  // if (docs.length === 0) {
-  //   // if (validator.isEmpty(req.body.comment)) {
-  //   //   throw new Error("Please write something!");
-  //   // }
-  //   console.log("no docs");
-  //   const translation = context.params.id;
-  //   const entry = new Translations({
-  //     preTrans: translation,
-  //     postTrans: translation,
-  //     id: uuidv4(),
-  //     date: new Date()
-  //   });
-  //   await entry.save();
-  //   connection.close();
-  //   return { props: {} };
-  // }
+  const docs = await Translations.find();
+  console.log(docs);
+  if (docs.length === 0) {
+    // if (validator.isEmpty(req.body.comment)) {
+    //   throw new Error("Please write something!");
+    // }
+    console.log("no docs");
+    const translation = context.params.id;
+    const entry = new Translations({
+      preTrans: translation,
+      postTrans: translation,
+      id: uuidv4(),
+      date: new Date()
+    });
+    await entry.save();
+    connection.close();
+    return { props: {} };
+  }
   console.log("docs found");
 
-  // connection.close();
-  // return { props: { result: docs[0].postTrans } };
-  return { props: {} };
+  connection.close();
+  return { props: { result: docs[0].postTrans } };
 }
 
 export default Post;
