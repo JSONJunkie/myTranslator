@@ -23,7 +23,27 @@ const Index = () => {
       </div> */}
       <div>
         <Link prefetch={false} href="/enes/[translation]" as={`/enes/${text}`}>
-          <a>brack Translate</a>
+          <a>input</a>
+        </Link>
+      </div>
+      <div>
+        <Link prefetch={false} href="/enes/test">
+          <a>test</a>
+        </Link>
+      </div>
+      <div>
+        <Link prefetch={false} href="/enes/hello">
+          <a>hello</a>
+        </Link>
+      </div>
+      <div>
+        <Link prefetch={false} href="/enes/loot">
+          <a>loot</a>
+        </Link>
+      </div>
+      <div>
+        <Link prefetch={false} href="/enes/goobye">
+          <a>goodbye</a>
         </Link>
       </div>
     </div>
