@@ -25,7 +25,7 @@ export async function getStaticProps(context) {
   const { connection, models } = await connectToMongo();
   const { Translations } = models;
 
-  const docs = await Translations.find();
+  const docs = await Translations.find({ preTrans: context.params.id });
   console.log(docs);
   if (docs.length === 0) {
     // if (validator.isEmpty(req.body.comment)) {
