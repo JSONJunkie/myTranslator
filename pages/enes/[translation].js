@@ -53,7 +53,7 @@ export async function getStaticProps(context) {
   // const result = translationResult.result.translations[0].translation;
   await new Promise(resolve => setTimeout(resolve, 5000));
 
-  const result = context.params.id;
+  const result = context.params.translation;
   return { props: { result } };
 }
 
