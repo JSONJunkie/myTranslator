@@ -48,6 +48,7 @@ export async function getStaticProps(context) {
     });
     await entry.save();
     connection.close();
+    return { props: { docs: null } };
   }
   console.log("docs found");
 
