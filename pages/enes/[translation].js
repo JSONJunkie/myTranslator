@@ -46,10 +46,8 @@ export async function getStaticProps(context) {
   // if (validator.isEmpty(translateParams.text)) {
   //   throw new Error("Please include some text to translate");
   // }
-  console.log(doc);
-  if (!doc) {
-    // console.log("no docs");
 
+  if (!doc) {
     const entry = new Translations({
       preTrans,
       postTrans: "temp",
@@ -59,9 +57,6 @@ export async function getStaticProps(context) {
     connection.close();
     return { props: { doc: null } };
   }
-
-  // console.log("docs found");
-  // console.log("translating");
 
   if (doc.postTrans === "temp") {
     const languageTranslator = new LanguageTranslatorV3({
@@ -85,8 +80,6 @@ export async function getStaticProps(context) {
     );
     const result = translationResult.result.translations[0].translation;
 
-    // console.log("updating");
-
     const transDoc = await Translations.findOneAndUpdate(
       { preTrans },
       { postTrans: result },
@@ -95,8 +88,6 @@ export async function getStaticProps(context) {
 
     return { props: { doc: JSON.stringify(transDoc) } };
   }
-
-  // console.log(transDoc);
 
   connection.close();
 
