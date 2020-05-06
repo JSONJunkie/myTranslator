@@ -7,15 +7,15 @@ import validator from "validator";
 
 import connectToMongo from "../../database";
 
-const Enes = ({ docs }) => {
+const Enes = ({ doc }) => {
   const router = useRouter();
   // console.log(router);
   // console.log(result);
 
   var data;
 
-  if (docs) {
-    data = JSON.parse(docs);
+  if (doc) {
+    data = JSON.parse(doc);
   }
 
   if (router.isFallback) {
@@ -41,13 +41,13 @@ export async function getStaticProps(context) {
   const { Translations } = models;
   const preTrans = context.params.translation;
 
-  const docs = await Translations.find({ preTrans });
+  const doc = await Translations.findOne({ preTrans });
 
   // if (validator.isEmpty(translateParams.text)) {
   //   throw new Error("Please include some text to translate");
   // }
-
-  if (docs.length === 0) {
+  console.log(doc);
+  if (!doc) {
     // console.log("no docs");
 
     const entry = new Translations({
@@ -57,7 +57,7 @@ export async function getStaticProps(context) {
     });
     await entry.save();
     connection.close();
-    return { props: { docs: null } };
+    return { props: { doc: null } };
   }
 
   // console.log("docs found");
@@ -100,7 +100,7 @@ export async function getStaticProps(context) {
 
   connection.close();
 
-  return { props: { docs: JSON.stringify(transDoc) } };
+  return { props: { doc: JSON.stringify(doc) } };
 }
 
 export async function getStaticPaths() {
