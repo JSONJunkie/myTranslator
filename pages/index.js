@@ -148,4 +148,8 @@ const Index = () => {
   );
 };
 
+// Index.propTypes = {
+//   rollbar: PropTypes.object.isRequired
+// };
+
 export default connect(null)(Index);

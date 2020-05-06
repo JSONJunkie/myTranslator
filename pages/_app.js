@@ -6,6 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withRedux } from "../lib/redux";
 import Rollbar from "rollbar";
 
+import Navbar from "../components/Navbar";
 import theme from "../themes/theme";
 
 function getRollbar() {
@@ -52,6 +53,7 @@ function MyApp({ Component, pageProps, store }) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
+        <Navbar />
         <Component rollbar={rollbar} {...pageProps} />
       </ThemeProvider>
     </React.Fragment>

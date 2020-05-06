@@ -101,4 +101,8 @@ export async function getStaticPaths() {
   };
 }
 
+// Navbar.propTypes = {
+//   rollbar: PropTypes.object.isRequired
+// };
+
 export default Enes;
