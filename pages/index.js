@@ -60,7 +60,7 @@ const Index = () => {
 
   const handleSub = e => {
     e.preventDefault();
-    router.push("/enes/[translation]", "/enes/" + selectValue);
+    router.push("/enes/[translation]", "/enes/" + selectValue.toLowerCase());
   };
 
   const handleClear = e => {
@@ -118,7 +118,7 @@ const Index = () => {
                   <Grid item xs={6} className={classes.outterButton}>
                     <ButtonLink
                       href={"/enes/[translation]"}
-                      as={"/enes/" + selectValue}
+                      as={"/enes/" + selectValue.toLowerCase()}
                       fullWidth
                       color="primary"
                       variant="contained"
