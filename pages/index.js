@@ -53,7 +53,9 @@ const Index = ({
 }) => {
   const classes = useStyles();
 
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, setValue, watch } = useForm({
+    defaultValues
+  });
 
   const [text, setText] = useState("");
   const [badAlert, setBadAlert] = useState(false);
