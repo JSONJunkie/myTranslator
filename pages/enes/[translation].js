@@ -5,20 +5,24 @@ import { IamAuthenticator } from "ibm-watson/auth";
 // import Rollbar from "rollbar";
 import validator from "validator";
 
-const Enes = ({ result }) => {
+import connectToMongo from "../../database";
+
+const Enes = ({ docs }) => {
   const router = useRouter();
-  const { translation } = router.query;
-  console.log(result);
+  // console.log(router);
+  // console.log(result);
+
+  var data;
+
+  if (docs) {
+    data = JSON.parse(docs);
+  }
+
   if (router.isFallback) {
-    console.log("loading");
     return <div>Loading...</div>;
   }
 
-  return (
-    <p>
-      Before:{translation} After:{result}
-    </p>
-  );
+  return <p>{data.postTrans}</p>;
 };
 
 export async function getStaticProps(context) {
@@ -27,6 +31,38 @@ export async function getStaticProps(context) {
   //   captureUncaught: true,
   //   captureUnhandledRejections: true
   // });
+
+  // if (validator.isEmpty(context.params.id)) {
+  //   console.log("empty params/query");
+  //   throw new Error("No query");
+  // }
+
+  const { connection, models } = await connectToMongo();
+  const { Translations } = models;
+  const preTrans = context.params.translation;
+
+  const docs = await Translations.find({ preTrans });
+
+  // if (validator.isEmpty(translateParams.text)) {
+  //   throw new Error("Please include some text to translate");
+  // }
+
+  if (docs.length === 0) {
+    // console.log("no docs");
+
+    const entry = new Translations({
+      preTrans,
+      postTrans: "temp",
+      date: new Date()
+    });
+    await entry.save();
+    connection.close();
+    return { props: { docs: null } };
+  }
+
+  // console.log("docs found");
+  // console.log("translating");
+
   const languageTranslator = new LanguageTranslatorV3({
     version: "2018-05-01",
     authenticator: new IamAuthenticator({
@@ -39,23 +75,31 @@ export async function getStaticProps(context) {
   });
 
   const translateParams = {
-    text: context.params.translation,
+    text: preTrans,
     modelId: "en-es"
   };
-
-  if (validator.isEmpty(translateParams.text)) {
-    throw new Error("Please include some text to translate");
-  }
 
   const translationResult = await languageTranslator.translate(translateParams);
   const result = translationResult.result.translations[0].translation;
 
-  return { props: { result } };
+  // console.log("updating");
+
+  const transDoc = await Translations.findOneAndUpdate(
+    { preTrans },
+    { postTrans: result },
+    { new: true }
+  );
+
+  // console.log(transDoc);
+
+  connection.close();
+
+  return { props: { docs: JSON.stringify(transDoc) } };
 }
 
 export async function getStaticPaths() {
   return {
-    paths: [{ params: { translation: "hello" } }],
+    paths: [],
     fallback: true
   };
 }
