@@ -1,20 +1,15 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Alert from "@material-ui/lab/Alert";
-import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 import ButtonLink from "../components/ButtonLink";
-import { clear, translate } from "../src/actions/lang";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,89 +40,68 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Index = ({
-  clear,
-  translate,
-  lang: { preTrans, postTrans, error },
-  rollbar
-}) => {
+const Index = () => {
+  const router = useRouter();
   const classes = useStyles();
+  const defaultValues = {
+    input: ""
+  };
 
   const { register, handleSubmit, errors, setValue, watch } = useForm({
     defaultValues
   });
 
-  const [text, setText] = useState("");
-  const [badAlert, setBadAlert] = useState(false);
-  const [textError, setTextError] = useState("");
-  const [isTextError, setIsTextError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const selectValue = watch("input");
+
+  const [helperText, setHelperText] = useState({
+    inputError: "",
+    isInputError: false
+  });
+
+  const handleSub = e => {
+    e.preventDefault();
+    router.push("/enes/[translation]", "/enes/" + selectValue);
+  };
+
+  const handleClear = e => {
+    e.preventDefault();
+    setValue("input", "");
+  };
 
   const onChange = e => {
-    setText(e.target.value);
-  };
-
-  const handleTranslate = () => {
-    clear({ rollbar });
-    translate({ formData: text, rollbar });
-  };
-
-  const handleCleanup = e => {
-    setText("");
-    clear({ rollbar });
+    setValue("input", e.target.value);
   };
 
   useEffect(() => {
-    if (error) {
-      window.scrollTo(0, 0);
-      setErrorMessage(error.message);
-      setBadAlert(true);
-      setTimeout(() => {
-        setBadAlert(false);
-      }, 5000);
-      setIsSaving(false);
-      clear({ data: error, rollbar });
-    }
-    if (errors.text) {
-      window.scrollTo(0, 0);
-      setTextError(errors.text.message);
-      setIsTextError(true);
+    if (errors.input) {
+      setHelperText(prev => ({
+        inputError: errors.input.message,
+        isInputError: true
+      }));
     } else {
-      setTextError("");
-      setIsTextError(false);
+      setHelperText(prev => ({ inputError: "", isInputError: false }));
     }
-  }, [clear, error, errors.text, rollbar]);
+  }, [errors.input]);
 
   return (
     <div className={classes.root}>
       <Container className={classes.content}>
-        <Container className={classes.alert}>
-          <Collapse in={badAlert}>
-            <Alert severity="error">{errorMessage}</Alert>
-          </Collapse>
-        </Container>
-        <Container>
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <Typography variant="h6">Welcome to the Translator!</Typography>
-            </Grid>
-          </Grid>
-        </Container>
         <Paper className={classes.paper}>
-          <form onSubmit={handleSubmit(handleTranslate)}>
+          <form onSubmit={handleSubmit(handleSub)}>
             <Grid container spacing={2}>
               <Grid item xs>
                 <TextField
                   aria-label="untranslated text"
-                  name="text"
+                  name="input"
+                  value={selectValue}
                   variant="filled"
                   placeholder="Enter text to be translated here..."
                   fullWidth
                   multiline
                   rows={5}
                   autoFocus
-                  helperText={textError}
-                  error={isTextError}
+                  helperText={helperText.inputError}
+                  error={helperText.isInputError}
                   inputRef={register({
                     required: {
                       value: true,
@@ -144,7 +118,7 @@ const Index = ({
                   <Grid item xs={6} className={classes.outterButton}>
                     <ButtonLink
                       href={"/enes/[translation]"}
-                      as={"/enes/" + text}
+                      as={"/enes/" + selectValue}
                       fullWidth
                       color="primary"
                       variant="contained"
@@ -155,13 +129,11 @@ const Index = ({
                   </Grid>
                   <Grid item xs={6} className={classes.outterButton}>
                     <Button
-                      type="reset"
                       fullWidth
                       variant="contained"
                       color="secondary"
                       className={classes.button}
-                      onClick={e => handleCleanup(e)}
-                      disabled={badAlert}
+                      onClick={e => handleClear(e)}
                     >
                       Clear
                     </Button>
@@ -176,17 +148,4 @@ const Index = ({
   );
 };
 
-Index.propTypes = {
-  clear: PropTypes.func.isRequired,
-  translate: PropTypes.func.isRequired,
-  lang: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  lang: state.lang
-});
-
-export default connect(mapStateToProps, {
-  clear,
-  translate
-})(Index);
+export default connect(null)(Index);
