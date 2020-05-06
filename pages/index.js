@@ -13,6 +13,7 @@ import Collapse from "@material-ui/core/Collapse";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 
+import ButtonLink from "../components/ButtonLink";
 import { clear, translate } from "../src/actions/lang";
 
 const useStyles = makeStyles(theme => ({
@@ -139,17 +140,16 @@ const Index = ({
                 />
                 <Grid container>
                   <Grid item xs={6} className={classes.outterButton}>
-                    <Link href="/enes/[translation]" as={`/enes/${text}`}>
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                        disabled={badAlert}
-                      >
-                        Translate
-                      </Button>
-                    </Link>
+                    <ButtonLink
+                      href={"/enes/[translation]"}
+                      as={"/enes/" + text}
+                      fullWidth
+                      color="primary"
+                      variant="contained"
+                      className={classes.button}
+                    >
+                      Translate
+                    </ButtonLink>
                   </Grid>
                   <Grid item xs={6} className={classes.outterButton}>
                     <Button
