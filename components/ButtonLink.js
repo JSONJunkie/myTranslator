@@ -6,7 +6,7 @@ function ButtonLink({ children, href, as, ...props }) {
 
   const handleClick = e => {
     e.preventDefault();
-    router.push(href, as, { shallow: true });
+    router.push(href, as);
   };
 
   return (
