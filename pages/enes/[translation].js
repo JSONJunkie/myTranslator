@@ -63,32 +63,38 @@ export async function getStaticProps(context) {
   // console.log("docs found");
   // console.log("translating");
 
-  const languageTranslator = new LanguageTranslatorV3({
-    version: "2018-05-01",
-    authenticator: new IamAuthenticator({
-      apikey: process.env.TRANSLATE_KEY
-    }),
-    url: process.env.TRANSLATE_URL,
-    headers: {
-      "X-Watson-Learning-Opt-Out": "true"
-    }
-  });
+  if (doc.postTrans === "temp") {
+    const languageTranslator = new LanguageTranslatorV3({
+      version: "2018-05-01",
+      authenticator: new IamAuthenticator({
+        apikey: process.env.TRANSLATE_KEY
+      }),
+      url: process.env.TRANSLATE_URL,
+      headers: {
+        "X-Watson-Learning-Opt-Out": "true"
+      }
+    });
 
-  const translateParams = {
-    text: preTrans,
-    modelId: "en-es"
-  };
+    const translateParams = {
+      text: preTrans,
+      modelId: "en-es"
+    };
 
-  const translationResult = await languageTranslator.translate(translateParams);
-  const result = translationResult.result.translations[0].translation;
+    const translationResult = await languageTranslator.translate(
+      translateParams
+    );
+    const result = translationResult.result.translations[0].translation;
 
-  // console.log("updating");
+    // console.log("updating");
 
-  const transDoc = await Translations.findOneAndUpdate(
-    { preTrans },
-    { postTrans: result },
-    { new: true }
-  );
+    const transDoc = await Translations.findOneAndUpdate(
+      { preTrans },
+      { postTrans: result },
+      { new: true }
+    );
+
+    return { props: { doc: JSON.stringify(transDoc) } };
+  }
 
   // console.log(transDoc);
 
