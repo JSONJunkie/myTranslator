@@ -1,6 +1,5 @@
 import { fade, makeStyles } from "@material-ui/core/styles";
-import { Fragment } from "react";
-import InputBase from "@material-ui/core/InputBase";
+import { Fragment, useEffect, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import TranslateIcon from "@material-ui/icons/Translate";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 import ButtonLink from "./ButtonLink";
 
@@ -67,6 +68,48 @@ const useStyles = makeStyles(theme => ({
 const Navbar = () => {
   const classes = useStyles();
 
+  const router = useRouter();
+  const defaultValues = {
+    input: ""
+  };
+
+  const { register, handleSubmit, errors, setValue, watch } = useForm({
+    defaultValues
+  });
+
+  const selectValue = watch("input");
+
+  const [helperText, setHelperText] = useState({
+    inputError: "",
+    isInputError: false
+  });
+
+  const handleSub = e => {
+    e.preventDefault();
+    router.push("/enes/[translation]", "/enes/" + selectValue.toLowerCase());
+  };
+
+  const handleClear = e => {
+    e.preventDefault();
+    setValue("input", "");
+  };
+
+  const onChange = e => {
+    console.log("hi");
+    setValue("input", e.target.value);
+  };
+
+  useEffect(() => {
+    if (errors.input) {
+      setHelperText(prev => ({
+        inputError: errors.input.message,
+        isInputError: true
+      }));
+    } else {
+      setHelperText(prev => ({ inputError: "", isInputError: false }));
+    }
+  }, [errors.input]);
+
   return (
     <Fragment>
       <AppBar position="fixed">
@@ -82,22 +125,57 @@ const Navbar = () => {
                 </Grid>
               </Grid>
               <Grid item xs className={classes.spacing}>
-                <div className={classes.search}>
-                  <TextField
-                    className={classes.input}
-                    autoFocus
-                    fullWidth
-                    size="small"
-                  />
-                  <ButtonLink
-                    className={classes.button}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                  >
-                    Translate
-                  </ButtonLink>
-                </div>
+                <form onSubmit={handleSubmit(handleSub)}>
+                  <div className={classes.search}>
+                    <TextField
+                      className={classes.input}
+                      autoFocus
+                      fullWidth
+                      id="translate"
+                      size="small"
+                      name="input"
+                      value={selectValue}
+                      placeholder="Translate something..."
+                      helperText={helperText.inputError}
+                      error={helperText.isInputError}
+                      onChange={e => onChange(e)}
+                      inputRef={register({
+                        required: {
+                          value: true,
+                          message: "Please include some text to translate"
+                        },
+                        pattern: {
+                          value: /\b[^\d\W]+\b/,
+                          message: "Please only include words"
+                        }
+                      })}
+                    />
+                    {selectValue !== "" && (
+                      <ButtonLink
+                        className={classes.button}
+                        href={"/enes/[translation]"}
+                        as={"/enes/" + selectValue.toLowerCase()}
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                      >
+                        Translate
+                      </ButtonLink>
+                    )}
+                    {selectValue === "" && (
+                      <ButtonLink
+                        className={classes.button}
+                        href={"/enes/[translation]"}
+                        as={"/enes/translate"}
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                      >
+                        Translate
+                      </ButtonLink>
+                    )}
+                  </div>
+                </form>
               </Grid>
             </Grid>
           </Toolbar>
