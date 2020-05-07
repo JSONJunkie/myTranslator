@@ -83,7 +83,7 @@ export async function getStaticProps(context) {
     const transDoc = await Translations.findOneAndUpdate(
       { preTrans },
       { postTrans: result },
-      { new: true }
+      { new: true, useFindAndModify: false }
     );
 
     connection.close();
