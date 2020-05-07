@@ -76,20 +76,18 @@ const Navbar = () => {
     isInputError: false
   });
 
-  const [input, setInput] = useState("");
-
-  const handleSub = () => {
-    if (input === "") {
+  const handleSub = e => {
+    if (e.input === "") {
       router.push("/enes/[translation]", "/enes/translate");
     } else {
-      router.push("/enes/[translation]", "/enes/" + input.toLowerCase());
+      router.push("/enes/[translation]", "/enes/" + e.input.toLowerCase());
     }
   };
 
   const onChange = e => {
     return e.target.value;
   };
-  console.log(input);
+
   useEffect(() => {
     if (errors.input) {
       setHelperText(prev => ({
