@@ -86,6 +86,8 @@ export async function getStaticProps(context) {
       { new: true }
     );
 
+    connection.close();
+
     return { props: { doc: JSON.stringify(transDoc) } };
   }
 
