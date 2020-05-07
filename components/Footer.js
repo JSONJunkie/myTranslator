@@ -6,12 +6,15 @@ import Typography from "@material-ui/core/Typography";
 import { useRouter } from "next/router";
 import Grow from "@material-ui/core/Grow";
 import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
 
+import Copyright from "./Copyright";
 import { numOfTranslations } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginTop: "auto"
+    marginTop: "auto",
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -50,11 +53,18 @@ const Footer = ({ numOfTranslations, translations: { numTrans } }) => {
   return (
     <div className={classes.root}>
       <Container maxWidth="md">
-        <Grow in={grow} timeout={2000}>
-          <Typography>
-            Total number of translations available: {numTrans}
-          </Typography>
-        </Grow>
+        <Grid container justify="center" alignItems="center" direction="column">
+          <Grid item>
+            <Grow in={grow} timeout={2000}>
+              <Typography color="textSecondary">
+                Total number of translations available: {numTrans}
+              </Typography>
+            </Grow>
+          </Grid>
+          <Grid item>
+            <Copyright />
+          </Grid>
+        </Grid>
       </Container>
     </div>
   );
