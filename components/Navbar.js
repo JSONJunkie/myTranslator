@@ -104,7 +104,55 @@ const Navbar = () => {
         </Container>
       </AppBar>
       <Toolbar className={classes.hidden}>
-        <Typography variant="h3">Translator</Typography>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item>
+            <Grid container className={classes.titleDesktop}>
+              <Typography variant="h4">Translator</Typography>
+            </Grid>
+            <Grid container className={classes.titleMobile}>
+              <TranslateIcon fontSize="large" />
+            </Grid>
+          </Grid>
+          <Grid item xs className={classes.spacing}>
+            <form onSubmit={handleSubmit(handleSub)}>
+              <div className={classes.search}>
+                <TextField
+                  className={classes.input}
+                  autoFocus
+                  fullWidth
+                  size="small"
+                  inputProps={{ "aria-label": "translate" }}
+                  name="input"
+                  value={selectValue}
+                  placeholder="Translate something..."
+                  helperText={helperText.inputError}
+                  error={helperText.isInputError}
+                  inputRef={register({
+                    required: {
+                      value: true,
+                      message: "Please include some text to translate"
+                    },
+                    pattern: {
+                      value: /\b[^\d\W]+\b/,
+                      message: "Please only include words"
+                    }
+                  })}
+                  onChange={e => onChange(e)}
+                />
+                <ButtonLink
+                  className={classes.button}
+                  href={"/enes/[translation]"}
+                  as={"/enes/" + selectValue.toLowerCase()}
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                >
+                  Translate
+                </ButtonLink>
+              </div>
+            </form>
+          </Grid>
+        </Grid>
       </Toolbar>
     </Fragment>
   );
