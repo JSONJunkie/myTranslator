@@ -87,7 +87,7 @@ const Navbar = () => {
   };
 
   const onChange = e => {
-    setInput(e.target.value);
+    return e.target.value;
   };
   console.log(input);
   useEffect(() => {
@@ -121,7 +121,6 @@ const Navbar = () => {
                     <Controller
                       as={TextField}
                       name="input"
-                      value={input}
                       control={control}
                       className={classes.input}
                       autoFocus
@@ -132,6 +131,7 @@ const Navbar = () => {
                       helperText={helperText.inputError}
                       error={helperText.isInputError}
                       onChange={([e]) => onChange(e)}
+                      defaultValue=""
                       rules={{
                         required: {
                           value: true,
