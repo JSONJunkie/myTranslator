@@ -131,13 +131,9 @@ const Navbar = () => {
                       onChange={([e]) => onChange(e)}
                       defaultValue=""
                       rules={{
-                        required: {
-                          value: true,
-                          message: "Please include some text to translate"
-                        },
                         pattern: {
                           value: /\b[^\d\W]+\b/,
-                          message: "Please only include words"
+                          message: "Alphabets only"
                         }
                       }}
                     />
