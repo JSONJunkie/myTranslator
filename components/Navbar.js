@@ -6,14 +6,20 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { useRouter } from "next/router";
+import Grow from "@material-ui/core/Grow";
+
+import { numOfTranslations } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   root: {
     marginBottom: theme.spacing(1)
+  },
+  stuff: {
+    marginLeft: "auto"
   }
 }));
 
-const Navbar = ({}) => {
+const Navbar = ({ numOfTranslations, translations: { numTrans } }) => {
   const classes = useStyles();
 
   const router = useRouter();
@@ -21,7 +27,6 @@ const Navbar = ({}) => {
   const [routeChange, setRouteChange] = useState(true);
 
   const handleRouteChangeComplete = url => {
-    console.log("App changed to: ", url);
     setRouteChange(prev => true);
   };
 
@@ -34,7 +39,7 @@ const Navbar = ({}) => {
 
   useEffect(() => {
     if (routeChange) {
-      console.log("Total translations");
+      numOfTranslations();
       setRouteChange(prev => false);
     }
   }, [routeChange]);
@@ -43,10 +48,19 @@ const Navbar = ({}) => {
     <Fragment>
       <AppBar position="fixed">
         <Toolbar>
-          <Typography>Translator</Typography>
+          <Typography variant="h3">Translator</Typography>
+          <Grow in={numTrans}>
+            <span className={classes.stuff}>
+              <Typography>
+                Total number of translations available: {numTrans}
+              </Typography>
+            </span>
+          </Grow>
         </Toolbar>
       </AppBar>
-      <Toolbar className={classes.root} />
+      <Toolbar className={classes.root}>
+        <Typography variant="h3">Translator</Typography>
+      </Toolbar>
     </Fragment>
   );
 };
@@ -55,6 +69,13 @@ const Navbar = ({}) => {
 //   rollbar: PropTypes.object.isRequired
 // };
 
-Navbar.propTypes = {};
+Navbar.propTypes = {
+  numOfTranslations: PropTypes.func.isRequired,
+  translations: PropTypes.object.isRequired
+};
 
-export default connect(null)(Navbar);
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps, { numOfTranslations })(Navbar);
