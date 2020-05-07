@@ -3,7 +3,7 @@ import Link from "@material-ui/core/Link";
 
 const Copyright = () => {
   return (
-    <Typography variant="caption text" color="textSecondary">
+    <Typography variant="caption" color="textSecondary">
       {"Copyright © "}
       <Link color="inherit" href="https://github.com/jsonjunkie">
         JSONJunkie
