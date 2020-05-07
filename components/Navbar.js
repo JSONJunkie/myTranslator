@@ -69,6 +69,37 @@ const Navbar = () => {
 
   const router = useRouter();
 
+  const [routing, setRouting] = useState({
+    starting: false,
+    complete: true
+  });
+
+  const handleRouteChangeStart = url => {
+    setRouting(prev => ({ ...prev, starting: true }));
+  };
+
+  const handleRouteChangeComplete = url => {
+    setRouting(prev => ({ ...prev, complete: true }));
+  };
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", handleRouteChangeComplete);
+    router.events.on("routeChangeComplete", handleRouteChangeStart);
+    return () => {
+      router.events.on("routeChangeStart", handleRouteChangeComplete);
+      router.events.off("routeChangeComplete", handleRouteChangeStart);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (routing.complete) {
+      setRouting(prev => ({ ...prev, complete: false }));
+    }
+    if (routing.starting) {
+      setRouting(prev => ({ ...prev, starting: false }));
+    }
+  }, [routing.starting, routing.complete]);
+
   const { handleSubmit, errors, control } = useForm();
 
   const [helperText, setHelperText] = useState({
