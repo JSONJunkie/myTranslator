@@ -1,6 +1,7 @@
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { Fragment } from "react";
 import InputBase from "@material-ui/core/InputBase";
+import TextField from "@material-ui/core/TextField";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -47,10 +48,7 @@ const useStyles = makeStyles(theme => ({
   button: {
     position: "absolute",
     right: theme.spacing(0.5),
-    top: theme.spacing(0.7),
-    [theme.breakpoints.up("md")]: {
-      top: theme.spacing(0.5)
-    }
+    top: theme.spacing(0.5)
   },
   titleDesktop: {
     display: "none",
@@ -85,7 +83,7 @@ const Navbar = () => {
               </Grid>
               <Grid item xs className={classes.spacing}>
                 <div className={classes.search}>
-                  <InputBase
+                  <TextField
                     className={classes.input}
                     autoFocus
                     fullWidth
