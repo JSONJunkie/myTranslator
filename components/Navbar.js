@@ -70,12 +70,13 @@ const Navbar = () => {
   const router = useRouter();
 
   const [routing, setRouting] = useState({
+    url: "",
     starting: false,
     complete: true
   });
 
   const handleRouteChangeStart = url => {
-    setRouting(prev => ({ ...prev, starting: true }));
+    setRouting(prev => ({ ...prev, starting: true, url }));
   };
 
   const handleRouteChangeComplete = url => {
@@ -94,13 +95,17 @@ const Navbar = () => {
   useEffect(() => {
     if (routing.complete) {
       setRouting(prev => ({ ...prev, complete: false }));
+      reset({ TextField: "" });
     }
     if (routing.starting) {
-      setRouting(prev => ({ ...prev, starting: false }));
+      setRouting(prev => ({ ...prev, starting: false, url: "" }));
+      if (routing.url === "enes/translate") {
+        reset({ TextField: "translate" });
+      }
     }
   }, [routing.starting, routing.complete]);
 
-  const { handleSubmit, errors, control } = useForm();
+  const { handleSubmit, errors, control, reset } = useForm();
 
   const [helperText, setHelperText] = useState({
     inputError: "",
