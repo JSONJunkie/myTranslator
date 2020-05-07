@@ -2,7 +2,7 @@ import nextConnect from "next-connect";
 import SpeechToTextV1 from "ibm-watson/speech-to-text/v1";
 import { IamAuthenticator } from "ibm-watson/auth";
 
-import { rollbar } from ".";
+import rollbar from "../";
 
 const handler = nextConnect();
 

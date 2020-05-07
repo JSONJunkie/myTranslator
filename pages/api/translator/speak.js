@@ -3,7 +3,7 @@ import TextToSpeechV1 from "ibm-watson/text-to-speech/v1";
 import { IamAuthenticator } from "ibm-watson/auth";
 import validator from "validator";
 
-import { rollbar } from ".";
+import rollbar from "../";
 
 const handler = nextConnect();
 
