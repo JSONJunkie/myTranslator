@@ -1,14 +1,7 @@
 import nextConnect from "next-connect";
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
-import Rollbar from "rollbar";
 import validator from "validator";
-
-export const rollbar = new Rollbar({
-  // accessToken: process.env.ROLLBAR_SERVER_TOKEN,
-  captureUncaught: true,
-  captureUnhandledRejections: true
-});
 
 const handler = nextConnect();
 
