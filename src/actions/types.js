@@ -9,3 +9,4 @@ export const DELETE_SAVED = "DELETE_SAVED";
 export const PUSH_TRANS = "PUSH_TRANS";
 export const ERROR = "ERROR";
 export const CLEAR_ERROR = "CLEAR_ERROR";
+export const GET_TRANSCOUNT = "GET_TRANSCOUNT";
