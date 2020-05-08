@@ -14,7 +14,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import Button from "@material-ui/core/Button";
 
-import { updateInput } from "../src/actions/translations";
+import { updateInput, addHit } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   hidden: {
@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navbar = ({ translations: { userInput }, updateInput }) => {
+const Navbar = ({ translations: { userInput }, updateInput, addHit }) => {
   const classes = useStyles();
 
   const router = useRouter();
@@ -102,6 +102,14 @@ const Navbar = ({ translations: { userInput }, updateInput }) => {
       setRouting(prev => ({ ...prev, complete: false }));
       updateInput("");
       reset({ TextField: "" });
+      if (
+        userInput ||
+        (router.pathname !== "/" && router.pathname !== "/404")
+      ) {
+        if (!router.isFallback) {
+          addHit(router.query);
+        }
+      }
     }
     if (routing.starting) {
       setRouting(prev => ({ ...prev, starting: false, url: "" }));
@@ -118,8 +126,9 @@ const Navbar = ({ translations: { userInput }, updateInput }) => {
   const handleSub = e => {
     if (e.input === "") {
     } else {
-      if (userInput !== "")
+      if (userInput !== "") {
         router.push("/enes/[translation]", "/enes/" + e.input.toLowerCase());
+      }
     }
   };
 
@@ -220,11 +229,12 @@ const Navbar = ({ translations: { userInput }, updateInput }) => {
 
 Navbar.propTypes = {
   translations: PropTypes.object.isRequired,
-  updateInput: PropTypes.func.isRequired
+  updateInput: PropTypes.func.isRequired,
+  addHit: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   translations: state.translations
 });
 
-export default connect(mapStateToProps, { updateInput })(Navbar);
+export default connect(mapStateToProps, { updateInput, addHit })(Navbar);
