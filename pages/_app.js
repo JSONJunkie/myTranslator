@@ -7,6 +7,7 @@ import { withRedux } from "../lib/redux";
 import Rollbar from "rollbar";
 
 import Navbar from "../components/Navbar";
+import LoadingOverlay from "../components/LoadingOverlay";
 import Footer from "../components/Footer";
 import theme from "../themes/theme";
 
@@ -37,6 +38,12 @@ const useStyles = makeStyles(theme => ({
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column"
+  },
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    position: "relative",
+    flexGrow: 1
   }
 }));
 
@@ -67,7 +74,10 @@ function MyApp({ Component, pageProps, store }) {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <Navbar />
-          <Component rollbar={rollbar} {...pageProps} />
+          <div className={classes.wrapper}>
+            <LoadingOverlay />
+            <Component rollbar={rollbar} {...pageProps} />
+          </div>
           <Footer />
         </ThemeProvider>
       </div>
