@@ -9,10 +9,15 @@ const TranslationsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  hits: {
-    type: Number,
-    required: true
-  },
+  hits: [
+    {
+      time: { type: Number, required: true },
+      hits: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
   date: {
     type: String,
     required: true
