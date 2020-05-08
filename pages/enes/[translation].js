@@ -101,16 +101,19 @@ const Enes = ({ doc }) => {
             <Grid className={classes.cardGrid} item xs={12} sm={6}>
               <Card className={classes.cardRoot}>
                 <CardContent>
-                  <Typography
-                    className={classes.title}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    {text.split("\n").map((i, key) => {
-                      return <div key={key}>{i}</div>;
-                    })}
-                  </Typography>
-
+                  {text.split("\n").map((i, key) => {
+                    return (
+                      <Typography
+                        className={classes.title}
+                        color="textSecondary"
+                        gutterBottom
+                        key={key}
+                        paragraph
+                      >
+                        {i}
+                      </Typography>
+                    );
+                  })}
                   <Divider />
                   <Typography className={classes.pos} color="textSecondary">
                     translating from english to spanish...
@@ -169,29 +172,38 @@ const Enes = ({ doc }) => {
           <Grid item className={classes.cardGrid} xs={12} sm={6}>
             <Card className={classes.cardRoot}>
               <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  {data.preTrans.split("\n").map((i, key) => {
-                    return <div key={key}>{i}</div>;
-                  })}
-                </Typography>
+                {data.preTrans.split("\n").map((i, key) => {
+                  return (
+                    <Typography
+                      className={classes.title}
+                      color="textSecondary"
+                      gutterBottom
+                      key={key}
+                      paragraph
+                    >
+                      {i}
+                    </Typography>
+                  );
+                })}
                 <Divider />
                 <Typography className={classes.pos} color="textSecondary">
                   translating from english to spanish...
                 </Typography>
                 {/* <div className={classes.wrapper}> */}
-                <Typography
-                  className={classes.translation}
-                  variant="body2"
-                  component="p"
-                >
-                  {data.postTrans.split("\n").map((i, key) => {
-                    return <div key={key}>{i}</div>;
-                  })}
-                </Typography>
+                {data.postTrans.split("\n").map((i, key) => {
+                  return (
+                    <Typography
+                      className={classes.translation}
+                      variant="body2"
+                      component="p"
+                      gutterBottom
+                      key={key}
+                      paragraph
+                    >
+                      {i}
+                    </Typography>
+                  );
+                })}
                 {/* <CircularProgress disableShrink className={classes.progress} /> */}
                 {/* </div> */}
               </CardContent>

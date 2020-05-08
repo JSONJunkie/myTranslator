@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import clsx from "clsx";
@@ -12,6 +12,9 @@ import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Paper from "@material-ui/core/Paper";
 import Grow from "@material-ui/core/Grow";
+import Button from "@material-ui/core/Button";
+import Backdrop from "@material-ui/core/Backdrop";
+import { useRouter } from "next/router";
 
 import Chart from "../components/Chart";
 
@@ -78,13 +81,60 @@ const useStyles = makeStyles(theme => ({
     height: 240,
     width: 340,
     margin: "auto"
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    background: "rgb(53, 53, 53, .9)",
+    color: "#fff",
+    display: "flex",
+    flexDirection: "column"
   }
 }));
 
 const LoadingOverlay = ({ translations: { userInput } }) => {
   const classes = useStyles();
 
+  const router = useRouter();
+
+  const [routing, setRouting] = useState({
+    url: "",
+    starting: false,
+    complete: true
+  });
+
+  const [open, setOpen] = useState(false);
+
   const [hide, setHide] = useState(true);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleRouteChangeStart = url => {
+    setRouting(prev => ({ ...prev, starting: true, url }));
+  };
+
+  const handleRouteChangeComplete = url => {
+    setRouting(prev => ({ ...prev, complete: true }));
+  };
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", handleRouteChangeStart);
+    router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    return () => {
+      router.events.on("routeChangeStart", handleRouteChangeStart);
+      router.events.off("routeChangeComplete", handleRouteChangeComplete);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (routing.complete) {
+      setRouting(prev => ({ ...prev, complete: false }));
+    }
+    if (routing.starting) {
+      setRouting(prev => ({ ...prev, starting: false, url: "" }));
+    }
+  }, [routing.starting, routing.complete]);
 
   useEffect(() => {
     if (userInput) {
@@ -99,83 +149,102 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
     };
   }, [userInput]);
 
+  useEffect(() => {
+    if (router.isFallback) {
+      setOpen(true);
+    }
+  }, [routing.starting, routing.complete]);
+
   return (
-    <div
-      className={clsx(classes.root, {
-        [classes.hideRoot]: hide
-      })}
-    >
-      <Container className={classes.content} maxWidth="md">
-        <Grid
-          container
-          justify="center"
-          alignItems="center"
-          alignContent="center"
-          spacing={2}
-        >
-          <Grid className={classes.cardGrid} item xs={12} sm={6}>
-            <Card className={classes.cardRoot}>
-              <CardContent>
-                {userInput && (
-                  <Typography
-                    className={classes.title}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    {userInput.split("\n").map((i, key) => {
-                      return <div key={key}>{i}</div>;
-                    })}
+    <Fragment>
+      <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
+        <Typography variant="h5" align="center">
+          Hey, you're the first person to make this translation! Thanks for
+          using my webapp!
+        </Typography>
+        <Button variant="contained" color="primary" size="large">
+          Continue
+        </Button>
+      </Backdrop>
+      <div
+        className={clsx(classes.root, {
+          [classes.hideRoot]: hide
+        })}
+      >
+        <Container className={classes.content} maxWidth="md">
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            alignContent="center"
+            spacing={2}
+          >
+            <Grid className={classes.cardGrid} item xs={12} sm={6}>
+              <Card className={classes.cardRoot}>
+                <CardContent>
+                  {userInput.split("\n").map((i, key) => {
+                    return (
+                      <Typography
+                        className={classes.title}
+                        color="textSecondary"
+                        gutterBottom
+                        key={key}
+                        paragraph
+                      >
+                        {i}
+                      </Typography>
+                    );
+                  })}
+                  {!userInput && (
+                    <Typography
+                      className={classes.title}
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                      Welcome
+                    </Typography>
+                  )}
+                  <Divider />
+                  <Typography className={classes.pos} color="textSecondary">
+                    translating from english to spanish...
                   </Typography>
-                )}
-                {!userInput && (
-                  <Typography
-                    className={classes.title}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    Welcome
-                  </Typography>
-                )}
-                <Divider />
-                <Typography className={classes.pos} color="textSecondary">
-                  translating from english to spanish...
-                </Typography>
+                  <div className={classes.wrapper}>
+                    <Typography
+                      className={classes.hidden}
+                      variant="body2"
+                      component="p"
+                    >
+                      Bienvenida
+                    </Typography>
+                    <CircularProgress
+                      disableShrink
+                      className={classes.progress}
+                    />
+                    <Typography
+                      className={classes.caption}
+                      variant="caption"
+                      color="textSecondary"
+                    >
+                      hit "enter" or the translate button to translate
+                    </Typography>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper className={classes.chart}>
                 <div className={classes.wrapper}>
-                  <Typography
-                    className={classes.hidden}
-                    variant="body2"
-                    component="p"
-                  >
-                    Bienvenida
-                  </Typography>
                   <CircularProgress
                     disableShrink
-                    className={classes.progress}
+                    className={classes.chartProgress}
                   />
-                  <Typography
-                    className={classes.caption}
-                    variant="caption"
-                    color="textSecondary"
-                  >
-                    hit "enter" or the translate button to translate
-                  </Typography>
                 </div>
-              </CardContent>
-            </Card>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper className={classes.chart}>
-              <div className={classes.wrapper}>
-                <CircularProgress
-                  disableShrink
-                  className={classes.chartProgress}
-                />
-              </div>
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
+        </Container>
+      </div>
+    </Fragment>
   );
 };
 
