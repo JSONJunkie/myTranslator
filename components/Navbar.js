@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import TranslateIcon from "@material-ui/icons/Translate";
+import IconButton from "@material-ui/core/IconButton";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import Button from "@material-ui/core/Button";
@@ -120,6 +121,10 @@ const Navbar = () => {
     }
   };
 
+  const goHome = () => {
+    router.push("/");
+  };
+
   const onChange = e => {
     setTrans(e.target.value);
     return e.target.value;
@@ -144,10 +149,22 @@ const Navbar = () => {
             <Grid container spacing={2} alignItems="center">
               <Grid item>
                 <Grid container className={classes.titleDesktop}>
-                  <Typography variant="h4">Translator</Typography>
+                  <IconButton
+                    aria-label="home"
+                    color="inherit"
+                    onClick={goHome}
+                  >
+                    <Typography variant="h4">Translator</Typography>
+                  </IconButton>
                 </Grid>
                 <Grid container className={classes.titleMobile}>
-                  <TranslateIcon fontSize="large" />
+                  <IconButton
+                    aria-label="home"
+                    color="inherit"
+                    onClick={goHome}
+                  >
+                    <TranslateIcon fontSize="large" />
+                  </IconButton>
                 </Grid>
               </Grid>
               <Grid item xs className={classes.spacing}>
