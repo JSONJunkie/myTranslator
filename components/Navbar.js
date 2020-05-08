@@ -98,13 +98,14 @@ const Navbar = () => {
     if (routing.complete) {
       setRouting(prev => ({ ...prev, complete: false }));
       setTrans(prev => "");
+      reset({ TextField: "" });
     }
     if (routing.starting) {
       setRouting(prev => ({ ...prev, starting: false, url: "" }));
     }
   }, [routing.starting, routing.complete]);
 
-  const { handleSubmit, errors, control } = useForm();
+  const { handleSubmit, errors, control, reset } = useForm();
 
   const [helperText, setHelperText] = useState({
     inputError: "",
