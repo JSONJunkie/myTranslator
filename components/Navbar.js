@@ -1,5 +1,7 @@
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { Fragment, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,6 +13,8 @@ import IconButton from "@material-ui/core/IconButton";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import Button from "@material-ui/core/Button";
+
+import { updateInput } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   hidden: {
@@ -65,7 +69,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navbar = () => {
+const Navbar = ({ translations: { userInput }, updateInput }) => {
   const classes = useStyles();
 
   const router = useRouter();
@@ -98,7 +102,7 @@ const Navbar = () => {
   useEffect(() => {
     if (routing.complete) {
       setRouting(prev => ({ ...prev, complete: false }));
-      setTrans(prev => "");
+      updateInput("");
       reset({ TextField: "" });
     }
     if (routing.starting) {
@@ -126,7 +130,7 @@ const Navbar = () => {
   };
 
   const onChange = e => {
-    setTrans(e.target.value);
+    updateInput(e.target.value);
     return e.target.value;
   };
 
@@ -216,4 +220,13 @@ const Navbar = () => {
 //   rollbar: PropTypes.object.isRequired
 // };
 
-export default Navbar;
+Navbar.propTypes = {
+  translations: PropTypes.object.isRequired,
+  updateInput: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps, { updateInput })(Navbar);

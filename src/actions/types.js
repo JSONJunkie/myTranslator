@@ -10,3 +10,4 @@ export const PUSH_TRANS = "PUSH_TRANS";
 export const ERROR = "ERROR";
 export const CLEAR_ERROR = "CLEAR_ERROR";
 export const GET_TRANSCOUNT = "GET_TRANSCOUNT";
+export const UPDATE_INPUT = "UPDATE_INPUT";
