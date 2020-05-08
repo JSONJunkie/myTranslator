@@ -120,7 +120,7 @@ const Navbar = ({ translations: { userInput }, updateInput }) => {
   const handleSub = e => {
     if (e.input === "") {
     } else {
-      if (trans !== "")
+      if (userInput !== "")
         router.push("/enes/[translation]", "/enes/" + e.input.toLowerCase());
     }
   };
