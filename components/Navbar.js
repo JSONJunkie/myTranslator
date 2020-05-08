@@ -92,8 +92,8 @@ const Navbar = ({ translations: { userInput }, updateInput }) => {
     router.events.on("routeChangeStart", handleRouteChangeComplete);
     router.events.on("routeChangeComplete", handleRouteChangeStart);
     return () => {
-      router.events.on("routeChangeStart", handleRouteChangeComplete);
-      router.events.off("routeChangeComplete", handleRouteChangeStart);
+      router.events.on("routeChangeStart", handleRouteChangeStart);
+      router.events.off("routeChangeComplete", handleRouteChangeComplete);
     };
   }, []);
 
