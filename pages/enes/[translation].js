@@ -95,35 +95,56 @@ const Enes = ({ doc }) => {
             justify="center"
             alignItems="center"
             alignContent="center"
+            spacing={2}
           >
-            <Card className={classes.cardRoot}>
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  one moment while I get that for you...
-                </Typography>
-                <Divider />
-                <Typography className={classes.pos} color="textSecondary">
-                  translating from english to spanish...
-                </Typography>
-                <div className={classes.wrapper}>
+            <Grid className={classes.cardGrid} item xs={12} sm={6}>
+              <Card className={classes.cardRoot}>
+                <CardContent>
                   <Typography
-                    className={classes.hidden}
-                    variant="body2"
-                    component="p"
+                    className={classes.title}
+                    color="textSecondary"
+                    gutterBottom
                   >
-                    the translation is gona go here
+                    one moment while I get that for you...
                   </Typography>
+
+                  <Divider />
+                  <Typography className={classes.pos} color="textSecondary">
+                    translating from english to spanish...
+                  </Typography>
+                  <div className={classes.wrapper}>
+                    <Typography
+                      className={classes.hidden}
+                      variant="body2"
+                      component="p"
+                    >
+                      Bienvenida
+                    </Typography>
+                    <CircularProgress
+                      disableShrink
+                      className={classes.progress}
+                    />
+                    <Typography
+                      className={classes.caption}
+                      variant="caption"
+                      color="textSecondary"
+                    >
+                      hit "enter" or the translate button to translate
+                    </Typography>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper className={classes.chart}>
+                <div className={classes.wrapper}>
                   <CircularProgress
                     disableShrink
-                    className={classes.progress}
+                    className={classes.chartProgress}
                   />
                 </div>
-              </CardContent>
-            </Card>
+              </Paper>
+            </Grid>
           </Grid>
         </Container>
       </div>
