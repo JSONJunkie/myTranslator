@@ -9,11 +9,9 @@ handler.use(middleware);
 handler.get(async (req, res) => {
   try {
     const { Translations } = req.models;
-    // const { connection } = req.connection;
-    console.log(req.connection);
     const numDocs = await Translations.estimatedDocumentCount().exec();
     res.json(numDocs);
-    // connection.close();
+    req.connection.close();
   } catch (err) {
     res.status(400).json({ errors: { name: err.name, message: err.message } });
     // rollbar.error(err);
