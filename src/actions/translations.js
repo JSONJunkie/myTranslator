@@ -1,7 +1,28 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-import { GET_TRANSCOUNT, UPDATE_INPUT } from "./types";
+import { GET_TRANSCOUNT, UPDATE_INPUT, ADD_HIT } from "./types";
+
+export const addHit = data => async dispatch => {
+  try {
+    const body = { data };
+
+    await axios.patch("/api/translations", body);
+
+    dispatch({
+      type: ADD_HIT
+    });
+  } catch (err) {
+    // rollbar.error(err);
+    // dispatch({
+    //   type: ERROR,
+    //   payload: {
+    //     name: err.name,
+    //     message: err.message
+    //   }
+    // });
+  }
+};
 
 export const updateInput = data => async dispatch => {
   try {

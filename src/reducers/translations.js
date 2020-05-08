@@ -1,4 +1,4 @@
-import { GET_TRANSCOUNT, UPDATE_INPUT } from "../actions/types";
+import { GET_TRANSCOUNT, UPDATE_INPUT, ADD_HIT } from "../actions/types";
 
 const initialState = {
   numTrans: "",
@@ -12,6 +12,7 @@ export default function (state = initialState, action) {
       return { ...state, numTrans: payload.numTrans };
     case UPDATE_INPUT:
       return { ...state, userInput: payload.userInput };
+    case ADD_HIT:
     default:
       return state;
   }
