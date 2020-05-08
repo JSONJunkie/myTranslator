@@ -78,7 +78,6 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
     };
   }, [userInput]);
 
-  console.log(userInput);
   return (
     <div
       className={clsx(classes.root, {
