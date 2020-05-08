@@ -87,7 +87,7 @@ const Enes = ({ doc }) => {
   }
 
   if (router.isFallback) {
-    text = "one moment while I get that for you...";
+    const text = "one moment while I get that for you...";
     return (
       <div className={classes.root}>
         <Container className={classes.content} maxWidth="md">
