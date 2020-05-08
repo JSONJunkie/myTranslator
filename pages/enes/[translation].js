@@ -82,7 +82,7 @@ export async function getStaticProps(context) {
 
     const transDoc = await Translations.findOneAndUpdate(
       { preTrans },
-      { postTrans: result },
+      { postTrans: result.toLowerCase() },
       { new: true, useFindAndModify: false }
     );
 
