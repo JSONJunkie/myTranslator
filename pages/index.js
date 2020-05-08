@@ -9,6 +9,9 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import Paper from "@material-ui/core/Paper";
+
+import Chart from "../components/Chart";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,7 +23,8 @@ const useStyles = makeStyles(theme => ({
     display: "flex"
   },
   cardRoot: {
-    width: 360
+    width: "100%",
+    height: "100%"
   },
   title: {
     fontSize: 50
@@ -31,9 +35,13 @@ const useStyles = makeStyles(theme => ({
   pos: {
     marginBottom: 12
   },
-  hidden: {
-    fontSize: 30,
-    visibility: "hidden"
+  cardGrid: {
+    maxWidth: 360
+  },
+  chart: {
+    height: 240,
+    width: 340,
+    margin: "auto"
   }
 }));
 
@@ -67,29 +75,37 @@ const Index = ({ translations: { userInput } }) => {
           justify="center"
           alignItems="center"
           alignContent="center"
+          spacing={2}
         >
-          <Card className={classes.cardRoot}>
-            <CardContent>
-              <Typography
-                className={classes.title}
-                color="textSecondary"
-                gutterBottom
-              >
-                Welcome
-              </Typography>
-              <Divider />
-              <Typography className={classes.pos} color="textSecondary">
-                translating from english to spanish...
-              </Typography>
-              <Typography
-                className={classes.translation}
-                variant="body2"
-                component="p"
-              >
-                Bienvenida
-              </Typography>
-            </CardContent>
-          </Card>
+          <Grid className={classes.cardGrid} item xs={12} sm={6}>
+            <Card className={classes.cardRoot}>
+              <CardContent>
+                <Typography
+                  className={classes.title}
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  Welcome
+                </Typography>
+                <Divider />
+                <Typography className={classes.pos} color="textSecondary">
+                  translating from english to spanish...
+                </Typography>
+                <Typography
+                  className={classes.translation}
+                  variant="body2"
+                  component="p"
+                >
+                  Bienvenida
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Paper className={classes.chart}>
+              <Chart />
+            </Paper>
+          </Grid>
         </Grid>
       </Container>
     </div>
