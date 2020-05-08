@@ -169,7 +169,7 @@ const Navbar = () => {
                       rules={{
                         pattern: {
                           value: /\b[^\d\W]+\b/,
-                          message: "Alphabets only"
+                          message: "Alphabet characters only"
                         }
                       }}
                     />
