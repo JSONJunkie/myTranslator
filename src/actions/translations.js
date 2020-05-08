@@ -5,7 +5,6 @@ import { GET_TRANSCOUNT, UPDATE_INPUT } from "./types";
 
 export const updateInput = data => async dispatch => {
   try {
-    console.log(data);
     dispatch({
       type: UPDATE_INPUT,
       payload: { userInput: data }
