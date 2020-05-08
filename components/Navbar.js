@@ -89,8 +89,8 @@ const Navbar = ({ translations: { userInput }, updateInput }) => {
   };
 
   useEffect(() => {
-    router.events.on("routeChangeStart", handleRouteChangeComplete);
-    router.events.on("routeChangeComplete", handleRouteChangeStart);
+    router.events.on("routeChangeStart", handleRouteChangeStart);
+    router.events.on("routeChangeComplete", handleRouteChangeComplete);
     return () => {
       router.events.on("routeChangeStart", handleRouteChangeStart);
       router.events.off("routeChangeComplete", handleRouteChangeComplete);
