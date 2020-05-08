@@ -10,6 +10,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Paper from "@material-ui/core/Paper";
+import Grow from "@material-ui/core/Grow";
+
+import Chart from "../components/Chart";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,10 +32,15 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   content: {
-    display: "flex"
+    display: "flex",
+    background: theme.palette.background.default
+  },
+  cardGrid: {
+    maxWidth: 360
   },
   cardRoot: {
-    width: 360
+    width: "100%",
+    height: "100%"
   },
   title: {
     fontSize: 50
@@ -50,13 +59,25 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     top: "50%",
     left: "47%",
-    marginTop: -12,
+    marginTop: -30,
+    marginLeft: -12
+  },
+  chartProgress: {
+    position: "absolute",
+    top: "10%",
+    left: "47%",
+    marginTop: 100,
     marginLeft: -12
   },
   caption: {
     position: "absolute",
     top: "90%",
     left: "10%"
+  },
+  chart: {
+    height: 240,
+    width: 340,
+    margin: "auto"
   }
 }));
 
@@ -90,39 +111,66 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
           justify="center"
           alignItems="center"
           alignContent="center"
+          spacing={2}
         >
-          <Card className={classes.cardRoot}>
-            <CardContent>
-              <Typography
-                className={classes.title}
-                color="textSecondary"
-                gutterBottom
-              >
-                {userInput}
-              </Typography>
-              <Divider />
-              <Typography className={classes.pos} color="textSecondary">
-                translating from english to spanish...
-              </Typography>
+          <Grid className={classes.cardGrid} item xs={12} sm={6}>
+            <Card className={classes.cardRoot}>
+              <CardContent>
+                {userInput && (
+                  <Typography
+                    className={classes.title}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    {userInput}
+                  </Typography>
+                )}
+                {!userInput && (
+                  <Typography
+                    className={classes.title}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Welcome
+                  </Typography>
+                )}
+                <Divider />
+                <Typography className={classes.pos} color="textSecondary">
+                  translating from english to spanish...
+                </Typography>
+                <div className={classes.wrapper}>
+                  <Typography
+                    className={classes.hidden}
+                    variant="body2"
+                    component="p"
+                  >
+                    Bienvenida
+                  </Typography>
+                  <CircularProgress
+                    disableShrink
+                    className={classes.progress}
+                  />
+                  <Typography
+                    className={classes.caption}
+                    variant="caption"
+                    color="textSecondary"
+                  >
+                    hit "enter" or the translate button to translate
+                  </Typography>
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Paper className={classes.chart}>
               <div className={classes.wrapper}>
-                <Typography
-                  className={classes.hidden}
-                  variant="body2"
-                  component="p"
-                >
-                  the translation is gona go here
-                </Typography>
-                <CircularProgress disableShrink className={classes.progress} />
-                <Typography
-                  className={classes.caption}
-                  variant="caption"
-                  color="textSecondary"
-                >
-                  hit "enter" or the translate button to translate
-                </Typography>
+                <CircularProgress
+                  disableShrink
+                  className={classes.chartProgress}
+                />
               </div>
-            </CardContent>
-          </Card>
+            </Paper>
+          </Grid>
         </Grid>
       </Container>
     </div>

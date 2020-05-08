@@ -7,6 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Paper from "@material-ui/core/Paper";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
@@ -47,8 +48,27 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     top: "50%",
     left: "47%",
-    marginTop: -12,
+    marginTop: -30,
     marginLeft: -12
+  },
+  chartProgress: {
+    position: "absolute",
+    top: "10%",
+    left: "47%",
+    marginTop: 100,
+    marginLeft: -12
+  },
+  chart: {
+    height: 240,
+    width: 340,
+    margin: "auto"
+  },
+  cardGrid: {
+    maxWidth: 360
+  },
+  cardRoot: {
+    width: "100%",
+    height: "100%"
   }
 }));
 
@@ -120,32 +140,45 @@ const Enes = ({ doc }) => {
           justify="center"
           alignItems="center"
           alignContent="center"
+          spacing={2}
         >
-          <Card className={classes.cardRoot}>
-            <CardContent>
-              <Typography
-                className={classes.title}
-                color="textSecondary"
-                gutterBottom
-              >
-                {data.preTrans}
-              </Typography>
-              <Divider />
-              <Typography className={classes.pos} color="textSecondary">
-                translating from english to spanish...
-              </Typography>
-              {/* <div className={classes.wrapper}> */}
-              <Typography
-                className={classes.translation}
-                variant="body2"
-                component="p"
-              >
-                {data.postTrans}
-              </Typography>
-              {/* <CircularProgress disableShrink className={classes.progress} /> */}
-              {/* </div> */}
-            </CardContent>
-          </Card>
+          <Grid item className={classes.cardGrid} xs={12} sm={6}>
+            <Card className={classes.cardRoot}>
+              <CardContent>
+                <Typography
+                  className={classes.title}
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {data.preTrans}
+                </Typography>
+                <Divider />
+                <Typography className={classes.pos} color="textSecondary">
+                  translating from english to spanish...
+                </Typography>
+                {/* <div className={classes.wrapper}> */}
+                <Typography
+                  className={classes.translation}
+                  variant="body2"
+                  component="p"
+                >
+                  {data.postTrans}
+                </Typography>
+                {/* <CircularProgress disableShrink className={classes.progress} /> */}
+                {/* </div> */}
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Paper className={classes.chart}>
+              <div className={classes.wrapper}>
+                <CircularProgress
+                  disableShrink
+                  className={classes.chartProgress}
+                />
+              </div>
+            </Paper>
+          </Grid>
         </Grid>
       </Container>
     </div>

@@ -10,6 +10,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
+import Grow from "@material-ui/core/Grow";
 
 import Chart from "../components/Chart";
 
@@ -42,67 +43,79 @@ const useStyles = makeStyles(theme => ({
     height: 240,
     width: 340,
     margin: "auto"
+  },
+  showChart: {
+    height: "100%",
+    width: "100%"
+  },
+  hideChart: {
+    visibility: "hidden"
   }
 }));
 
 const Index = ({ translations: { userInput } }) => {
   const classes = useStyles();
 
-  const [hide, setHide] = useState(true);
+  const [hide, setHide] = useState(false);
 
   useEffect(() => {
     if (userInput) {
-      setHide(prev => false);
+      setHide(prev => true);
     }
 
     if (!userInput) {
-      setHide(prev => true);
+      setHide(prev => false);
     }
-    return () => {
-      setHide(prev => true);
-    };
   }, [userInput]);
 
   return (
     <div className={classes.root}>
       <Container className={classes.content} maxWidth="md">
-        <Grid
-          container
-          justify="center"
-          alignItems="center"
-          alignContent="center"
-          spacing={2}
-        >
-          <Grid className={classes.cardGrid} item xs={12} sm={6}>
-            <Card className={classes.cardRoot}>
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
+        <Grow in={true} timeout={500}>
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            alignContent="center"
+            spacing={2}
+          >
+            <Grid className={classes.cardGrid} item xs={12} sm={6}>
+              <Card className={classes.cardRoot}>
+                <CardContent>
+                  <Typography
+                    className={classes.title}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Welcome
+                  </Typography>
+                  <Divider />
+                  <Typography className={classes.pos} color="textSecondary">
+                    translating from english to spanish...
+                  </Typography>
+                  <Typography
+                    className={classes.translation}
+                    variant="body2"
+                    component="p"
+                  >
+                    Bienvenida
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper className={classes.chart}>
+                <div
+                  className={clsx(classes.showChart, {
+                    [classes.hideChart]: hide
+                  })}
                 >
-                  Welcome
-                </Typography>
-                <Divider />
-                <Typography className={classes.pos} color="textSecondary">
-                  translating from english to spanish...
-                </Typography>
-                <Typography
-                  className={classes.translation}
-                  variant="body2"
-                  component="p"
-                >
-                  Bienvenida
-                </Typography>
-              </CardContent>
-            </Card>
+                  <Chart />
+                </div>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper className={classes.chart}>
-              <Chart />
-            </Paper>
-          </Grid>
-        </Grid>
+        </Grow>
       </Container>
     </div>
   );
