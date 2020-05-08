@@ -80,8 +80,6 @@ const Navbar = ({ translations: { userInput }, updateInput }) => {
     complete: true
   });
 
-  const [trans, setTrans] = useState("");
-
   const handleRouteChangeStart = url => {
     setRouting(prev => ({ ...prev, starting: true, url }));
   };
