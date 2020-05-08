@@ -251,6 +251,7 @@ export async function getStaticProps(context) {
     const entry = new Translations({
       preTrans,
       postTrans: "temp",
+      hits: 1,
       date: new Date()
     });
     await entry.save();
