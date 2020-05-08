@@ -75,7 +75,7 @@ const Index = ({ translations: { userInput } }) => {
                 color="textSecondary"
                 gutterBottom
               >
-                Welcome!
+                Welcome
               </Typography>
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
@@ -86,7 +86,7 @@ const Index = ({ translations: { userInput } }) => {
                 variant="body2"
                 component="p"
               >
-                Your translation will apear here.
+                Bienvenida
               </Typography>
             </CardContent>
           </Card>
