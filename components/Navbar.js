@@ -75,6 +75,8 @@ const Navbar = () => {
     complete: true
   });
 
+  const [trans, setTrans] = useState("");
+
   const handleRouteChangeStart = url => {
     setRouting(prev => ({ ...prev, starting: true, url }));
   };
@@ -95,17 +97,14 @@ const Navbar = () => {
   useEffect(() => {
     if (routing.complete) {
       setRouting(prev => ({ ...prev, complete: false }));
-      reset({ TextField: "" });
+      setTrans(prev => "");
     }
     if (routing.starting) {
       setRouting(prev => ({ ...prev, starting: false, url: "" }));
-      if (routing.url === "enes/translate") {
-        reset({ TextField: "translate" });
-      }
     }
   }, [routing.starting, routing.complete]);
 
-  const { handleSubmit, errors, control, reset } = useForm();
+  const { handleSubmit, errors, control } = useForm();
 
   const [helperText, setHelperText] = useState({
     inputError: "",
@@ -114,13 +113,14 @@ const Navbar = () => {
 
   const handleSub = e => {
     if (e.input === "") {
-      router.push("/enes/[translation]", "/enes/translate");
     } else {
-      router.push("/enes/[translation]", "/enes/" + e.input.toLowerCase());
+      if (trans !== "")
+        router.push("/enes/[translation]", "/enes/" + e.input.toLowerCase());
     }
   };
 
   const onChange = e => {
+    setTrans(e.target.value);
     return e.target.value;
   };
 
