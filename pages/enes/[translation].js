@@ -6,6 +6,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
@@ -32,8 +33,22 @@ const useStyles = makeStyles(theme => ({
   translation: {
     fontSize: 30
   },
+  hidden: {
+    fontSize: 30,
+    visibility: "hidden"
+  },
   pos: {
     marginBottom: 12
+  },
+  wrapper: {
+    position: "relative"
+  },
+  progress: {
+    position: "absolute",
+    top: "50%",
+    left: "47%",
+    marginTop: -12,
+    marginLeft: -12
   }
 }));
 
@@ -52,7 +67,47 @@ const Enes = ({ doc }) => {
   }
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return (
+      <div className={classes.root}>
+        <Container className={classes.content} maxWidth="md">
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            alignContent="center"
+          >
+            <Card className={classes.cardRoot}>
+              <CardContent>
+                <Typography
+                  className={classes.title}
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  one moment while I get that for you...
+                </Typography>
+                <Divider />
+                <Typography className={classes.pos} color="textSecondary">
+                  translating from english to spanish...
+                </Typography>
+                <div className={classes.wrapper}>
+                  <Typography
+                    className={classes.hidden}
+                    variant="body2"
+                    component="p"
+                  >
+                    the translation is gona go here
+                  </Typography>
+                  <CircularProgress
+                    disableShrink
+                    className={classes.progress}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Container>
+      </div>
+    );
   }
 
   // return <p>{data.postTrans}</p>;
