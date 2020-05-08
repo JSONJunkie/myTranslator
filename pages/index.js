@@ -64,11 +64,7 @@ const Index = ({ translations: { userInput } }) => {
   }, [userInput]);
 
   return (
-    <div
-      className={clsx(classes.root, {
-        [classes.hideRoot]: hide
-      })}
-    >
+    <div className={classes.root}>
       <Container className={classes.content} maxWidth="md">
         <Grid
           container
