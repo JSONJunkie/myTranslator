@@ -122,7 +122,9 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
                     color="textSecondary"
                     gutterBottom
                   >
-                    {userInput}
+                    {userInput.split("\n").map((i, key) => {
+                      return <div key={key}>{i}</div>;
+                    })}
                   </Typography>
                 )}
                 {!userInput && (

@@ -87,6 +87,7 @@ const Enes = ({ doc }) => {
   }
 
   if (router.isFallback) {
+    text = "one moment while I get that for you...";
     return (
       <div className={classes.root}>
         <Container className={classes.content} maxWidth="md">
@@ -105,7 +106,9 @@ const Enes = ({ doc }) => {
                     color="textSecondary"
                     gutterBottom
                   >
-                    one moment while I get that for you...
+                    {text.split("\n").map((i, key) => {
+                      return <div key={key}>{i}</div>;
+                    })}
                   </Typography>
 
                   <Divider />
@@ -171,7 +174,9 @@ const Enes = ({ doc }) => {
                   color="textSecondary"
                   gutterBottom
                 >
-                  {data.preTrans}
+                  {data.preTrans.split("\n").map((i, key) => {
+                    return <div key={key}>{i}</div>;
+                  })}
                 </Typography>
                 <Divider />
                 <Typography className={classes.pos} color="textSecondary">
@@ -183,7 +188,9 @@ const Enes = ({ doc }) => {
                   variant="body2"
                   component="p"
                 >
-                  {data.postTrans}
+                  {data.postTrans.split("\n").map((i, key) => {
+                    return <div key={key}>{i}</div>;
+                  })}
                 </Typography>
                 {/* <CircularProgress disableShrink className={classes.progress} /> */}
                 {/* </div> */}
