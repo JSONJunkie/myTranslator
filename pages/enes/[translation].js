@@ -1,4 +1,11 @@
 import { useRouter } from "next/router";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
@@ -7,8 +14,34 @@ import validator from "validator";
 
 import connectToMongo from "../../database";
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex",
+    height: "100%",
+    flexGrow: 1
+  },
+  content: {
+    display: "flex"
+  },
+  cardRoot: {
+    width: 360
+  },
+  title: {
+    fontSize: 50
+  },
+  translation: {
+    fontSize: 30
+  },
+  pos: {
+    marginBottom: 12
+  }
+}));
+
 const Enes = ({ doc }) => {
   const router = useRouter();
+
+  const classes = useStyles();
+
   // console.log(router);
   // console.log(result);
 
@@ -22,7 +55,46 @@ const Enes = ({ doc }) => {
     return <div>Loading...</div>;
   }
 
-  return <p>{data.postTrans}</p>;
+  // return <p>{data.postTrans}</p>;
+
+  return (
+    <div className={classes.root}>
+      <Container className={classes.content} maxWidth="md">
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          alignContent="center"
+        >
+          <Card className={classes.cardRoot}>
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                {data.preTrans}
+              </Typography>
+              <Divider />
+              <Typography className={classes.pos} color="textSecondary">
+                translating from english to spanish...
+              </Typography>
+              {/* <div className={classes.wrapper}> */}
+              <Typography
+                className={classes.translation}
+                variant="body2"
+                component="p"
+              >
+                {data.postTrans}
+              </Typography>
+              {/* <CircularProgress disableShrink className={classes.progress} /> */}
+              {/* </div> */}
+            </CardContent>
+          </Card>
+        </Grid>
+      </Container>
+    </div>
+  );
 };
 
 export async function getStaticProps(context) {
