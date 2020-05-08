@@ -98,7 +98,7 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
                 color="textSecondary"
                 gutterBottom
               >
-                what is this good looking
+                {userInput}
               </Typography>
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
