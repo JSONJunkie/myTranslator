@@ -14,7 +14,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import Button from "@material-ui/core/Button";
 
-import { updateInput, addHit } from "../src/actions/translations";
+import { updateInput, addHit, getData } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   hidden: {
@@ -69,7 +69,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navbar = ({ translations: { userInput }, updateInput, addHit }) => {
+const Navbar = ({
+  translations: { userInput, chartData },
+  updateInput,
+  addHit,
+  getData
+}) => {
   const classes = useStyles();
 
   const router = useRouter();
@@ -108,7 +113,12 @@ const Navbar = ({ translations: { userInput }, updateInput, addHit }) => {
       ) {
         if (!router.isFallback) {
           addHit(router.query);
+          getData(router.query.translation);
         }
+      }
+      if (router.pathname === "/") {
+        addHit({ data: { translation: "welcome" } });
+        getData(router.query.translation);
       }
     }
     if (routing.starting) {
@@ -230,11 +240,14 @@ const Navbar = ({ translations: { userInput }, updateInput, addHit }) => {
 Navbar.propTypes = {
   translations: PropTypes.object.isRequired,
   updateInput: PropTypes.func.isRequired,
-  addHit: PropTypes.func.isRequired
+  addHit: PropTypes.func.isRequired,
+  getData: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   translations: state.translations
 });
 
-export default connect(mapStateToProps, { updateInput, addHit })(Navbar);
+export default connect(mapStateToProps, { updateInput, addHit, getData })(
+  Navbar
+);

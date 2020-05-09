@@ -96,7 +96,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const LoadingOverlay = ({ translations: { userInput } }) => {
+const LoadingOverlay = ({ translations: { userInput, chartData } }) => {
   const classes = useStyles();
 
   const router = useRouter();
@@ -173,7 +173,7 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
       </Backdrop>
       <div
         className={clsx(classes.root, {
-          [classes.hideRoot]: hide
+          [classes.hideRoot]: !hide
         })}
       >
         <Container className={classes.content} maxWidth="md">
@@ -245,12 +245,13 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Paper className={classes.chart}>
-                <div className={classes.wrapper}>
+                <Chart data={chartData} />
+                {/* <div className={classes.wrapper}>
                   <CircularProgress
                     disableShrink
                     className={classes.chartProgress}
                   />
-                </div>
+                </div> */}
               </Paper>
             </Grid>
           </Grid>
