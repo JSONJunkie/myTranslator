@@ -9,7 +9,7 @@ const TranslationsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  hits: [
+  hitData: [
     {
       time: { type: Number, required: true },
       hits: {
