@@ -248,11 +248,13 @@ export async function getStaticProps(context) {
   // }
 
   if (!doc) {
+    const d = new Date();
+
     const entry = new Translations({
       preTrans,
       postTrans: "temp",
-      hits: 1,
-      date: new Date()
+      hitData: [{ time: 0, hits: 0 }],
+      date: d.getTime()
     });
     await entry.save();
     connection.close();
