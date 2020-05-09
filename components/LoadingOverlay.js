@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: "absolute",
     display: "flex",
-    height: "100%",
+    minHeight: "100%",
     width: "100%",
     flexGrow: 1
   },
@@ -36,6 +36,8 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
     background: theme.palette.background.default
   },
   cardGrid: {
@@ -88,6 +90,9 @@ const useStyles = makeStyles(theme => ({
     color: "#fff",
     display: "flex",
     flexDirection: "column"
+  },
+  date: {
+    visibility: "hidden"
   }
 }));
 
@@ -172,6 +177,13 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
         })}
       >
         <Container className={classes.content} maxWidth="md">
+          <Typography
+            className={classes.date}
+            variant="caption"
+            color="textSecondary"
+          >
+            first translated
+          </Typography>
           <Grid
             container
             justify="center"

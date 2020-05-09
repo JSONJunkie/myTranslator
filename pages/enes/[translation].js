@@ -23,10 +23,13 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   content: {
-    display: "flex"
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center"
   },
   cardRoot: {
-    width: 360
+    width: "100%",
+    height: "100%"
   },
   title: {
     fontSize: 50
@@ -69,6 +72,13 @@ const useStyles = makeStyles(theme => ({
   cardRoot: {
     width: "100%",
     height: "100%"
+  },
+  date: {
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
+  main: {
+    justifyContent: "center"
   }
 }));
 
@@ -81,9 +91,11 @@ const Enes = ({ doc }) => {
   // console.log(result);
 
   var data;
+  var date;
 
   if (doc) {
     data = JSON.parse(doc);
+    date = new Date(parseInt(data.date));
   }
 
   if (router.isFallback) {
@@ -92,6 +104,7 @@ const Enes = ({ doc }) => {
       <div className={classes.root}>
         <Container className={classes.content} maxWidth="md">
           <Grid
+            className={classes.main}
             container
             justify="center"
             alignItems="center"
@@ -162,6 +175,13 @@ const Enes = ({ doc }) => {
   return (
     <div className={classes.root}>
       <Container className={classes.content} maxWidth="md">
+        <Typography
+          className={classes.date}
+          variant="caption"
+          color="textSecondary"
+        >
+          first translated: {date.toString()}
+        </Typography>
         <Grid
           container
           justify="center"
@@ -169,7 +189,7 @@ const Enes = ({ doc }) => {
           alignContent="center"
           spacing={2}
         >
-          <Grid item className={classes.cardGrid} xs={12} sm={6}>
+          <Grid item className={classes.cardGrid} xs={12} sm={6} md={6}>
             <Card className={classes.cardRoot}>
               <CardContent>
                 {data.preTrans.split("\n").map((i, key) => {
@@ -204,12 +224,13 @@ const Enes = ({ doc }) => {
                     </Typography>
                   );
                 })}
+
                 {/* <CircularProgress disableShrink className={classes.progress} /> */}
                 {/* </div> */}
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} md={6}>
             <Paper className={classes.chart}>
               <div className={classes.wrapper}>
                 <CircularProgress
