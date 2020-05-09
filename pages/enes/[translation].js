@@ -77,8 +77,11 @@ const useStyles = makeStyles(theme => ({
     marginLeft: "auto",
     marginRight: "auto"
   },
-  main: {
-    justifyContent: "center"
+  caption: {
+    visibility: "hidden",
+    position: "absolute",
+    top: "90%",
+    left: "10%"
   }
 }));
 
@@ -103,8 +106,14 @@ const Enes = ({ doc }) => {
     return (
       <div className={classes.root}>
         <Container className={classes.content} maxWidth="md">
+          <Typography
+            className={classes.date}
+            variant="caption"
+            color="textSecondary"
+          >
+            first translated:
+          </Typography>
           <Grid
-            className={classes.main}
             container
             justify="center"
             alignItems="center"
@@ -121,7 +130,6 @@ const Enes = ({ doc }) => {
                         color="textSecondary"
                         gutterBottom
                         key={key}
-                        paragraph
                       >
                         {i}
                       </Typography>
@@ -199,7 +207,6 @@ const Enes = ({ doc }) => {
                       color="textSecondary"
                       gutterBottom
                       key={key}
-                      paragraph
                     >
                       {i}
                     </Typography>
