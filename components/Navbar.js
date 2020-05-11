@@ -118,7 +118,7 @@ const Navbar = ({
       }
       if (router.pathname === "/") {
         addHit({ translation: "welcome" });
-        getData(router.query.translation);
+        getData("welcome");
       }
     }
     if (routing.starting) {
