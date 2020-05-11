@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Paper from "@material-ui/core/Paper";
+import Grow from "@material-ui/core/Grow";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
@@ -106,73 +107,7 @@ const Enes = ({ doc }) => {
     return (
       <div className={classes.root}>
         <Container className={classes.content} maxWidth="md">
-          <Typography
-            className={classes.date}
-            variant="caption"
-            color="textSecondary"
-          >
-            first translated:
-          </Typography>
-          <Grid
-            container
-            justify="center"
-            alignItems="center"
-            alignContent="center"
-            spacing={2}
-          >
-            <Grid className={classes.cardGrid} item xs={12} sm={6}>
-              <Card className={classes.cardRoot}>
-                <CardContent>
-                  {text.split("\n").map((i, key) => {
-                    return (
-                      <Typography
-                        className={classes.title}
-                        color="textSecondary"
-                        gutterBottom
-                        key={key}
-                      >
-                        {i}
-                      </Typography>
-                    );
-                  })}
-                  <Divider />
-                  <Typography className={classes.pos} color="textSecondary">
-                    translating from english to spanish...
-                  </Typography>
-                  <div className={classes.wrapper}>
-                    <Typography
-                      className={classes.hidden}
-                      variant="body2"
-                      component="p"
-                    >
-                      Bienvenida
-                    </Typography>
-                    <CircularProgress
-                      disableShrink
-                      className={classes.progress}
-                    />
-                    <Typography
-                      className={classes.caption}
-                      variant="caption"
-                      color="textSecondary"
-                    >
-                      hit "enter" or the translate button to translate
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Paper className={classes.chart}>
-                <div className={classes.wrapper}>
-                  <CircularProgress
-                    disableShrink
-                    className={classes.chartProgress}
-                  />
-                </div>
-              </Paper>
-            </Grid>
-          </Grid>
+          <CircularProgress disableShrink className={classes.progress} />
         </Container>
       </div>
     );
@@ -190,64 +125,66 @@ const Enes = ({ doc }) => {
         >
           first translated: {date.toString()}
         </Typography>
-        <Grid
-          container
-          justify="center"
-          alignItems="center"
-          alignContent="center"
-          spacing={2}
-        >
-          <Grid item className={classes.cardGrid} xs={12} sm={6} md={6}>
-            <Card className={classes.cardRoot}>
-              <CardContent>
-                {data.preTrans.split("\n").map((i, key) => {
-                  return (
-                    <Typography
-                      className={classes.title}
-                      color="textSecondary"
-                      gutterBottom
-                      key={key}
-                    >
-                      {i}
-                    </Typography>
-                  );
-                })}
-                <Divider />
-                <Typography className={classes.pos} color="textSecondary">
-                  translating from english to spanish...
-                </Typography>
-                {/* <div className={classes.wrapper}> */}
-                {data.postTrans.split("\n").map((i, key) => {
-                  return (
-                    <Typography
-                      className={classes.translation}
-                      variant="body2"
-                      component="p"
-                      gutterBottom
-                      key={key}
-                      paragraph
-                    >
-                      {i}
-                    </Typography>
-                  );
-                })}
+        <Grow in={true} timeout={500}>
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            alignContent="center"
+            spacing={2}
+          >
+            <Grid item className={classes.cardGrid} xs={12} sm={6} md={6}>
+              <Card className={classes.cardRoot}>
+                <CardContent>
+                  {data.preTrans.split("\n").map((i, key) => {
+                    return (
+                      <Typography
+                        className={classes.title}
+                        color="textSecondary"
+                        gutterBottom
+                        key={key}
+                      >
+                        {i}
+                      </Typography>
+                    );
+                  })}
+                  <Divider />
+                  <Typography className={classes.pos} color="textSecondary">
+                    translating from english to spanish...
+                  </Typography>
+                  {/* <div className={classes.wrapper}> */}
+                  {data.postTrans.split("\n").map((i, key) => {
+                    return (
+                      <Typography
+                        className={classes.translation}
+                        variant="body2"
+                        component="p"
+                        gutterBottom
+                        key={key}
+                        paragraph
+                      >
+                        {i}
+                      </Typography>
+                    );
+                  })}
 
-                {/* <CircularProgress disableShrink className={classes.progress} /> */}
-                {/* </div> */}
-              </CardContent>
-            </Card>
+                  {/* <CircularProgress disableShrink className={classes.progress} /> */}
+                  {/* </div> */}
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={6}>
+              <Paper className={classes.chart}>
+                <div className={classes.wrapper}>
+                  <CircularProgress
+                    disableShrink
+                    className={classes.chartProgress}
+                  />
+                </div>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <Paper className={classes.chart}>
-              <div className={classes.wrapper}>
-                <CircularProgress
-                  disableShrink
-                  className={classes.chartProgress}
-                />
-              </div>
-            </Paper>
-          </Grid>
-        </Grid>
+        </Grow>
       </Container>
     </div>
   );
