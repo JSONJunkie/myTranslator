@@ -6,6 +6,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   cardGrid: {
@@ -33,6 +34,10 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("md")]: {
       fontSize: 30
     }
+  },
+  progress: {
+    display: "flex",
+    justifyContent: "center"
   }
 }));
 
@@ -55,9 +60,16 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to }) => {
             <Typography className={classes.pos} color="textSecondary">
               translating from {from} to {to}...
             </Typography>
-            <Typography className={classes.translation} variant="body2">
-              {afterTrans}
-            </Typography>
+            {afterTrans && (
+              <Typography className={classes.translation} variant="body2">
+                {afterTrans}
+              </Typography>
+            )}
+            {!afterTrans && (
+              <div className={classes.progress}>
+                <CircularProgress disableShrink />
+              </div>
+            )}
           </CardContent>
         </Card>
       </Grid>
