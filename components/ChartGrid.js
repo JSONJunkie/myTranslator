@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import { CircularProgress } from "@material-ui/core";
 
 import Chart from "../components/Chart";
 
@@ -22,10 +23,16 @@ const useStyles = makeStyles(theme => ({
   },
   hideChart: {
     visibility: "hidden"
+  },
+  wrapper: {
+    display: "flex",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center"
   }
 }));
 
-const ChartGrid = () => {
+const ChartGrid = ({ hide }) => {
   const classes = useStyles();
 
   return (
@@ -33,7 +40,12 @@ const ChartGrid = () => {
       <Grid item xs={12} sm={12}>
         <Paper className={classes.chart}>
           <div className={classes.showChart}>
-            <Chart />
+            {!hide && <Chart />}
+            {hide && (
+              <div className={classes.wrapper}>
+                <CircularProgress disableShrink />
+              </div>
+            )}
           </div>
         </Paper>
       </Grid>
@@ -42,6 +54,7 @@ const ChartGrid = () => {
 };
 
 ChartGrid.propTypes = {
+  hide: PropTypes.bool.isRequired,
   rollbar: PropTypes.object.isRequired
 };
 
