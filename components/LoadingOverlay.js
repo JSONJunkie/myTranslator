@@ -5,18 +5,14 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Paper from "@material-ui/core/Paper";
 import Grow from "@material-ui/core/Grow";
 import Button from "@material-ui/core/Button";
 import Backdrop from "@material-ui/core/Backdrop";
 import { useRouter } from "next/router";
 
-import Chart from "../components/Chart";
+import TranslationGrid from "../components/TranslationGrid";
+import ChartGrid from "../components/ChartGrid";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,63 +22,10 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     flexGrow: 1
   },
-  hideRoot: {
-    visibility: "hidden",
-    position: "absolute",
-    display: "flex",
-    height: "100%",
-    width: "100%",
-    flexGrow: 1
-  },
   content: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
-    background: theme.palette.background.default
-  },
-  cardGrid: {
-    maxWidth: 360
-  },
-  cardRoot: {
-    width: "100%",
-    height: "100%"
-  },
-  title: {
-    fontSize: 50
-  },
-  hidden: {
-    fontSize: 30,
-    visibility: "hidden"
-  },
-  pos: {
-    marginBottom: 12
-  },
-  wrapper: {
-    position: "relative"
-  },
-  progress: {
-    position: "absolute",
-    top: "50%",
-    left: "47%",
-    marginTop: -30,
-    marginLeft: -12
-  },
-  chartProgress: {
-    position: "absolute",
-    top: "10%",
-    left: "47%",
-    marginTop: 100,
-    marginLeft: -12
-  },
-  caption: {
-    position: "absolute",
-    top: "90%",
-    left: "10%"
-  },
-  chart: {
-    height: 240,
-    width: 340,
-    margin: "auto"
+    justifyContent: "center"
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -91,12 +34,15 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column"
   },
-  date: {
+  hiddenDate: {
+    visibility: "hidden"
+  },
+  hiddenGrid: {
     visibility: "hidden"
   }
 }));
 
-const LoadingOverlay = ({ translations: { userInput, chartData } }) => {
+const LoadingOverlay = ({ translations: { userInput } }) => {
   const classes = useStyles();
 
   const router = useRouter();
@@ -171,90 +117,50 @@ const LoadingOverlay = ({ translations: { userInput, chartData } }) => {
           Continue
         </Button>
       </Backdrop>
-      <div
-        className={clsx(classes.root, {
-          [classes.hideRoot]: hide
-        })}
-      >
+      <div className={classes.root}>
         <Container className={classes.content} maxWidth="md">
           <Typography
-            className={classes.date}
+            className={classes.hiddenDate}
             variant="caption"
             color="textSecondary"
           >
             first translated
           </Typography>
-          <Grid
-            container
-            justify="center"
-            alignItems="center"
-            alignContent="center"
-            spacing={2}
-          >
-            <Grid className={classes.cardGrid} item xs={12} sm={6}>
-              <Card className={classes.cardRoot}>
-                <CardContent>
-                  {userInput.split("\n").map((i, key) => {
-                    return (
-                      <Typography
-                        className={classes.title}
-                        color="textSecondary"
-                        gutterBottom
-                        key={key}
-                        paragraph
-                      >
-                        {i}
-                      </Typography>
-                    );
-                  })}
-                  {!userInput && (
-                    <Typography
-                      className={classes.title}
-                      color="textSecondary"
-                      gutterBottom
-                    >
-                      Welcome
-                    </Typography>
-                  )}
-                  <Divider />
-                  <Typography className={classes.pos} color="textSecondary">
-                    translating from english to spanish...
-                  </Typography>
-                  <div className={classes.wrapper}>
-                    <Typography
-                      className={classes.hidden}
-                      variant="body2"
-                      component="p"
-                    >
-                      Bienvenida
-                    </Typography>
-                    <CircularProgress
-                      disableShrink
-                      className={classes.progress}
+          <Grow in={true} timeout={500}>
+            <Grid
+              container
+              justify="center"
+              alignItems="center"
+              alignContent="center"
+              spacing={2}
+            >
+              {hide && (
+                <Fragment>
+                  <div className={classes.hiddenGrid}>
+                    <TranslationGrid
+                      beforeTrans={"Welcome"}
+                      afterTrans={""}
+                      from={"english"}
+                      to={"spanish"}
                     />
-                    <Typography
-                      className={classes.caption}
-                      variant="caption"
-                      color="textSecondary"
-                    >
-                      hit "enter" or the translate button to translate
-                    </Typography>
                   </div>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Paper className={classes.chart}>
-                <Chart data={chartData} />
-                {/* <div className={classes.wrapper}>
-                  <CircularProgress
-                    disableShrink
-                    className={classes.chartProgress}
+                  {!router.isFallback && <ChartGrid hide={{ hide: !hide }} />}
+                </Fragment>
+              )}
+              {!hide && (
+                <Fragment>
+                  <TranslationGrid
+                    className={classes.hiddenGrid}
+                    beforeTrans={userInput}
+                    afterTrans={""}
+                    from={"english"}
+                    to={"spanish"}
                   />
-                </div> */}
-              </Paper>
+                  <ChartGrid hide={{ hide: !hide }} />
+                </Fragment>
+              )}
             </Grid>
-          </Grid>
+          </Grow>
         </Container>
       </div>
     </Fragment>

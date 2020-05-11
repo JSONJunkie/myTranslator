@@ -2,13 +2,12 @@ import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Paper from "@material-ui/core/Paper";
 import Grow from "@material-ui/core/Grow";
+
+import TranslationGrid from "../../components/TranslationGrid";
+import ChartGrid from "../../components/ChartGrid";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
@@ -28,61 +27,17 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     justifyContent: "center"
   },
-  cardRoot: {
-    width: "100%",
-    height: "100%"
-  },
-  title: {
-    fontSize: 50
-  },
-  translation: {
-    fontSize: 30
-  },
-  hidden: {
-    fontSize: 30,
-    visibility: "hidden"
-  },
-  pos: {
-    marginBottom: 12
-  },
-  wrapper: {
-    position: "relative"
-  },
-  progress: {
-    position: "absolute",
-    top: "50%",
-    left: "47%",
-    marginTop: -30,
-    marginLeft: -12
-  },
-  chartProgress: {
-    position: "absolute",
-    top: "10%",
-    left: "47%",
-    marginTop: 100,
-    marginLeft: -12
-  },
-  chart: {
-    height: 240,
-    width: 340,
-    margin: "auto"
-  },
-  cardGrid: {
-    maxWidth: 360
-  },
-  cardRoot: {
-    width: "100%",
-    height: "100%"
-  },
   date: {
     marginLeft: "auto",
     marginRight: "auto"
   },
-  caption: {
+  progress: {
+    display: "flex",
+    justifyContent: "center"
+  },
+  hideChart: {
     visibility: "hidden",
-    position: "absolute",
-    top: "90%",
-    left: "10%"
+    background: "black"
   }
 }));
 
@@ -103,11 +58,15 @@ const Enes = ({ doc }) => {
   }
 
   if (router.isFallback) {
-    const text = "one moment while I get that for you...";
     return (
       <div className={classes.root}>
         <Container className={classes.content} maxWidth="md">
-          <CircularProgress disableShrink className={classes.progress} />
+          <Typography variant="h5" align="center">
+            one moment while I get that for you...
+          </Typography>
+          <div className={classes.progress}>
+            <CircularProgress disableShrink />
+          </div>
         </Container>
       </div>
     );
@@ -133,56 +92,13 @@ const Enes = ({ doc }) => {
             alignContent="center"
             spacing={2}
           >
-            <Grid item className={classes.cardGrid} xs={12} sm={6} md={6}>
-              <Card className={classes.cardRoot}>
-                <CardContent>
-                  {data.preTrans.split("\n").map((i, key) => {
-                    return (
-                      <Typography
-                        className={classes.title}
-                        color="textSecondary"
-                        gutterBottom
-                        key={key}
-                      >
-                        {i}
-                      </Typography>
-                    );
-                  })}
-                  <Divider />
-                  <Typography className={classes.pos} color="textSecondary">
-                    translating from english to spanish...
-                  </Typography>
-                  {/* <div className={classes.wrapper}> */}
-                  {data.postTrans.split("\n").map((i, key) => {
-                    return (
-                      <Typography
-                        className={classes.translation}
-                        variant="body2"
-                        component="p"
-                        gutterBottom
-                        key={key}
-                        paragraph
-                      >
-                        {i}
-                      </Typography>
-                    );
-                  })}
-
-                  {/* <CircularProgress disableShrink className={classes.progress} /> */}
-                  {/* </div> */}
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={6}>
-              <Paper className={classes.chart}>
-                <div className={classes.wrapper}>
-                  <CircularProgress
-                    disableShrink
-                    className={classes.chartProgress}
-                  />
-                </div>
-              </Paper>
-            </Grid>
+            <TranslationGrid
+              beforeTrans={data.preTrans}
+              afterTrans={data.postTrans}
+              from={"english"}
+              to={"spanish"}
+            />
+            <ChartGrid hide={{ hide: "" }} />
           </Grid>
         </Grow>
       </Container>

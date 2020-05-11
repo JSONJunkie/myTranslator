@@ -32,20 +32,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ChartGrid = ({ hide }) => {
+const ChartGrid = ({ hide: { hide } }) => {
   const classes = useStyles();
-
   return (
     <Fragment>
       <Grid item xs={12} sm={12}>
         <Paper className={classes.chart}>
           <div className={classes.showChart}>
-            {!hide && <Chart />}
+            {!hide && hide !== "" && <Chart />}
             {hide && (
               <div className={classes.wrapper}>
-                <CircularProgress disableShrink />
+                <CircularProgress size={5} disableShrink />
               </div>
             )}
+            {hide === "" && null}
           </div>
         </Paper>
       </Grid>
@@ -54,7 +54,7 @@ const ChartGrid = ({ hide }) => {
 };
 
 ChartGrid.propTypes = {
-  hide: PropTypes.bool.isRequired,
+  hide: PropTypes.object.isRequired,
   rollbar: PropTypes.object.isRequired
 };
 
