@@ -173,7 +173,7 @@ const LoadingOverlay = ({ translations: { userInput, chartData } }) => {
       </Backdrop>
       <div
         className={clsx(classes.root, {
-          [classes.hideRoot]: !hide
+          [classes.hideRoot]: hide
         })}
       >
         <Container className={classes.content} maxWidth="md">
