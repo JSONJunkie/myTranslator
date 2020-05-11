@@ -42,7 +42,7 @@ const ChartGrid = ({ hide: { hide } }) => {
             {!hide && hide !== "" && <Chart />}
             {hide && (
               <div className={classes.wrapper}>
-                <CircularProgress size={5} disableShrink />
+                <CircularProgress disableShrink />
               </div>
             )}
             {hide === "" && null}
