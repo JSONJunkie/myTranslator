@@ -27,6 +27,12 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     justifyContent: "center"
   },
+  contentTyping: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    background: theme.palette.background.default
+  },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     background: "rgb(53, 53, 53, .9)",
@@ -118,7 +124,12 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
         </Button>
       </Backdrop>
       <div className={classes.root}>
-        <Container className={classes.content} maxWidth="md">
+        <Container
+          className={clsx(classes.content, {
+            [classes.contentTyping]: !hide
+          })}
+          maxWidth="md"
+        >
           <Typography
             className={classes.hiddenDate}
             variant="caption"
