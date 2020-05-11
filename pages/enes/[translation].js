@@ -4,7 +4,6 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Grow from "@material-ui/core/Grow";
 
 import TranslationGrid from "../../components/TranslationGrid";
 import ChartGrid from "../../components/ChartGrid";
@@ -46,7 +45,7 @@ const Enes = ({ doc }) => {
 
   const classes = useStyles();
 
-  // console.log(router);
+  console.log(router);
   // console.log(result);
 
   var data;
@@ -84,23 +83,21 @@ const Enes = ({ doc }) => {
         >
           first translated: {date.toString()}
         </Typography>
-        <Grow in={true} timeout={500}>
-          <Grid
-            container
-            justify="center"
-            alignItems="center"
-            alignContent="center"
-            spacing={2}
-          >
-            <TranslationGrid
-              beforeTrans={data.preTrans}
-              afterTrans={data.postTrans}
-              from={"english"}
-              to={"spanish"}
-            />
-            <ChartGrid hide={{ hide: "" }} />
-          </Grid>
-        </Grow>
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          alignContent="center"
+          spacing={2}
+        >
+          <TranslationGrid
+            beforeTrans={data.preTrans}
+            afterTrans={data.postTrans}
+            from={"english"}
+            to={"spanish"}
+          />
+          <ChartGrid hide={{ hide: "" }} />
+        </Grid>
       </Container>
     </div>
   );
