@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Translation = ({ doc }) => {
+const Translation = ({ doc, codes }) => {
   const router = useRouter();
 
   const classes = useStyles();
@@ -52,7 +52,6 @@ const Translation = ({ doc }) => {
   var date;
 
   if (doc) {
-    console.log(doc);
     data = JSON.parse(doc);
     date = new Date(parseInt(data.date));
   }
@@ -82,7 +81,7 @@ const Translation = ({ doc }) => {
           variant="caption"
           color="textSecondary"
         >
-          {/* first translated: {date.toString()} */}
+          first translated: {date.toString()}
         </Typography>
         <Grid
           container
@@ -92,10 +91,10 @@ const Translation = ({ doc }) => {
           spacing={2}
         >
           <TranslationGrid
-            beforeTrans={"test"}
-            afterTrans={"test"}
-            from={"english"}
-            to={"spanish"}
+            beforeTrans={data.en}
+            afterTrans={data.es}
+            from={codes.from}
+            to={codes.to}
           />
           <ChartGrid hide={{ hide: "" }} />
         </Grid>
@@ -123,7 +122,50 @@ export async function getStaticProps(context) {
   const preTrans = context.params.translation[2];
   const modelId = from + "-" + to;
 
-  const doc = await Translations.findOne({ preTrans });
+  const getLang = data => {
+    switch (data) {
+      case "ar":
+        return "Arabic";
+      case "zh":
+        return "Simplified Chinese";
+      case "zh-TW":
+        return "Traditional Chinese";
+      case "en":
+        return "English";
+      case "fi":
+        return "Finnish";
+      case "fr":
+        return "French";
+      case "de":
+        return "German";
+      case "it":
+        return "Italian";
+      case "ja":
+        return "Japanese";
+      case "ko":
+        return "Korean";
+      case "pt":
+        return "Portuguese";
+      case "ro":
+        return "Romanian";
+      case "ru":
+        return "Russian";
+      case "sk":
+        return "Slovak";
+      case "es":
+        return "Spanish";
+      case "sv":
+        return "Swedish";
+      case "th":
+        return "Thai";
+      case "tr":
+        return "Turkish";
+      case "vi":
+        return "Vietnamese";
+    }
+  };
+
+  const doc = await Translations.findOne({ [from]: preTrans });
 
   // if (validator.isEmpty(translateParams.text)) {
   //   throw new Error("Please include some text to translate");
@@ -142,7 +184,7 @@ export async function getStaticProps(context) {
     });
     await entry.save();
     connection.close();
-    return { props: { doc: null } };
+    return { props: { doc: null, codes: null } };
   }
 
   if (doc[to] === "temp") {
@@ -175,12 +217,22 @@ export async function getStaticProps(context) {
 
     connection.close();
 
-    return { props: { doc: JSON.stringify(transDoc) } };
+    return {
+      props: {
+        doc: JSON.stringify(transDoc),
+        codes: { from: getLang(from), to: getLang(to) }
+      }
+    };
   }
 
   connection.close();
 
-  return { props: { doc: JSON.stringify(doc) } };
+  return {
+    props: {
+      doc: JSON.stringify(doc),
+      codes: { from: getLang(from), to: getLang(to) }
+    }
+  };
 }
 
 export async function getStaticPaths() {
