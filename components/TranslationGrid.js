@@ -46,33 +46,57 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to }) => {
 
   return (
     <Fragment>
-      <Grid className={classes.cardGrid} item xs={12} sm={12}>
-        <Card className={classes.cardRoot}>
-          <CardContent>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-            >
-              {beforeTrans}
-            </Typography>
-            <Divider />
-            <Typography className={classes.pos} color="textSecondary">
-              translating from {from} to {to}...
-            </Typography>
-            {afterTrans && (
-              <Typography className={classes.translation} variant="body2">
-                {afterTrans}
+      {afterTrans && (
+        <Grid className={classes.cardGrid} item xs={12} sm={12}>
+          <Card className={classes.cardRoot}>
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                {beforeTrans}
               </Typography>
-            )}
-            {!afterTrans && (
+              <Divider />
+              <Typography className={classes.pos} color="textSecondary">
+                translating from {from} to {to}...
+              </Typography>
+              {afterTrans && (
+                <Typography className={classes.translation} variant="body2">
+                  {afterTrans}
+                </Typography>
+              )}
+              {!afterTrans && (
+                <div className={classes.progress}>
+                  <CircularProgress disableShrink />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
+      {afterTrans === "" && (
+        <Grid className={classes.cardGrid} item xs={12} sm={12}>
+          <Card className={classes.cardRoot}>
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                {beforeTrans}
+              </Typography>
+              <Divider />
+              <Typography className={classes.pos} color="textSecondary">
+                translating from {from} to {to}...
+              </Typography>
               <div className={classes.progress}>
                 <CircularProgress disableShrink />
               </div>
-            )}
-          </CardContent>
-        </Card>
-      </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
     </Fragment>
   );
 };

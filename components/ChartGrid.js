@@ -29,6 +29,16 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     justifyContent: "center",
     alignItems: "center"
+  },
+  spacer: {
+    height: 120,
+    width: 170,
+    margin: "auto",
+    [theme.breakpoints.up("md")]: {
+      height: 240,
+      width: 340
+    },
+    visibility: "hidden"
   }
 }));
 
@@ -46,17 +56,27 @@ const ChartGrid = ({ hide: { hide } }) => {
   return (
     <Fragment>
       <Grid item xs={12} sm={12}>
-        <Paper className={classes.chart}>
-          <div className={classes.showChart}>
-            {!hide && hide !== "" && <Chart data={data} />}
-            {hide && (
+        {!hide && hide !== "" && (
+          <Paper className={classes.chart}>
+            <div className={classes.showChart}>
+              <Chart data={data} />
+            </div>
+          </Paper>
+        )}
+        {hide && (
+          <Paper className={classes.chart}>
+            <div className={classes.showChart}>
               <div className={classes.wrapper}>
                 <CircularProgress disableShrink />
               </div>
-            )}
-            {hide === "" && null}
-          </div>
-        </Paper>
+            </div>
+          </Paper>
+        )}
+        {hide === "" && (
+          <Paper className={classes.spacer}>
+            <div>a</div>
+          </Paper>
+        )}
       </Grid>
     </Fragment>
   );

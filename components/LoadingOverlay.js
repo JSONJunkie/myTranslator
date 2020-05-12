@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
   },
   hiddenGrid: {
     visibility: "hidden",
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(4)
   }
 }));
 
@@ -150,7 +150,7 @@ const LoadingOverlay = ({
             >
               {hide && (
                 <Fragment>
-                  {!router.isFallback && (
+                  {!router.isFallback && preTrans && (
                     <Fragment>
                       <div className={classes.hiddenGrid}>
                         <TranslationGrid
