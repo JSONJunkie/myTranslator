@@ -134,13 +134,20 @@ const Navbar = ({
   });
 
   const handleSub = e => {
-    if (e.input === "") {
+    if (!toCode || !fromCode) {
+      setHelperText(prev => ({
+        inputError: "Please select a from and to language for translation",
+        isInputError: true
+      }));
     } else {
-      if (userInput !== "") {
-        router.push(
-          "/[from]/[to]/[translation]/",
-          "/" + fromCode + "/" + toCode + "/" + e.input.toLowerCase()
-        );
+      if (e.input === "") {
+      } else {
+        if (userInput !== "") {
+          router.push(
+            "/[from]/[to]/[translation]/",
+            "/" + fromCode + "/" + toCode + "/" + e.input.toLowerCase()
+          );
+        }
       }
     }
   };
@@ -163,7 +170,7 @@ const Navbar = ({
     } else {
       setHelperText(prev => ({ inputError: "", isInputError: false }));
     }
-  }, [errors.input]);
+  }, [errors.input, fromCode, toCode]);
 
   return (
     <Fragment>
