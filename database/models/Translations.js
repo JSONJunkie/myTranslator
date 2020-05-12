@@ -18,6 +18,10 @@ const TranslationsSchema = new mongoose.Schema({
       }
     }
   ],
+  lifetimeHits: {
+    type: Number,
+    required: false
+  },
   date: {
     type: String,
     required: true

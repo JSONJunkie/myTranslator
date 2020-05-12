@@ -79,13 +79,14 @@ handler.patch(async (req, res) => {
 
       const updatedDoc = await Translations.findOneAndUpdate(
         { preTrans },
-        { hitData: doc.hitData },
+        { hitData: doc.hitData, lifetimeHits: doc.lifetimeHits + 1 },
         {
           new: true,
           useFindAndModify: false
         }
       );
 
+      console.log(updatedDoc);
       res.json(updatedDoc);
       req.connection.close();
     }
@@ -140,12 +141,13 @@ handler.patch(async (req, res) => {
 
       const updatedDoc = await Translations.findOneAndUpdate(
         { preTrans },
-        { hitData: newData },
+        { hitData: newData, lifetimeHits: doc.lifetimeHits + 1 },
         {
           new: true,
           useFindAndModify: false
         }
       );
+      console.log(updatedDoc);
 
       res.json(updatedDoc);
       req.connection.close();

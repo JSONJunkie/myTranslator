@@ -133,6 +133,7 @@ export async function getStaticProps(context) {
         { time: 0, hits: 0 },
         { time: 0, hits: 0 }
       ],
+      lifetimeHits: 0,
       date: new Date().getTime()
     });
     await entry.save();
