@@ -49,7 +49,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const LoadingOverlay = ({ translations: { userInput } }) => {
+const LoadingOverlay = ({
+  translations: { userInput, preTrans, postTrans }
+}) => {
   const classes = useStyles();
 
   const router = useRouter();
@@ -148,21 +150,24 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
             >
               {hide && (
                 <Fragment>
-                  <div className={classes.hiddenGrid}>
-                    <TranslationGrid
-                      beforeTrans={"Welcome"}
-                      afterTrans={"Bienvenida"}
-                      from={"english"}
-                      to={"spanish"}
-                    />
-                  </div>
-                  {!router.isFallback && <ChartGrid hide={{ hide: !hide }} />}
+                  {!router.isFallback && (
+                    <Fragment>
+                      <div className={classes.hiddenGrid}>
+                        <TranslationGrid
+                          beforeTrans={preTrans}
+                          afterTrans={postTrans}
+                          from={"english"}
+                          to={"spanish"}
+                        />
+                      </div>
+                      <ChartGrid hide={{ hide: !hide }} />
+                    </Fragment>
+                  )}
                 </Fragment>
               )}
               {!hide && (
                 <Fragment>
                   <TranslationGrid
-                    className={classes.hiddenGrid}
                     beforeTrans={userInput}
                     afterTrans={""}
                     from={"english"}
