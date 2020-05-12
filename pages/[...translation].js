@@ -52,6 +52,7 @@ const Translation = ({ doc }) => {
   var date;
 
   if (doc) {
+    console.log(doc);
     data = JSON.parse(doc);
     date = new Date(parseInt(data.date));
   }
@@ -81,7 +82,7 @@ const Translation = ({ doc }) => {
           variant="caption"
           color="textSecondary"
         >
-          first translated: {date.toString()}
+          {/* first translated: {date.toString()} */}
         </Typography>
         <Grid
           container
@@ -91,8 +92,8 @@ const Translation = ({ doc }) => {
           spacing={2}
         >
           <TranslationGrid
-            beforeTrans={data.preTrans}
-            afterTrans={data.postTrans}
+            beforeTrans={"test"}
+            afterTrans={"test"}
             from={"english"}
             to={"spanish"}
           />
@@ -114,11 +115,13 @@ export async function getStaticProps(context) {
   //   console.log("empty params/query");
   //   throw new Error("No query");
   // }
-  console.log(context);
 
   const { connection, models } = await connectToMongo();
   const { Translations } = models;
-  const preTrans = context.params.translation;
+  const from = context.params.translation[0];
+  const to = context.params.translation[1];
+  const preTrans = context.params.translation[2];
+  const modelId = from + "-" + to;
 
   const doc = await Translations.findOne({ preTrans });
 
@@ -128,8 +131,8 @@ export async function getStaticProps(context) {
 
   if (!doc) {
     const entry = new Translations({
-      preTrans,
-      postTrans: "temp",
+      [from]: preTrans,
+      [to]: "temp",
       hitData: [
         { time: 0, hits: 0 },
         { time: 0, hits: 0 }
@@ -142,7 +145,7 @@ export async function getStaticProps(context) {
     return { props: { doc: null } };
   }
 
-  if (doc.postTrans === "temp") {
+  if (doc[to] === "temp") {
     const languageTranslator = new LanguageTranslatorV3({
       version: "2018-05-01",
       authenticator: new IamAuthenticator({
@@ -156,7 +159,7 @@ export async function getStaticProps(context) {
 
     const translateParams = {
       text: preTrans,
-      modelId: "en-es"
+      modelId: modelId
     };
 
     const translationResult = await languageTranslator.translate(
@@ -165,8 +168,8 @@ export async function getStaticProps(context) {
     const result = translationResult.result.translations[0].translation;
 
     const transDoc = await Translations.findOneAndUpdate(
-      { preTrans },
-      { postTrans: result.toLowerCase() },
+      { [from]: preTrans },
+      { [to]: result.toLowerCase() },
       { new: true, useFindAndModify: false }
     );
 
