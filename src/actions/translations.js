@@ -11,11 +11,58 @@ import {
 
 export const selectLang = data => async dispatch => {
   try {
+    const { from, to } = data;
+
+    const getLang = data => {
+      switch (data) {
+        case "ar":
+          return "Arabic";
+        case "zh":
+          return "Simplified Chinese";
+        case "zh-TW":
+          return "Traditional Chinese";
+        case "en":
+          return "English";
+        case "fi":
+          return "Finnish";
+        case "fr":
+          return "French";
+        case "de":
+          return "German";
+        case "it":
+          return "Italian";
+        case "ja":
+          return "Japanese";
+        case "ko":
+          return "Korean";
+        case "pt":
+          return "Portuguese";
+        case "ro":
+          return "Romanian";
+        case "ru":
+          return "Russian";
+        case "sk":
+          return "Slovak";
+        case "es":
+          return "Spanish";
+        case "sv":
+          return "Swedish";
+        case "th":
+          return "Thai";
+        case "tr":
+          return "Turkish";
+        case "vi":
+          return "Vietnamese";
+      }
+    };
+
     dispatch({
       type: SELECT_LANG,
       payload: {
-        from: data.from,
-        to: data.to
+        fromCode: data.from,
+        from: getLang(data.from),
+        toCode: data.to,
+        to: getLang(data.to)
       }
     });
   } catch (err) {

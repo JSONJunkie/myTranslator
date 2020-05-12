@@ -11,8 +11,10 @@ const initialState = {
   userInput: "",
   preTrans: "",
   postTrans: "",
-  from: "en",
-  to: "es",
+  fromCode: "en",
+  from: "English",
+  toCode: "es",
+  to: "Spanish",
   chartData: []
 };
 
@@ -31,7 +33,13 @@ export default function (state = initialState, action) {
         chartData: payload.chartData
       };
     case SELECT_LANG:
-      return { ...state, from: payload.from, to: payload.to };
+      return {
+        ...state,
+        from: payload.from,
+        to: payload.to,
+        fromCode: payload.fromCode,
+        toCode: payload.toCode
+      };
     case ADD_HIT:
     default:
       return state;
