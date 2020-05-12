@@ -23,7 +23,7 @@ handler.patch(async (req, res) => {
     const now = new Date().getTime();
 
     const { Translations } = req.models;
-    const preTrans = req.body.data.translation;
+    const preTrans = req.body.data;
     const doc = await Translations.findOne({ preTrans });
 
     // const entry = {

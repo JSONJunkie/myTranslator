@@ -112,7 +112,7 @@ const Navbar = ({
         (router.pathname !== "/" && router.pathname !== "/404")
       ) {
         if (!router.isFallback) {
-          addHit(router.query);
+          addHit(router.query.translation[2]);
           getData(router.query.translation[2]);
         }
       }
