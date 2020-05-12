@@ -32,6 +32,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const data = [
+  { time: 0, hits: 2 },
+  { time: 4, hits: 7 },
+  { time: 8, hits: 9 },
+  { time: 12, hits: 3 },
+  { time: 16, hits: 5 },
+  { time: 100, hits: 0 }
+];
+
 const ChartGrid = ({ hide: { hide } }) => {
   const classes = useStyles();
   return (
@@ -39,7 +48,7 @@ const ChartGrid = ({ hide: { hide } }) => {
       <Grid item xs={12} sm={12}>
         <Paper className={classes.chart}>
           <div className={classes.showChart}>
-            {!hide && hide !== "" && <Chart />}
+            {!hide && hide !== "" && <Chart data={data} />}
             {hide && (
               <div className={classes.wrapper}>
                 <CircularProgress disableShrink />
