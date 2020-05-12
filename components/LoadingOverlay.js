@@ -163,7 +163,7 @@ const LoadingOverlay = ({
             >
               {hide && (
                 <Fragment>
-                  {!router.isFallback && preTrans && (
+                  {!router.isFallback && (
                     <Fragment>
                       <div className={classes.hiddenGrid}>
                         <TranslationGrid
@@ -173,7 +173,8 @@ const LoadingOverlay = ({
                           to={"spanish"}
                         />
                       </div>
-                      <ChartGrid hide={{ hide: !hide }} />
+                      {routing.complete && <ChartGrid hide={{ hide: !hide }} />}
+                      {!routing.complete && <ChartGrid hide={{ hide: hide }} />}
                     </Fragment>
                   )}
                 </Fragment>
