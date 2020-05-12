@@ -44,7 +44,8 @@ const useStyles = makeStyles(theme => ({
     visibility: "hidden"
   },
   hiddenGrid: {
-    visibility: "hidden"
+    visibility: "hidden",
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -150,7 +151,7 @@ const LoadingOverlay = ({ translations: { userInput } }) => {
                   <div className={classes.hiddenGrid}>
                     <TranslationGrid
                       beforeTrans={"Welcome"}
-                      afterTrans={""}
+                      afterTrans={"Bienvenida"}
                       from={"english"}
                       to={"spanish"}
                     />
