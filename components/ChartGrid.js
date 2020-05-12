@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
@@ -42,16 +43,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const data = [
-  { time: 0, hits: 2 },
-  { time: 4, hits: 7 },
-  { time: 8, hits: 9 },
-  { time: 12, hits: 3 },
-  { time: 16, hits: 5 },
-  { time: 100, hits: 0 }
-];
-
-const ChartGrid = ({ hide: { hide } }) => {
+const ChartGrid = ({ hide: { hide }, translations: { chartData } }) => {
   const classes = useStyles();
   return (
     <Fragment>
@@ -59,7 +51,7 @@ const ChartGrid = ({ hide: { hide } }) => {
         {!hide && hide !== "" && (
           <Paper className={classes.chart}>
             <div className={classes.showChart}>
-              <Chart data={data} />
+              <Chart data={chartData} />
             </div>
           </Paper>
         )}
@@ -83,8 +75,13 @@ const ChartGrid = ({ hide: { hide } }) => {
 };
 
 ChartGrid.propTypes = {
+  translations: PropTypes.object.isRequired,
   hide: PropTypes.object.isRequired,
   rollbar: PropTypes.object.isRequired
 };
 
-export default ChartGrid;
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps)(ChartGrid);
