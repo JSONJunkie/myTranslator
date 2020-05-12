@@ -7,6 +7,7 @@ import { withRedux } from "../lib/redux";
 import Rollbar from "rollbar";
 
 import Navbar from "../components/Navbar";
+import LanguageSelect from "../components/LanguageSelect";
 import LoadingOverlay from "../components/LoadingOverlay";
 import Footer from "../components/Footer";
 import theme from "../themes/theme";
@@ -74,6 +75,7 @@ function MyApp({ Component, pageProps, store }) {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <Navbar />
+          <LanguageSelect />
           <div className={classes.wrapper}>
             <LoadingOverlay />
             <Component rollbar={rollbar} {...pageProps} />
