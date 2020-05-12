@@ -15,6 +15,8 @@ export const selectLang = data => async dispatch => {
 
     const getLang = data => {
       switch (data) {
+        case "":
+          return "...";
         case "ar":
           return "Arabic";
         case "zh":

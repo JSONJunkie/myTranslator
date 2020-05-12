@@ -11,10 +11,10 @@ const initialState = {
   userInput: "",
   preTrans: "",
   postTrans: "",
-  fromCode: "en",
-  from: "English",
-  toCode: "es",
-  to: "Spanish",
+  fromCode: "",
+  from: "...",
+  toCode: "",
+  to: "...",
   chartData: []
 };
 
