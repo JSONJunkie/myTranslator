@@ -13,3 +13,4 @@ export const GET_TRANSCOUNT = "GET_TRANSCOUNT";
 export const UPDATE_INPUT = "UPDATE_INPUT";
 export const ADD_HIT = "ADD_HIT";
 export const GET_DATA = "GET_DATA";
+export const SELECT_LANG = "SELECT_LANG";

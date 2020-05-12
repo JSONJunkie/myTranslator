@@ -1,7 +1,34 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-import { GET_TRANSCOUNT, UPDATE_INPUT, ADD_HIT, GET_DATA } from "./types";
+import {
+  GET_TRANSCOUNT,
+  UPDATE_INPUT,
+  ADD_HIT,
+  GET_DATA,
+  SELECT_LANG
+} from "./types";
+
+export const selectLang = data => async dispatch => {
+  try {
+    dispatch({
+      type: SELECT_LANG,
+      payload: {
+        from: data.from,
+        to: data.to
+      }
+    });
+  } catch (err) {
+    // rollbar.error(err);
+    // dispatch({
+    //   type: ERROR,
+    //   payload: {
+    //     name: err.name,
+    //     message: err.message
+    //   }
+    // });
+  }
+};
 
 export const getData = data => async dispatch => {
   try {

@@ -2,7 +2,8 @@ import {
   GET_TRANSCOUNT,
   UPDATE_INPUT,
   ADD_HIT,
-  GET_DATA
+  GET_DATA,
+  SELECT_LANG
 } from "../actions/types";
 
 const initialState = {
@@ -10,6 +11,8 @@ const initialState = {
   userInput: "",
   preTrans: "",
   postTrans: "",
+  from: "en",
+  to: "es",
   chartData: []
 };
 
@@ -27,6 +30,8 @@ export default function (state = initialState, action) {
         postTrans: payload.postTrans,
         chartData: payload.chartData
       };
+    case SELECT_LANG:
+      return { ...state, from: payload.from, to: payload.to };
     case ADD_HIT:
     default:
       return state;
