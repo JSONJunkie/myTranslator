@@ -122,6 +122,21 @@ export const getData = data => async dispatch => {
 
 export const addHit = data => async dispatch => {
   try {
+    if (fromCode === "" || toCode === "") {
+      const body = { preTrans: "welcome", fromCode: "en", toCode: "es" };
+
+      await axios.patch("/api/translations", body);
+
+      return dispatch({
+        type: GET_DATA,
+        payload: {
+          preTrans: "welcome",
+          postTrans: "beinvenida",
+          chartData: res.data.hitData
+        }
+      });
+    }
+
     const body = { data };
 
     await axios.patch("/api/translations", body);
