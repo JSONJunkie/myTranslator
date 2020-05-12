@@ -61,8 +61,8 @@ const Index = ({ translations: { userInput, from, to } }) => {
           <TranslationGrid
             beforeTrans={"Welcome"}
             afterTrans={"Bienvenida"}
-            from={from}
-            to={to}
+            from={"English"}
+            to={"Spanish"}
           />
           <ChartGrid hide={{ hide: "" }} />
         </Grid>
