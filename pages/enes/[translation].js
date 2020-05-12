@@ -126,13 +126,14 @@ export async function getStaticProps(context) {
   // }
 
   if (!doc) {
-    const d = new Date();
-
     const entry = new Translations({
       preTrans,
       postTrans: "temp",
-      hitData: [{ time: 0, hits: 0 }],
-      date: d.getTime()
+      hitData: [
+        { time: 0, hits: 0 },
+        { time: 0, hits: 0 }
+      ],
+      date: new Date().getTime()
     });
     await entry.save();
     connection.close();

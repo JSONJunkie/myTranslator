@@ -20,19 +20,63 @@ handler.get(async (req, res) => {
 
 handler.patch(async (req, res) => {
   try {
-    const d = new Date();
-    const now = d.getTime();
+    const now = new Date().getTime();
 
     const { Translations } = req.models;
     const preTrans = req.body.data.translation;
     const doc = await Translations.findOne({ preTrans });
-    const minutes = (d - doc.date) / 1000 / 60;
 
-    if (doc.hitData.length < 100) {
-      doc.hitData.push({
-        time: minutes,
-        hits: doc.hitData[doc.hitData.length - 1].hits + 1
-      });
+    // const entry = {
+    //   hour: new Date(parseInt(doc.date)).getHours(),
+    //   day: new Date(parseInt(doc.date)).getDate(),
+    //   month: new Date(parseInt(doc.date)).getMonth(),
+    //   year: new Date(parseInt(doc.date)).getFullYear()
+    // };
+
+    const hours = Math.floor((now - doc.date) / 1000 / 60 / 60) + 1;
+
+    if (doc.hitData.length < 23) {
+      const lastEntry = doc.hitData[doc.hitData.length - 1];
+
+      doc.hitData.pop();
+
+      if (lastEntry.time === hours) {
+        doc.hitData.push({
+          time: hours,
+          hits: lastEntry.hits + 1
+        });
+      } else {
+        if (hours - lastEntry.time > 1) {
+          const noHitHours = hours - lastEntry.time;
+          if (noHitHours <= 23) {
+            for (var i = 1; i < noHitHours; i++) {
+              doc.hitData.push({ time: lastEntry.time + i, hits: 0 });
+            }
+            doc.hitData.push({
+              time: hours,
+              hits: 1
+            });
+          }
+
+          if (noHitHours >= 24) {
+            for (var i = 1; i < 24; i++) {
+              doc.hitData.push({ time: lastEntry.time + i, hits: 0 });
+            }
+            doc.hitData.push({
+              time: hours,
+              hits: 1
+            });
+          }
+        } else {
+          doc.hitData.push(lastEntry);
+
+          doc.hitData.push({
+            time: hours,
+            hits: 1
+          });
+        }
+      }
+
       const updatedDoc = await Translations.findOneAndUpdate(
         { preTrans },
         { hitData: doc.hitData },
@@ -41,18 +85,59 @@ handler.patch(async (req, res) => {
           useFindAndModify: false
         }
       );
+
       res.json(updatedDoc);
       req.connection.close();
     }
 
-    if (doc.hitData.length >= 100) {
+    if (doc.hitData.length >= 23) {
       const reversedData = doc.hitData.reverse();
+
       reversedData.pop();
+
       const newData = reversedData.reverse();
-      newData.push({
-        time: minutes,
-        hits: doc.hitData[doc.hitData.length - 1].hits + 1
-      });
+
+      const lastEntry = doc.newData[doc.newData.length - 1];
+
+      doc.newData.pop();
+
+      if (lastEntry.time === hours) {
+        doc.newData.push({
+          time: hours,
+          hits: lastEntry.hits + 1
+        });
+      } else {
+        if (hours - lastEntry.time > 1) {
+          const noHitHours = hours - lastEntry.time;
+          if (noHitHours <= 23) {
+            for (var i = 1; i < noHitHours; i++) {
+              doc.newData.push({ time: lastEntry.time + i, hits: 0 });
+            }
+            doc.newData.push({
+              time: hours,
+              hits: 1
+            });
+          }
+
+          if (noHitHours >= 24) {
+            for (var i = 1; i < 24; i++) {
+              doc.newData.push({ time: lastEntry.time + i, hits: 0 });
+            }
+            doc.newData.push({
+              time: hours,
+              hits: 1
+            });
+          }
+        } else {
+          doc.newData.push(lastEntry);
+
+          doc.newData.push({
+            time: hours,
+            hits: 1
+          });
+        }
+      }
+
       const updatedDoc = await Translations.findOneAndUpdate(
         { preTrans },
         { hitData: newData },
@@ -61,6 +146,7 @@ handler.patch(async (req, res) => {
           useFindAndModify: false
         }
       );
+
       res.json(updatedDoc);
       req.connection.close();
     }
