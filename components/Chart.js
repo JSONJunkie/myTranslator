@@ -17,22 +17,19 @@ const Chart = ({ data }) => {
       <LineChart
         data={data}
         margin={{
-          top: 20,
-          right: 30,
-          left: 5,
+          top: 10,
+          right: 10,
+          left: 10,
           bottom: 10
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="time" />
-        <YAxis />
         <Tooltip />
-        <Legend />
         <Line
-          type="monotone"
+          type="linear"
           dataKey="hits"
           stroke="#8884d8"
-          activeDot={{ r: 8 }}
+          dot={false}
+          activeDot={true}
         />
       </LineChart>
     </ResponsiveContainer>
