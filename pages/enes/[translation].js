@@ -45,7 +45,7 @@ const Enes = ({ doc }) => {
 
   const classes = useStyles();
 
-  console.log(router);
+  // console.log(router);
   // console.log(result);
 
   var data;
