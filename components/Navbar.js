@@ -113,7 +113,7 @@ const Navbar = ({
       ) {
         if (!router.isFallback) {
           addHit(router.query);
-          getData(router.query.translation);
+          getData(router.query.translation[2]);
         }
       }
       if (router.pathname === "/") {
