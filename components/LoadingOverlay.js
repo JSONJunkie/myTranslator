@@ -66,6 +66,8 @@ const LoadingOverlay = ({
 
   const [hide, setHide] = useState(true);
 
+  const [grow, setGrow] = useState(false);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -110,6 +112,12 @@ const LoadingOverlay = ({
   }, [userInput]);
 
   useEffect(() => {
+    if (preTrans) {
+      setGrow(prev => true);
+    }
+  }, [preTrans]);
+
+  useEffect(() => {
     if (router.isFallback) {
       setOpen(true);
     }
@@ -140,7 +148,7 @@ const LoadingOverlay = ({
           >
             first translated
           </Typography>
-          <Grow in={true} timeout={500}>
+          <Grow in={grow} timeout={500}>
             <Grid
               container
               justify="center"
