@@ -51,23 +51,21 @@ const Index = ({ translations: { userInput } }) => {
         >
           first translated
         </Typography>
-        <Grow in={true} timeout={500}>
-          <Grid
-            container
-            justify="center"
-            alignItems="center"
-            alignContent="center"
-            spacing={2}
-          >
-            <TranslationGrid
-              beforeTrans={"Welcome"}
-              afterTrans={"Bienvenida"}
-              from={"english"}
-              to={"spanish"}
-            />
-            <ChartGrid hide={{ hide: "" }} />
-          </Grid>
-        </Grow>
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          alignContent="center"
+          spacing={2}
+        >
+          <TranslationGrid
+            beforeTrans={"Welcome"}
+            afterTrans={"Bienvenida"}
+            from={"english"}
+            to={"spanish"}
+          />
+          <ChartGrid hide={{ hide: "" }} />
+        </Grid>
       </Container>
     </div>
   );
