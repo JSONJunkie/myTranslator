@@ -1,16 +1,13 @@
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { useEffect, useState } from "react";
-import Typography from "@material-ui/core/Typography";
-import { useRouter } from "next/router";
-import Grow from "@material-ui/core/Grow";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+
+import { selectLang } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,23 +25,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const LanguageSelect = () => {
+const LanguageSelect = ({ selectLang, translations: { from, to } }) => {
   const classes = useStyles();
-
-  const [from, setFrom] = React.useState("en");
-
-  const [to, setTo] = React.useState("es");
 
   const [toOpen, setToOpen] = React.useState(false);
 
   const [fromOpen, setFromOpen] = React.useState(false);
 
-  const handleFromChange = event => {
-    setFrom(event.target.value);
+  const handleFromChange = e => {
+    selectLang({ from: e.target.value, to });
   };
 
-  const handleToChange = event => {
-    setTo(event.target.value);
+  const handleToChange = e => {
+    selectLang({ from, to: e.target.value });
   };
 
   const handleClose = () => {
@@ -209,7 +202,13 @@ const LanguageSelect = () => {
 };
 
 LanguageSelect.propTypes = {
+  translations: PropTypes.object.isRequired,
+  selectLang: PropTypes.func.isRequired,
   rollbar: PropTypes.object.isRequired
 };
 
-export default LanguageSelect;
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps, { selectLang })(LanguageSelect);
