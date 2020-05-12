@@ -8,10 +8,11 @@ handler.use(middleware);
 
 handler.get(async (req, res) => {
   try {
-    const preTrans = req.query.translation;
+    const preTrans = req.query.preTrans;
+    const from = req.query.from;
     const { Translations } = req.models;
     const doc = await Translations.findOne(
-      { preTrans },
+      { [from]: preTrans },
       { _id: 1, preTrans: 1, postTrans: 1, hitData: 1 }
     );
     res.json(doc);

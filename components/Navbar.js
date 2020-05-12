@@ -112,13 +112,13 @@ const Navbar = ({
         (router.pathname !== "/" && router.pathname !== "/404")
       ) {
         if (!router.isFallback) {
-          addHit(router.query.translation[2]);
-          getData(router.query.translation[2]);
+          addHit({ preTrans: router.query.translation[2], fromCode });
+          getData({ preTrans: router.query.translation[2], fromCode });
         }
       }
       if (router.pathname === "/") {
-        addHit("welcome");
-        getData("welcome");
+        addHit({ preTrans: "welcome", fromCode });
+        getData({ preTrans: "welcome", fromCode });
       }
     }
     if (routing.starting) {

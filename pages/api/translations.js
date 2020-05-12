@@ -23,8 +23,9 @@ handler.patch(async (req, res) => {
     const now = new Date().getTime();
 
     const { Translations } = req.models;
-    const preTrans = req.body.data;
-    const doc = await Translations.findOne({ preTrans });
+    const preTrans = req.body.data.preTrans;
+    const from = req.body.data.fromCode;
+    const doc = await Translations.findOne({ [from]: preTrans });
 
     // const entry = {
     //   hour: new Date(parseInt(doc.date)).getHours(),
@@ -78,7 +79,7 @@ handler.patch(async (req, res) => {
       }
 
       const updatedDoc = await Translations.findOneAndUpdate(
-        { preTrans },
+        { [from]: preTrans },
         { hitData: doc.hitData, lifetimeHits: doc.lifetimeHits + 1 },
         {
           new: true,
@@ -140,7 +141,7 @@ handler.patch(async (req, res) => {
       }
 
       const updatedDoc = await Translations.findOneAndUpdate(
-        { preTrans },
+        { [from]: preTrans },
         { hitData: newData, lifetimeHits: doc.lifetimeHits + 1 },
         {
           new: true,

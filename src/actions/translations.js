@@ -79,7 +79,9 @@ export const selectLang = data => async dispatch => {
 
 export const getData = data => async dispatch => {
   try {
-    const res = await axios.get("/api/data?translation=" + data);
+    const res = await axios.get(
+      "/api/data?preTrans=" + data.preTrans + "&fromCode=" + data.from
+    );
 
     dispatch({
       type: GET_DATA,
