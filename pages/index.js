@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Index = ({ translations: { userInput } }) => {
+const Index = ({ translations: { userInput, from, to } }) => {
   const classes = useStyles();
 
   const [hide, setHide] = useState(false);
@@ -61,8 +61,8 @@ const Index = ({ translations: { userInput } }) => {
           <TranslationGrid
             beforeTrans={"Welcome"}
             afterTrans={"Bienvenida"}
-            from={"english"}
-            to={"spanish"}
+            from={from}
+            to={to}
           />
           <ChartGrid hide={{ hide: "" }} />
         </Grid>

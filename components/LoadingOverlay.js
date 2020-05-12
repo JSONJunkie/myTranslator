@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoadingOverlay = ({
-  translations: { userInput, preTrans, postTrans }
+  translations: { userInput, preTrans, postTrans, from, to }
 }) => {
   const classes = useStyles();
 
@@ -169,8 +169,8 @@ const LoadingOverlay = ({
                         <TranslationGrid
                           beforeTrans={preTrans}
                           afterTrans={postTrans}
-                          from={"english"}
-                          to={"spanish"}
+                          from={from}
+                          to={to}
                         />
                       </div>
                       {routing.complete && <ChartGrid hide={{ hide: !hide }} />}
@@ -184,8 +184,8 @@ const LoadingOverlay = ({
                   <TranslationGrid
                     beforeTrans={userInput}
                     afterTrans={""}
-                    from={"english"}
-                    to={"spanish"}
+                    from={from}
+                    to={to}
                   />
                   <ChartGrid hide={{ hide: !hide }} />
                 </Fragment>
