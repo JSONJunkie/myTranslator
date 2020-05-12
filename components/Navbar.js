@@ -70,7 +70,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Navbar = ({
-  translations: { userInput, chartData },
+  translations: { userInput, fromCode, toCode },
   updateInput,
   addHit,
   getData
@@ -137,7 +137,10 @@ const Navbar = ({
     if (e.input === "") {
     } else {
       if (userInput !== "") {
-        router.push("/enes/[translation]", "/enes/" + e.input.toLowerCase());
+        router.push(
+          "/[from]/[to]/[translation]/",
+          "/" + fromCode + "/" + toCode + "/" + e.input.toLowerCase()
+        );
       }
     }
   };
