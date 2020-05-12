@@ -74,7 +74,7 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
                 onChange={handleFromChange}
               >
                 <MenuItem value="">
-                  <em className={classes.text}>Please select one</em>
+                  <em className={classes.text}>None</em>
                 </MenuItem>
                 <MenuItem value="ar" disabled={toCode !== "en"}>
                   Arabic
@@ -233,7 +233,7 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
                 onChange={handleFromChange}
               >
                 <MenuItem value="">
-                  <em className={classes.text}>Please select one</em>
+                  <em className={classes.text}>None</em>
                 </MenuItem>
                 <MenuItem value="ar">Arabic</MenuItem>
                 <MenuItem value="zh">Chinese (simplified)</MenuItem>
@@ -272,7 +272,7 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
                 onChange={handleToChange}
               >
                 <MenuItem value="">
-                  <em className={classes.text}>Please select one</em>
+                  <em className={classes.text}>None</em>
                 </MenuItem>
                 <MenuItem value="ar" disabled={fromCode !== "en"}>
                   Arabic
@@ -431,7 +431,7 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
                 onChange={handleToChange}
               >
                 <MenuItem value="">
-                  <em className={classes.text}>Please select one</em>
+                  <em className={classes.text}>None</em>
                 </MenuItem>
                 <MenuItem value="ar">Arabic</MenuItem>
                 <MenuItem value="zh">Chinese (simplified)</MenuItem>
