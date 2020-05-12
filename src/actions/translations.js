@@ -79,15 +79,17 @@ export const selectLang = data => async dispatch => {
 
 export const getData = data => async dispatch => {
   try {
+    const { preTrans, fromCode, toCode } = data;
+
     const res = await axios.get(
-      "/api/data?preTrans=" + data.preTrans + "&fromCode=" + data.from
+      "/api/data?preTrans=" + preTrans + "&fromCode=" + fromCode
     );
 
     dispatch({
       type: GET_DATA,
       payload: {
-        preTrans: res.data.preTrans,
-        postTrans: res.data.postTrans,
+        preTrans: res.data[fromCode],
+        postTrans: res.data[toCode],
         chartData: res.data.hitData
       }
     });

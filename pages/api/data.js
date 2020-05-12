@@ -9,12 +9,9 @@ handler.use(middleware);
 handler.get(async (req, res) => {
   try {
     const preTrans = req.query.preTrans;
-    const from = req.query.from;
+    const from = req.query.fromCode;
     const { Translations } = req.models;
-    const doc = await Translations.findOne(
-      { [from]: preTrans },
-      { _id: 1, preTrans: 1, postTrans: 1, hitData: 1 }
-    );
+    const doc = await Translations.findOne({ [from]: preTrans });
     res.json(doc);
     req.connection.close();
     // const minutes = (d - doc.date) / 1000 / 60;
