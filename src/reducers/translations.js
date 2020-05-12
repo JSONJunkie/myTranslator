@@ -8,6 +8,8 @@ import {
 const initialState = {
   numTrans: "",
   userInput: "",
+  preTrans: "",
+  postTrans: "",
   chartData: []
 };
 
@@ -19,7 +21,12 @@ export default function (state = initialState, action) {
     case UPDATE_INPUT:
       return { ...state, userInput: payload.userInput };
     case GET_DATA:
-      return { ...state, chartData: payload.chartData };
+      return {
+        ...state,
+        preTrans: payload.preTrans,
+        postTrans: payload.postTrans,
+        chartData: payload.chartData
+      };
     case ADD_HIT:
     default:
       return state;

@@ -9,7 +9,11 @@ export const getData = data => async dispatch => {
 
     dispatch({
       type: GET_DATA,
-      payload: { chartData: res.data }
+      payload: {
+        preTrans: res.data.preTrans,
+        postTrans: res.data.postTrans,
+        chartData: res.data.hitData
+      }
     });
   } catch (err) {
     // rollbar.error(err);
