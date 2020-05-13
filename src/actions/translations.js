@@ -83,19 +83,6 @@ export const getData = data => async dispatch => {
   try {
     const { preTrans, fromCode, toCode } = data;
 
-    if (fromCode === "" || toCode === "") {
-      const res = await axios.get("/api/data?preTrans=welcome&fromCode=en");
-
-      return dispatch({
-        type: GET_DATA,
-        payload: {
-          preTrans: "welcome",
-          postTrans: "beinvenida",
-          chartData: res.data.hitData
-        }
-      });
-    }
-
     const res = await axios.get(
       "/api/data?preTrans=" + preTrans + "&fromCode=" + fromCode
     );
