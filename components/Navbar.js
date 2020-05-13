@@ -81,8 +81,8 @@ const Navbar = ({
 
   const [routing, setRouting] = useState({
     url: "",
-    starting: false,
-    complete: true
+    starting: true,
+    complete: false
   });
 
   const handleRouteChangeStart = url => {

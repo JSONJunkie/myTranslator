@@ -58,8 +58,8 @@ const LoadingOverlay = ({
 
   const [routing, setRouting] = useState({
     url: "",
-    starting: false,
-    complete: true
+    starting: true,
+    complete: false
   });
 
   const [open, setOpen] = useState(false);
