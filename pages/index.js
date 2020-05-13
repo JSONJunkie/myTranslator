@@ -76,7 +76,9 @@ const Index = ({ translations: { userInput, from, to } }) => {
 // };
 
 Index.propTypes = {
-  translations: PropTypes.object.isRequired
+  speak: PropTypes.func.isRequired,
+  translations: PropTypes.object.isRequired,
+  rollbar: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
