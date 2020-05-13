@@ -86,11 +86,11 @@ const Navbar = ({
   });
 
   const handleRouteChangeStart = url => {
-    setRouting(prev => ({ ...prev, starting: true, url }));
+    setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
   };
 
   const handleRouteChangeComplete = url => {
-    setRouting(prev => ({ ...prev, complete: true }));
+    setRouting(prev => ({ ...prev, starting: false, complete: true }));
   };
 
   useEffect(() => {
@@ -104,7 +104,7 @@ const Navbar = ({
 
   useEffect(() => {
     if (routing.complete) {
-      setRouting(prev => ({ ...prev, complete: false }));
+      setRouting(prev => ({ ...prev, starting: false, complete: true }));
       updateInput("");
       reset({ TextField: "" });
       if (
@@ -122,7 +122,12 @@ const Navbar = ({
       }
     }
     if (routing.starting) {
-      setRouting(prev => ({ ...prev, starting: false, url: "" }));
+      setRouting(prev => ({
+        ...prev,
+        starting: true,
+        complete: false,
+        url: ""
+      }));
     }
   }, [routing.starting, routing.complete]);
 
