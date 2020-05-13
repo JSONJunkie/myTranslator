@@ -5,15 +5,15 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import TranslationGrid from "../components/TranslationGrid";
-import ChartGrid from "../components/ChartGrid";
+import TranslationGrid from "../../../components/TranslationGrid";
+import ChartGrid from "../../../components/ChartGrid";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
 // import Rollbar from "rollbar";
 import validator from "validator";
 
-import connectToMongo from "../database";
+import connectToMongo from "../../../database";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -114,7 +114,7 @@ export async function getStaticProps(context) {
   //   console.log("empty params/query");
   //   throw new Error("No query");
   // }
-
+  console.log(context);
   const { connection, models } = await connectToMongo();
   const { Translations } = models;
   const from = context.params.translation[0];
