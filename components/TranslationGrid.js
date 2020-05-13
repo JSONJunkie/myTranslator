@@ -107,8 +107,8 @@ TranslationGrid.propTypes = {
   beforeTrans: PropTypes.string.isRequired,
   afterTrans: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
-  rollbar: PropTypes.object.isRequired
+  to: PropTypes.string.isRequired
+  // rollbar: PropTypes.object.isRequired
 };
 
 export default TranslationGrid;

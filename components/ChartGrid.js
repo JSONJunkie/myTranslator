@@ -76,8 +76,8 @@ const ChartGrid = ({ hide: { hide }, translations: { chartData } }) => {
 
 ChartGrid.propTypes = {
   translations: PropTypes.object.isRequired,
-  hide: PropTypes.object.isRequired,
-  rollbar: PropTypes.object.isRequired
+  hide: PropTypes.object.isRequired
+  // rollbar: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

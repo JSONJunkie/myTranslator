@@ -463,8 +463,8 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
 
 LanguageSelect.propTypes = {
   translations: PropTypes.object.isRequired,
-  selectLang: PropTypes.func.isRequired,
-  rollbar: PropTypes.object.isRequired
+  selectLang: PropTypes.func.isRequired
+  // rollbar: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
