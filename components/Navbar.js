@@ -86,10 +86,13 @@ const Navbar = ({
   });
 
   const handleRouteChangeStart = url => {
+    console.log("change starting");
     setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
   };
 
   const handleRouteChangeComplete = url => {
+    console.log("change ending");
+
     setRouting(prev => ({ ...prev, starting: false, complete: true }));
   };
 
@@ -101,12 +104,15 @@ const Navbar = ({
       router.events.off("routeChangeComplete", handleRouteChangeComplete);
     };
   }, []);
+  console.log(router);
+  console.log(routing);
 
   useEffect(() => {
     if (routing.complete) {
       setRouting(prev => ({ ...prev, starting: false, complete: true }));
       updateInput("");
       reset({ TextField: "" });
+      console.log("hello");
       if (
         userInput ||
         (router.pathname !== "/" && router.pathname !== "/404")
@@ -117,8 +123,8 @@ const Navbar = ({
         }
       }
       if (router.pathname === "/") {
-        addHit({ preTrans: "welcome", fromCode, toCode });
-        getData({ preTrans: "welcome", fromCode, toCode });
+        addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
+        getData({ preTrans: "welcome", fromCode: "en", toCode: "es" });
       }
     }
     if (routing.starting) {
