@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,6 +7,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { useRouter } from "next/router";
 
 import { selectLang } from "../src/actions/translations";
 import { Fragment } from "react";
@@ -31,6 +33,51 @@ const useStyles = makeStyles(theme => ({
 
 const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
   const classes = useStyles();
+
+  const router = useRouter();
+
+  const [routing, setRouting] = useState({
+    url: "",
+    starting: false,
+    complete: true
+  });
+
+  const handleRouteChangeStart = url => {
+    setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
+  };
+
+  const handleRouteChangeComplete = url => {
+    setRouting(prev => ({ ...prev, starting: false, complete: true }));
+  };
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", handleRouteChangeStart);
+    router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    return () => {
+      router.events.on("routeChangeStart", handleRouteChangeStart);
+      router.events.off("routeChangeComplete", handleRouteChangeComplete);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (routing.complete) {
+      if (router.pathname !== "/") {
+        selectLang({
+          from: router.query.translation[0],
+          to: router.query.translation[1]
+        });
+      }
+      setRouting(prev => ({ ...prev, starting: false, complete: true }));
+    }
+    if (routing.starting) {
+      setRouting(prev => ({
+        ...prev,
+        starting: true,
+        complete: false,
+        url: ""
+      }));
+    }
+  }, [routing.starting, routing.complete]);
 
   const [toOpen, setToOpen] = React.useState(false);
 
