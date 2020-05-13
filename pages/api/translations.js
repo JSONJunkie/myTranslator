@@ -87,7 +87,6 @@ handler.patch(async (req, res) => {
         }
       );
 
-      console.log(updatedDoc);
       res.json(updatedDoc);
       req.connection.close();
     }
@@ -148,7 +147,6 @@ handler.patch(async (req, res) => {
           useFindAndModify: false
         }
       );
-      console.log(updatedDoc);
 
       res.json(updatedDoc);
       req.connection.close();
