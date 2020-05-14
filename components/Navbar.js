@@ -112,7 +112,12 @@ const Navbar = ({
       setRouting(prev => ({ ...prev, starting: false, complete: true }));
       updateInput("");
       reset({ TextField: "" });
-      console.log("hello");
+      if (router.pathname !== "/") {
+        selectLang({
+          from: router.pathname.split("/")[1],
+          to: router.pathname.split("/")[2]
+        });
+      }
       if (
         userInput ||
         (router.pathname !== "/" && router.pathname !== "/404")

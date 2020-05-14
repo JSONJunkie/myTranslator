@@ -61,12 +61,6 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
 
   useEffect(() => {
     if (routing.complete) {
-      if (router.pathname !== "/") {
-        selectLang({
-          from: router.query.translation[0],
-          to: router.query.translation[1]
-        });
-      }
       setRouting(prev => ({ ...prev, starting: false, complete: true }));
     }
     if (routing.starting) {
