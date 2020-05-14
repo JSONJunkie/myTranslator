@@ -52,7 +52,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoadingOverlay = ({
-  translations: { userInput, preTrans, postTrans, from, to, speak }
+  translations: { userInput, preTrans, postTrans, from, to, toCode, audio },
+  speak
 }) => {
   const classes = useStyles();
 
@@ -64,11 +65,18 @@ const LoadingOverlay = ({
     complete: false
   });
 
+  const [audioContext, setAudioContext] = useState(null);
+
   const [open, setOpen] = useState(false);
 
   const [hide, setHide] = useState(true);
 
   const [grow, setGrow] = useState(false);
+
+  const handleSpeak = e => {
+    audioContext.resume();
+    speak({ audioContext, data: audio[toCode][0] });
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -130,6 +138,10 @@ const LoadingOverlay = ({
     }
   }, [routing.starting, routing.complete]);
 
+  useEffect(() => {
+    setAudioContext(new (window.AudioContext || window.webkitAudioContext)());
+  }, []);
+
   return (
     <Fragment>
       <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
@@ -172,7 +184,7 @@ const LoadingOverlay = ({
                         afterTrans={postTrans}
                         from={from}
                         to={to}
-                        speak={"hi"}
+                        speak={handleSpeak}
                       />
                       {router.pathname === "/" && (
                         <ChartGrid hide={{ hide: !hide }} />
