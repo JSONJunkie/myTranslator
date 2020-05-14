@@ -9,7 +9,10 @@ import TranslationGrid from "../../../components/TranslationGrid";
 import ChartGrid from "../../../components/ChartGrid";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
+import TextToSpeechV1 from "ibm-watson/text-to-speech/v1";
 import { IamAuthenticator } from "ibm-watson/auth";
+import axios from "axios";
+import DatauriParser from "datauri/parser";
 // import Rollbar from "rollbar";
 import validator from "validator";
 
@@ -114,12 +117,19 @@ export async function getStaticProps(context) {
   //   console.log("empty params/query");
   //   throw new Error("No query");
   // }
-  console.log(context);
   const { connection, models } = await connectToMongo();
   const { Translations } = models;
-  const from = context.params.translation[0];
-  const to = context.params.translation[1];
-  const preTrans = context.params.translation[2];
+
+  const dev = process.env.NODE_ENV !== "production";
+
+  const baseUrl = dev
+    ? "http://localhost:3000"
+    : "https://drees1992-mytranslator.herokuapp.com";
+
+  const from = "en";
+  const to = "es";
+  const voice = "es-ES_LauraVoice";
+  const preTrans = context.params.translation;
   const modelId = from + "-" + to;
 
   const getLang = data => {
@@ -199,6 +209,16 @@ export async function getStaticProps(context) {
       }
     });
 
+    const textToSpeech = new TextToSpeechV1({
+      authenticator: new IamAuthenticator({
+        apikey: process.env.SPEAK_KEY
+      }),
+      url: process.env.SPEAK_URL,
+      headers: {
+        "X-Watson-Learning-Opt-Out": "true"
+      }
+    });
+
     const translateParams = {
       text: preTrans,
       modelId: modelId
@@ -209,9 +229,33 @@ export async function getStaticProps(context) {
     );
     const result = translationResult.result.translations[0].translation;
 
+    const synthesizeParams = {
+      text: result,
+      accept: "audio/mp3",
+      voice
+    };
+
+    const config = {
+      responseType: "arraybuffer"
+    };
+
+    const body = synthesizeParams;
+
+    const res = await axios.post(
+      baseUrl + "/api/translator/speak",
+      body,
+      config
+    );
+
+    const audio = res.data;
+
+    const parser = new DatauriParser();
+
+    const audioDataUri = parser.format("audio/webm", audio);
+
     const transDoc = await Translations.findOneAndUpdate(
       { [from]: preTrans },
-      { [to]: result.toLowerCase() },
+      { [to]: result.toLowerCase(), audio: { [to]: [audioDataUri.content] } },
       { new: true, useFindAndModify: false }
     );
 
@@ -237,7 +281,7 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   return {
-    paths: [],
+    paths: [{ params: { translation: "welcome" } }],
     fallback: true
   };
 }
