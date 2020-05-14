@@ -210,22 +210,26 @@ const Navbar = ({
             <Grid container spacing={2} alignItems="center">
               <Grid item>
                 <Grid container className={classes.titleDesktop}>
-                  <IconButton
-                    aria-label="home"
-                    color="inherit"
-                    onClick={goHome}
-                  >
-                    <Typography variant="h4">Translator</Typography>
-                  </IconButton>
+                  <Tooltip title="Home">
+                    <IconButton
+                      aria-label="home"
+                      color="inherit"
+                      onClick={goHome}
+                    >
+                      <Typography variant="h4">Translator</Typography>
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
                 <Grid container className={classes.titleMobile}>
-                  <IconButton
-                    aria-label="home"
-                    color="inherit"
-                    onClick={goHome}
-                  >
-                    <TranslateIcon fontSize="large" />
-                  </IconButton>
+                  <Tooltip title="Home">
+                    <IconButton
+                      aria-label="home"
+                      color="inherit"
+                      onClick={goHome}
+                    >
+                      <TranslateIcon fontSize="large" />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               </Grid>
               <Grid item xs className={classes.spacing}>
