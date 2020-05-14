@@ -173,8 +173,19 @@ const LoadingOverlay = ({
                           to={to}
                         />
                       </div>
-                      {routing.complete && <ChartGrid hide={{ hide: !hide }} />}
-                      {!routing.complete && <ChartGrid hide={{ hide: hide }} />}
+                      {router.pathname === "/" && (
+                        <ChartGrid hide={{ hide: !hide }} />
+                      )}
+                      {router.pathname !== "/" && (
+                        <Fragment>
+                          {routing.complete && (
+                            <ChartGrid hide={{ hide: !hide }} />
+                          )}
+                          {!routing.complete && (
+                            <ChartGrid hide={{ hide: hide }} />
+                          )}
+                        </Fragment>
+                      )}
                     </Fragment>
                   )}
                 </Fragment>
