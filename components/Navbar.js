@@ -160,7 +160,7 @@ const Navbar = ({
       } else {
         if (userInput !== "") {
           router.push(
-            "/[from]/[to]/[translation]/",
+            "/" + fromCode + "/" + toCode + "/[translation]",
             "/" + fromCode + "/" + toCode + "/" + e.input.toLowerCase()
           );
         }
