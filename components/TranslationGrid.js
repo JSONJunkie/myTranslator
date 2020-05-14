@@ -50,12 +50,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TranslationGrid = ({ beforeTrans, afterTrans, from, to }) => {
+const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
   const classes = useStyles();
 
   return (
     <Fragment>
-      {afterTrans && (
+      {afterTrans && speak && (
         <Grid className={classes.cardGrid} item xs={12} sm={12}>
           <Card className={classes.cardRoot}>
             <CardContent>
@@ -84,6 +84,35 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to }) => {
                     <VolumeUpIcon />
                   </IconButton>
                 </Tooltip>
+              </Typography>
+              {afterTrans && (
+                <Typography className={classes.translation} variant="body2">
+                  {afterTrans}
+                </Typography>
+              )}
+              {!afterTrans && (
+                <div className={classes.progress}>
+                  <CircularProgress disableShrink />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
+      {afterTrans && (
+        <Grid className={classes.cardGrid} item xs={12} sm={12}>
+          <Card className={classes.cardRoot}>
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                {beforeTrans}
+              </Typography>
+              <Divider />
+              <Typography className={classes.pos} color="textSecondary">
+                translating from {from} to {to}...
               </Typography>
               {afterTrans && (
                 <Typography className={classes.translation} variant="body2">
@@ -131,7 +160,8 @@ TranslationGrid.propTypes = {
   beforeTrans: PropTypes.string.isRequired,
   afterTrans: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired
+  to: PropTypes.string.isRequired,
+  speak: PropTypes.func.isRequired
   // rollbar: PropTypes.object.isRequired
 };
 
