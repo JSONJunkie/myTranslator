@@ -161,7 +161,7 @@ TranslationGrid.propTypes = {
   afterTrans: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
   to: PropTypes.string.isRequired,
-  speak: PropTypes.func.isRequired
+  speak: PropTypes.func
   // rollbar: PropTypes.object.isRequired
 };
 
