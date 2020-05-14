@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import {
   updateInput,
@@ -251,15 +252,17 @@ const Navbar = ({
                         }
                       }}
                     />
-                    <Button
-                      type="submit"
-                      className={classes.button}
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                    >
-                      Translate
-                    </Button>
+                    <Tooltip title="Translate">
+                      <Button
+                        type="submit"
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                      >
+                        Translate
+                      </Button>
+                    </Tooltip>
                   </div>
                 </form>
               </Grid>
