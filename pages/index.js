@@ -76,7 +76,6 @@ const Index = ({ translations: { userInput, from, to } }) => {
 // };
 
 Index.propTypes = {
-  speak: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
   rollbar: PropTypes.object.isRequired
 };

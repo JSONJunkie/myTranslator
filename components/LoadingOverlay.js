@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import TranslationGrid from "../components/TranslationGrid";
 import ChartGrid from "../components/ChartGrid";
 
+import { speak } from "../src/actions/translations";
+
 const useStyles = makeStyles(theme => ({
   root: {
     position: "absolute",
@@ -50,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoadingOverlay = ({
-  translations: { userInput, preTrans, postTrans, from, to }
+  translations: { userInput, preTrans, postTrans, from, to, speak }
 }) => {
   const classes = useStyles();
 
@@ -165,14 +167,13 @@ const LoadingOverlay = ({
                 <Fragment>
                   {!router.isFallback && (
                     <Fragment>
-                      <div className={classes.hiddenGrid}>
-                        <TranslationGrid
-                          beforeTrans={preTrans}
-                          afterTrans={postTrans}
-                          from={from}
-                          to={to}
-                        />
-                      </div>
+                      <TranslationGrid
+                        beforeTrans={preTrans}
+                        afterTrans={postTrans}
+                        from={from}
+                        to={to}
+                        speak={"hi"}
+                      />
                       {router.pathname === "/" && (
                         <ChartGrid hide={{ hide: !hide }} />
                       )}
@@ -214,11 +215,12 @@ const LoadingOverlay = ({
 // };
 
 LoadingOverlay.propTypes = {
-  translations: PropTypes.object.isRequired
+  translations: PropTypes.object.isRequired,
+  speak: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   translations: state.translations
 });
 
-export default connect(mapStateToProps)(LoadingOverlay);
+export default connect(mapStateToProps, { speak })(LoadingOverlay);

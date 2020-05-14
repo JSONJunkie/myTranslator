@@ -43,10 +43,47 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center"
   },
   play: {
+    position: "absolute",
+    marginLeft: theme.spacing(35),
+    marginTop: theme.spacing(-8)
+  },
+  wrapper: {
+    position: "relative"
+  },
+  hiddenTitle: {
+    visibility: "hidden",
+    fontSize: 25,
+    [theme.breakpoints.up("md")]: {
+      fontSize: 50
+    }
+  },
+  hiddenPos: {
+    visibility: "hidden",
+    marginBottom: 12,
+    fontSize: 10,
+    [theme.breakpoints.up("md")]: {
+      fontSize: 15
+    }
+  },
+  hiddenTranslation: {
+    visibility: "hidden",
+    fontSize: 15,
+    [theme.breakpoints.up("md")]: {
+      fontSize: 30
+    }
+  },
+  hiddenPlay: {
+    visibility: "hidden",
     marginLeft: theme.spacing(12),
     [theme.breakpoints.up("md")]: {
       marginLeft: theme.spacing(1)
     }
+  },
+  hidden: {
+    visibility: "hidden"
+  },
+  transparentCard: {
+    background: "none"
   }
 }));
 
@@ -57,18 +94,29 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
     <Fragment>
       {afterTrans && speak && (
         <Grid className={classes.cardGrid} item xs={12} sm={12}>
-          <Card className={classes.cardRoot}>
-            <CardContent>
+          <Card className={classes.transparentCard}>
+            <CardContent className={classes.transparentCard}>
               <Typography
-                className={classes.title}
+                className={classes.hiddenTitle}
                 color="textSecondary"
                 gutterBottom
               >
                 {beforeTrans}
               </Typography>
-              <Divider />
-              <Typography className={classes.pos} color="textSecondary">
-                translating from {from} to {to}...
+              <Divider className={classes.hidden} />
+              <div className={classes.wrapper}>
+                <Typography className={classes.hiddenPos} color="textSecondary">
+                  translating from {from} to {to}...
+                  <Tooltip title="Play">
+                    <IconButton
+                      className={classes.hiddenPlay}
+                      onClick={speak}
+                      aria-label="play"
+                    >
+                      <VolumeUpIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
                 <Tooltip title="Play">
                   <IconButton
                     className={classes.play}
@@ -78,22 +126,20 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
                     <VolumeUpIcon />
                   </IconButton>
                 </Tooltip>
-              </Typography>
+              </div>
               {afterTrans && (
-                <Typography className={classes.translation} variant="body2">
+                <Typography
+                  className={classes.hiddenTranslation}
+                  variant="body2"
+                >
                   {afterTrans}
                 </Typography>
-              )}
-              {!afterTrans && (
-                <div className={classes.progress}>
-                  <CircularProgress disableShrink />
-                </div>
               )}
             </CardContent>
           </Card>
         </Grid>
       )}
-      {afterTrans && (
+      {afterTrans && !speak && (
         <Grid className={classes.cardGrid} item xs={12} sm={12}>
           <Card className={classes.cardRoot}>
             <CardContent>
@@ -106,7 +152,14 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
               </Typography>
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
-                translating from {from} to {to}...
+                translated from {from} to {to}...
+                <IconButton
+                  className={classes.hiddenPlay}
+                  onClick={speak}
+                  aria-label="play"
+                >
+                  <VolumeUpIcon />
+                </IconButton>
               </Typography>
               {afterTrans && (
                 <Typography className={classes.translation} variant="body2">
@@ -136,6 +189,13 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
                 translating from {from} to {to}...
+                <IconButton
+                  className={classes.hiddenPlay}
+                  onClick={speak}
+                  aria-label="play"
+                >
+                  <VolumeUpIcon />
+                </IconButton>
               </Typography>
               <div className={classes.progress}>
                 <CircularProgress disableShrink />
