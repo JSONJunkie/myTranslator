@@ -72,13 +72,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
                 <Tooltip title="Play">
                   <IconButton
                     className={classes.play}
-                    // onClick={speak({
-                    //   transId: translation.transId,
-                    //   preTrans: translation.preTrans,
-                    //   postTrans: translation.postTrans,
-                    //   translatedAudio: translation.translatedAudio,
-                    //   stored: "no and i dont want you to"
-                    // })}
+                    onClick={speak}
                     aria-label="play"
                   >
                     <VolumeUpIcon />
