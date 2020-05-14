@@ -14,7 +14,12 @@ import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import Button from "@material-ui/core/Button";
 
-import { updateInput, addHit, getData } from "../src/actions/translations";
+import {
+  updateInput,
+  addHit,
+  getData,
+  selectLang
+} from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   hidden: {
@@ -70,7 +75,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Navbar = ({
-  translations: { userInput, fromCode, toCode },
+  translations: { userInput, fromCode, toCode, preTrans, postTrans },
+  selectLang,
   updateInput,
   addHit,
   getData
@@ -86,13 +92,10 @@ const Navbar = ({
   });
 
   const handleRouteChangeStart = url => {
-    console.log("change starting");
     setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
   };
 
   const handleRouteChangeComplete = url => {
-    console.log("change ending");
-
     setRouting(prev => ({ ...prev, starting: false, complete: true }));
   };
 
@@ -106,6 +109,14 @@ const Navbar = ({
   }, []);
 
   useEffect(() => {
+    if (router.pathname === "/") {
+      addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
+      getData({ preTrans: "welcome", fromCode: "en", toCode: "es" });
+      selectLang({
+        from: "en",
+        to: ""
+      });
+    }
     if (routing.complete) {
       setRouting(prev => ({ ...prev, starting: false, complete: true }));
       updateInput("");
@@ -132,9 +143,6 @@ const Navbar = ({
             toCode: router.pathname.split("/")[2]
           });
         }
-      if (router.pathname === "/") {
-        addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
-        getData({ preTrans: "welcome", fromCode: "en", toCode: "es" });
       }
     }
     if (routing.starting) {
@@ -270,6 +278,7 @@ const Navbar = ({
 
 Navbar.propTypes = {
   translations: PropTypes.object.isRequired,
+  selectLang: PropTypes.func.isRequired,
   updateInput: PropTypes.func.isRequired,
   addHit: PropTypes.func.isRequired,
   getData: PropTypes.func.isRequired
@@ -279,6 +288,9 @@ const mapStateToProps = state => ({
   translations: state.translations
 });
 
-export default connect(mapStateToProps, { updateInput, addHit, getData })(
-  Navbar
-);
+export default connect(mapStateToProps, {
+  updateInput,
+  addHit,
+  getData,
+  selectLang
+})(Navbar);
