@@ -104,8 +104,6 @@ const Navbar = ({
       router.events.off("routeChangeComplete", handleRouteChangeComplete);
     };
   }, []);
-  console.log(router);
-  console.log(routing);
 
   useEffect(() => {
     if (routing.complete) {
