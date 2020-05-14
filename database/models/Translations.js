@@ -77,6 +77,10 @@ const TranslationsSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  audio: {
+    type: Buffer,
+    required: false
+  },
   hitData: [
     {
       time: { type: Number, required: true },
