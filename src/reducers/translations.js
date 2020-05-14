@@ -15,6 +15,7 @@ const initialState = {
   from: "...",
   toCode: "",
   to: "...",
+  audio: "",
   chartData: []
 };
 
@@ -30,7 +31,8 @@ export default function (state = initialState, action) {
         ...state,
         preTrans: payload.preTrans,
         postTrans: payload.postTrans,
-        chartData: payload.chartData
+        chartData: payload.chartData,
+        audio: payload.audio
       };
     case SELECT_LANG:
       return {

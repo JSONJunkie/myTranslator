@@ -8,6 +8,42 @@ import {
   GET_DATA,
   SELECT_LANG
 } from "./types";
+import playSound from "../utils/playSound";
+
+export const speak = ({ audioContext, data }) => async dispatch => {
+  try {
+    const fileReader = new FileReader();
+
+    function dataURLtoBlob(dataUrl) {
+      var arr = dataUrl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    }
+
+    fileReader.onload = function (event) {
+      const result = event.target.result;
+      playSound(audioContext, result);
+    };
+
+    fileReader.readAsArrayBuffer(dataURLtoBlob(data));
+  } catch (err) {
+    console.log(err);
+    // rollbar.error(err);
+    // dispatch({
+    //   type: ERROR,
+    //   payload: {
+    //     name: err.name,
+    //     message: err.message
+    //   }
+    // });
+  }
+};
 
 export const selectLang = data => async dispatch => {
   try {
@@ -92,7 +128,8 @@ export const getData = data => async dispatch => {
       payload: {
         preTrans: res.data[fromCode],
         postTrans: res.data[toCode],
-        chartData: res.data.hitData
+        chartData: res.data.hitData,
+        audio: res.data.audio
       }
     });
   } catch (err) {
