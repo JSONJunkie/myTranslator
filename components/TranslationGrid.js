@@ -7,6 +7,9 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import { CircularProgress } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 
 const useStyles = makeStyles(theme => ({
   cardGrid: {
@@ -38,6 +41,12 @@ const useStyles = makeStyles(theme => ({
   progress: {
     display: "flex",
     justifyContent: "center"
+  },
+  play: {
+    marginLeft: theme.spacing(12),
+    [theme.breakpoints.up("md")]: {
+      marginLeft: theme.spacing(1)
+    }
   }
 }));
 
@@ -60,6 +69,21 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to }) => {
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
                 translating from {from} to {to}...
+                <Tooltip title="Play">
+                  <IconButton
+                    className={classes.play}
+                    // onClick={speak({
+                    //   transId: translation.transId,
+                    //   preTrans: translation.preTrans,
+                    //   postTrans: translation.postTrans,
+                    //   translatedAudio: translation.translatedAudio,
+                    //   stored: "no and i dont want you to"
+                    // })}
+                    aria-label="play"
+                  >
+                    <VolumeUpIcon />
+                  </IconButton>
+                </Tooltip>
               </Typography>
               {afterTrans && (
                 <Typography className={classes.translation} variant="body2">
