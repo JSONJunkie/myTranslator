@@ -24,7 +24,7 @@ handler.patch(async (req, res) => {
 
     const { Translations } = req.models;
     const preTrans = req.body.data.preTrans;
-    const from = req.body.data.fromCode;
+    const from = req.body.data.fromCode + ".text";
     const doc = await Translations.findOne({ [from]: preTrans });
 
     // const entry = {

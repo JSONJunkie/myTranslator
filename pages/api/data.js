@@ -9,7 +9,7 @@ handler.use(middleware);
 handler.get(async (req, res) => {
   try {
     const preTrans = req.query.preTrans;
-    const from = req.query.fromCode;
+    const from = req.query.fromCode + ".text";
     const { Translations } = req.models;
     const doc = await Translations.findOne({ [from]: preTrans });
     res.json(doc);

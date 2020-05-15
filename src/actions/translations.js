@@ -126,10 +126,10 @@ export const getData = data => async dispatch => {
     dispatch({
       type: GET_DATA,
       payload: {
-        preTrans: res.data[fromCode],
-        postTrans: res.data[toCode],
+        preTrans: res.data[fromCode].text,
+        postTrans: res.data[toCode].text,
         chartData: res.data.hitData,
-        audio: res.data.audio
+        audio: res.data[toCode].audio
       }
     });
   } catch (err) {
