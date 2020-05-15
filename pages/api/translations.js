@@ -1,4 +1,8 @@
 import nextConnect from "next-connect";
+import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
+import { IamAuthenticator } from "ibm-watson/auth";
+import axios from "axios";
+import DatauriParser from "datauri/parser";
 
 import { middleware } from "../../database";
 
@@ -26,6 +30,82 @@ handler.patch(async (req, res) => {
     const preTrans = req.body.data.preTrans;
     const from = req.body.data.fromCode + ".text";
     const doc = await Translations.findOne({ [from]: preTrans });
+
+    if (!doc && preTrans === "welcome") {
+      const dev = process.env.NODE_ENV !== "production";
+
+      const baseUrl = dev
+        ? "http://localhost:3000"
+        : "https://drees1992-mytranslator.herokuapp.com";
+
+      const fromText = "en.text";
+      const to = "es";
+      const voice = "es-ES_LauraVoice";
+      const modelId = "en-" + to;
+
+      // if (validator.isEmpty(translateParams.text)) {
+      //   throw new Error("Please include some text to translate");
+      // }
+
+      const languageTranslator = new LanguageTranslatorV3({
+        version: "2018-05-01",
+        authenticator: new IamAuthenticator({
+          apikey: process.env.TRANSLATE_KEY
+        }),
+        url: process.env.TRANSLATE_URL,
+        headers: {
+          "X-Watson-Learning-Opt-Out": "true"
+        }
+      });
+
+      const translateParams = {
+        text: preTrans,
+        modelId: modelId
+      };
+
+      const translationResult = await languageTranslator.translate(
+        translateParams
+      );
+
+      const result = translationResult.result.translations[0].translation;
+
+      const synthesizeParams = {
+        text: result,
+        accept: "audio/mp3",
+        voice
+      };
+
+      const config = {
+        responseType: "arraybuffer"
+      };
+
+      const body = synthesizeParams;
+
+      const res = await axios.post(
+        baseUrl + "/api/translator/speak",
+        body,
+        config
+      );
+
+      const audio = res.data;
+
+      const parser = new DatauriParser();
+
+      const audioDataUri = parser.format("audio/webm", audio);
+
+      const entry = new Translations({
+        [fromText]: preTrans,
+        [to]: { text: result.toLowerCase(), audio: [audioDataUri.content] },
+        hitData: [
+          { time: 0, hits: 0 },
+          { time: 0, hits: 0 }
+        ],
+        lifetimeHits: 0,
+        date: new Date().getTime()
+      });
+
+      await entry.save();
+    }
 
     // const entry = {
     //   hour: new Date(parseInt(doc.date)).getHours(),
