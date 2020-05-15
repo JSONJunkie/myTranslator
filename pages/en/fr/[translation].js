@@ -95,7 +95,7 @@ const Translation = ({ doc, codes }) => {
         >
           <TranslationGrid
             beforeTrans={data.en}
-            afterTrans={data.es}
+            afterTrans={data.fr}
             from={codes.from}
             to={codes.to}
           />
