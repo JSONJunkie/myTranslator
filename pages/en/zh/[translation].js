@@ -94,8 +94,8 @@ const Translation = ({ doc, codes }) => {
           spacing={2}
         >
           <TranslationGrid
-            beforeTrans={data.en}
-            afterTrans={data.zh}
+            beforeTrans={data.en.text}
+            afterTrans={data.zh.text}
             from={codes.from}
             to={codes.to}
           />
@@ -127,6 +127,7 @@ export async function getStaticProps(context) {
     : "https://drees1992-mytranslator.herokuapp.com";
 
   const from = "en";
+  const fromText = "en.text";
   const to = "zh";
   const voice = "zh-CN_LiNaVoice";
   const preTrans = context.params.translation;
@@ -175,7 +176,7 @@ export async function getStaticProps(context) {
     }
   };
 
-  const doc = await Translations.findOne({ [from]: preTrans });
+  const doc = await Translations.findOne({ [fromText]: preTrans });
 
   // if (validator.isEmpty(translateParams.text)) {
   //   throw new Error("Please include some text to translate");
@@ -183,8 +184,7 @@ export async function getStaticProps(context) {
 
   if (!doc) {
     const entry = new Translations({
-      [from]: preTrans,
-      [to]: "temp",
+      [fromText]: preTrans,
       hitData: [
         { time: 0, hits: 0 },
         { time: 0, hits: 0 }
@@ -197,7 +197,7 @@ export async function getStaticProps(context) {
     return { props: { doc: null, codes: null } };
   }
 
-  if (doc[to] === "temp" || !doc[to]) {
+  if (!doc[to].text) {
     const languageTranslator = new LanguageTranslatorV3({
       version: "2018-05-01",
       authenticator: new IamAuthenticator({
@@ -254,8 +254,10 @@ export async function getStaticProps(context) {
     const audioDataUri = parser.format("audio/webm", audio);
 
     const transDoc = await Translations.findOneAndUpdate(
-      { [from]: preTrans },
-      { [to]: result.toLowerCase() },
+      { [fromText]: preTrans },
+      {
+        [to]: { text: result.toLowerCase(), audio: [audioDataUri.content] }
+      },
       { new: true, useFindAndModify: false }
     );
 
