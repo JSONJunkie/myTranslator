@@ -128,7 +128,7 @@ export async function getStaticProps(context) {
 
   const from = "en";
   const to = "zh";
-  // const voice = "es-ES_LauraVoice";
+  const voice = "zh-CN_LiNaVoice";
   const preTrans = context.params.translation;
   const modelId = from + "-" + to;
 
@@ -209,15 +209,15 @@ export async function getStaticProps(context) {
       }
     });
 
-    // const textToSpeech = new TextToSpeechV1({
-    //   authenticator: new IamAuthenticator({
-    //     apikey: process.env.SPEAK_KEY
-    //   }),
-    //   url: process.env.SPEAK_URL,
-    //   headers: {
-    //     "X-Watson-Learning-Opt-Out": "true"
-    //   }
-    // });
+    const textToSpeech = new TextToSpeechV1({
+      authenticator: new IamAuthenticator({
+        apikey: process.env.SPEAK_KEY
+      }),
+      url: process.env.SPEAK_URL,
+      headers: {
+        "X-Watson-Learning-Opt-Out": "true"
+      }
+    });
 
     const translateParams = {
       text: preTrans,
@@ -229,29 +229,29 @@ export async function getStaticProps(context) {
     );
     const result = translationResult.result.translations[0].translation;
 
-    // const synthesizeParams = {
-    //   text: result,
-    //   accept: "audio/mp3",
-    //   voice
-    // };
+    const synthesizeParams = {
+      text: result,
+      accept: "audio/mp3",
+      voice
+    };
 
-    // const config = {
-    //   responseType: "arraybuffer"
-    // };
+    const config = {
+      responseType: "arraybuffer"
+    };
 
-    // const body = synthesizeParams;
+    const body = synthesizeParams;
 
-    // const res = await axios.post(
-    //   baseUrl + "/api/translator/speak",
-    //   body,
-    //   config
-    // );
+    const res = await axios.post(
+      baseUrl + "/api/translator/speak",
+      body,
+      config
+    );
 
-    // const audio = res.data;
+    const audio = res.data;
 
-    // const parser = new DatauriParser();
+    const parser = new DatauriParser();
 
-    // const audioDataUri = parser.format("audio/webm", audio);
+    const audioDataUri = parser.format("audio/webm", audio);
 
     const transDoc = await Translations.findOneAndUpdate(
       { [from]: preTrans },
