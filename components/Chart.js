@@ -25,7 +25,7 @@ const Chart = ({ data }) => {
       >
         <Tooltip />
         <Line
-          type="monotone"
+          type="linear"
           dataKey="hits"
           stroke="#8884d8"
           dot={false}
