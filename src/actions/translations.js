@@ -56,9 +56,9 @@ export const selectLang = data => async dispatch => {
         case "ar":
           return "Arabic";
         case "zh":
-          return "Simplified Chinese";
+          return "Chinese";
         case "zh-TW":
-          return "Traditional Chinese";
+          return "Chinese";
         case "en":
           return "English";
         case "fi":
