@@ -76,10 +76,10 @@ const LoadingOverlay = ({
   const handleSpeak = e => {
     if (router.pathname === "/") {
       audioContext.resume();
-      speak({ audioContext, data: audio.es[0] });
+      speak({ audioContext, data: audio[0] });
     } else {
       audioContext.resume();
-      speak({ audioContext, data: audio[toCode][0] });
+      speak({ audioContext, data: audio[0] });
     }
   };
 
