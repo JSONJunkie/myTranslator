@@ -95,7 +95,7 @@ const Translation = ({ doc, codes }) => {
         >
           <TranslationGrid
             beforeTrans={data.en}
-            afterTrans={data.es}
+            afterTrans={data.ko}
             from={codes.from}
             to={codes.to}
           />
@@ -197,7 +197,7 @@ export async function getStaticProps(context) {
     return { props: { doc: null, codes: null } };
   }
 
-  if (doc[to] === "temp") {
+  if (doc[to] === "temp" || !doc[to]) {
     const languageTranslator = new LanguageTranslatorV3({
       version: "2018-05-01",
       authenticator: new IamAuthenticator({
@@ -281,7 +281,7 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   return {
-    paths: [{ params: { translation: "welcome" } }],
+    paths: [],
     fallback: true
   };
 }
