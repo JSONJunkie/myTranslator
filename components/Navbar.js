@@ -112,7 +112,6 @@ const Navbar = ({
   useEffect(() => {
     if (router.pathname === "/") {
       addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
-      getData({ preTrans: "welcome", fromCode: "en", toCode: "es" });
       selectLang({
         from: "en",
         to: ""
@@ -134,11 +133,6 @@ const Navbar = ({
       ) {
         if (!router.isFallback) {
           addHit({
-            preTrans: router.asPath.split("/")[3],
-            fromCode: router.pathname.split("/")[1],
-            toCode: router.pathname.split("/")[2]
-          });
-          getData({
             preTrans: router.asPath.split("/")[3],
             fromCode: router.pathname.split("/")[1],
             toCode: router.pathname.split("/")[2]

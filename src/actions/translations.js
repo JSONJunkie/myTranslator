@@ -150,6 +150,8 @@ export const addHit = data => async dispatch => {
 
     await axios.patch("/api/translations", body);
 
+    dispatch(getData(data));
+
     dispatch({
       type: ADD_HIT
     });
