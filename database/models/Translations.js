@@ -9,7 +9,7 @@ const TranslationsSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  "zh - TW": {
+  zhTW: {
     type: String,
     required: false
   },
@@ -86,7 +86,7 @@ const TranslationsSchema = new mongoose.Schema({
       type: Array,
       required: false
     },
-    "zh - TW": {
+    zhTW: {
       type: Array,
       required: false
     },

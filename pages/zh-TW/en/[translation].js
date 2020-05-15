@@ -94,7 +94,7 @@ const Translation = ({ doc, codes }) => {
           spacing={2}
         >
           <TranslationGrid
-            beforeTrans={data["zh-TW"]}
+            beforeTrans={data.zhTW}
             afterTrans={data.en}
             from={codes.from}
             to={codes.to}
@@ -126,11 +126,11 @@ export async function getStaticProps(context) {
     ? "http://localhost:3000"
     : "https://drees1992-mytranslator.herokuapp.com";
 
-  const from = "zh-TW";
+  const from = "zhTW";
   const to = "en";
   const voice = "en-US_AllisonVoice";
   const preTrans = context.params.translation;
-  const modelId = from + "-" + to;
+  const modelId = "zh-TW-" + to;
 
   const getLang = data => {
     switch (data) {
@@ -138,7 +138,7 @@ export async function getStaticProps(context) {
         return "Arabic";
       case "zh":
         return "Simplified Chinese";
-      case "zh-TW":
+      case "zhTW":
         return "Traditional Chinese";
       case "en":
         return "English";
