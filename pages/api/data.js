@@ -10,8 +10,10 @@ handler.get(async (req, res) => {
   try {
     const preTrans = req.query.preTrans;
     const from = req.query.fromCode;
+    const to = req.query.toCode;
+    const trans = from + "-" + to;
     const { Translations } = req.models;
-    const doc = await Translations.findOne({ [from]: preTrans });
+    const doc = await Translations.findOne({ [trans]: preTrans });
     res.json(doc);
     req.connection.close();
     // const minutes = (d - doc.date) / 1000 / 60;

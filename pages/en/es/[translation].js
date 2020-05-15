@@ -128,9 +128,9 @@ export async function getStaticProps(context) {
 
   const from = "en";
   const to = "es";
+  const trans = "en-es";
   const voice = "es-ES_LauraVoice";
   const preTrans = context.params.translation;
-  const modelId = from + "-" + to;
 
   const getLang = data => {
     switch (data) {
@@ -175,7 +175,7 @@ export async function getStaticProps(context) {
     }
   };
 
-  const doc = await Translations.findOne({ [from]: preTrans });
+  const doc = await Translations.findOne({ [trans]: preTrans });
 
   // if (validator.isEmpty(translateParams.text)) {
   //   throw new Error("Please include some text to translate");
@@ -183,7 +183,7 @@ export async function getStaticProps(context) {
 
   if (!doc) {
     const entry = new Translations({
-      [from]: preTrans,
+      [trans]: preTrans,
       [to]: "temp",
       hitData: [
         { time: 0, hits: 0 },
@@ -221,7 +221,7 @@ export async function getStaticProps(context) {
 
     const translateParams = {
       text: preTrans,
-      modelId: modelId
+      modelId: trans
     };
 
     const translationResult = await languageTranslator.translate(
@@ -254,8 +254,12 @@ export async function getStaticProps(context) {
     const audioDataUri = parser.format("audio/webm", audio);
 
     const transDoc = await Translations.findOneAndUpdate(
-      { [from]: preTrans },
-      { [to]: result.toLowerCase(), audio: { [to]: [audioDataUri.content] } },
+      { [trans]: preTrans },
+      {
+        [from]: preTrans,
+        [to]: result.toLowerCase(),
+        audio: { [to]: [audioDataUri.content] }
+      },
       { new: true, useFindAndModify: false }
     );
 

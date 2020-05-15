@@ -119,14 +119,21 @@ export const getData = data => async dispatch => {
   try {
     const { preTrans, fromCode, toCode } = data;
 
+    const trans = fromCode + "-" + toCode;
+
     const res = await axios.get(
-      "/api/data?preTrans=" + preTrans + "&fromCode=" + fromCode
+      "/api/data?preTrans=" +
+        preTrans +
+        "&fromCode=" +
+        fromCode +
+        "&toCode=" +
+        toCode
     );
 
     dispatch({
       type: GET_DATA,
       payload: {
-        preTrans: res.data[fromCode],
+        preTrans: res.data[trans],
         postTrans: res.data[toCode],
         chartData: res.data.hitData,
         audio: res.data.audio
