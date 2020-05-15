@@ -197,7 +197,7 @@ export async function getStaticProps(context) {
     return { props: { doc: null, codes: null } };
   }
 
-  if (doc[to] === "temp") {
+  if (doc[to] === "temp" || !doc[to]) {
     const languageTranslator = new LanguageTranslatorV3({
       version: "2018-05-01",
       authenticator: new IamAuthenticator({
