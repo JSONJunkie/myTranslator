@@ -12,7 +12,6 @@ import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import TextToSpeechV1 from "ibm-watson/text-to-speech/v1";
 import { IamAuthenticator } from "ibm-watson/auth";
 import axios from "axios";
-import DatauriParser from "datauri/parser";
 // import Rollbar from "rollbar";
 import validator from "validator";
 
@@ -209,16 +208,6 @@ export async function getStaticProps(context) {
       }
     });
 
-    // const textToSpeech = new TextToSpeechV1({
-    //   authenticator: new IamAuthenticator({
-    //     apikey: process.env.SPEAK_KEY
-    //   }),
-    //   url: process.env.SPEAK_URL,
-    //   headers: {
-    //     "X-Watson-Learning-Opt-Out": "true"
-    //   }
-    // });
-
     const translateParams = {
       text: preTrans,
       modelId: modelId
@@ -228,30 +217,6 @@ export async function getStaticProps(context) {
       translateParams
     );
     const result = translationResult.result.translations[0].translation;
-
-    // const synthesizeParams = {
-    //   text: result,
-    //   accept: "audio/mp3",
-    //   voice
-    // };
-
-    // const config = {
-    //   responseType: "arraybuffer"
-    // };
-
-    // const body = synthesizeParams;
-
-    // const res = await axios.post(
-    //   baseUrl + "/api/translator/speak",
-    //   body,
-    //   config
-    // );
-
-    // const audio = res.data;
-
-    // const parser = new DatauriParser();
-
-    // const audioDataUri = parser.format("audio/webm", audio);
 
     const transDoc = await Translations.findOneAndUpdate(
       { [from]: preTrans },
