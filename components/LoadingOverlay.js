@@ -74,8 +74,13 @@ const LoadingOverlay = ({
   const [grow, setGrow] = useState(false);
 
   const handleSpeak = e => {
-    audioContext.resume();
-    speak({ audioContext, data: audio[toCode][0] });
+    if (router.pathname === "/") {
+      audioContext.resume();
+      speak({ audioContext, data: audio.es[0] });
+    } else {
+      audioContext.resume();
+      speak({ audioContext, data: audio[toCode][0] });
+    }
   };
 
   const handleClose = () => {
