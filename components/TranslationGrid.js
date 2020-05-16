@@ -106,7 +106,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
               <Divider className={classes.hidden} />
               <div className={classes.wrapper}>
                 <Typography className={classes.hiddenPos} color="textSecondary">
-                  translating from {from} to {to}...
+                  translating from {from} to {to}
                   <Tooltip title="Play">
                     <IconButton
                       className={classes.hiddenPlay}
@@ -152,7 +152,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
               </Typography>
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
-                translated from {from} to {to}...
+                translated from {from} to {to}
                 <IconButton
                   className={classes.hiddenPlay}
                   onClick={speak}
@@ -188,7 +188,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
               </Typography>
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
-                translating from {from} to {to}...
+                translating from {from} to {to}
                 <IconButton
                   className={classes.hiddenPlay}
                   onClick={speak}
