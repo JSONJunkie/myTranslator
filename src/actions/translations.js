@@ -123,6 +123,11 @@ export const getData = data => async dispatch => {
       "/api/data?preTrans=" + preTrans + "&fromCode=" + fromCode
     );
 
+    if (!res.data) {
+      return dispatch(
+        getData({ preTrans: "welcome", fromCode: "en", toCode: "es" })
+      );
+    }
     dispatch({
       type: GET_DATA,
       payload: {

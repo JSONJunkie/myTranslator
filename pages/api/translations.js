@@ -98,7 +98,8 @@ handler.patch(async (req, res) => {
         [to]: { text: result.toLowerCase(), audio: [audioDataUri.content] },
         hitData: [
           { time: 0, hits: 0 },
-          { time: 0, hits: 0 }
+          { time: 0, hits: 0 },
+          { time: 0, hits: 1 }
         ],
         lifetimeHits: 0,
         date: new Date().getTime()
@@ -232,7 +233,7 @@ handler.patch(async (req, res) => {
       req.connection.close();
     }
   } catch (err) {
-    console.log(err);
+    res.json(null);
     req.connection.close();
 
     // res.status(400).json({ errors: { name: err.name, message: err.message } });
