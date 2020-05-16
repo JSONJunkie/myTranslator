@@ -167,9 +167,23 @@ const Navbar = ({
       if (e.input === "") {
       } else {
         if (userInput !== "") {
+          // router.push(
+          //   "/translate/[translation]?from=" + fromCode + "&to=" + toCode,
+          //   "/translate/" +
+          //     e.input.toLowerCase() +
+          //     "?from=" +
+          //     fromCode +
+          //     "&to=" +
+          //     toCode
+          // );
           router.push(
-            "/" + fromCode + "/" + toCode + "/[translation]",
-            "/" + fromCode + "/" + toCode + "/" + e.input.toLowerCase()
+            "/translate/[translation]/" + fromCode + "/" + toCode,
+            "/translate/" +
+              e.input.toLowerCase() +
+              "/" +
+              fromCode +
+              "/" +
+              toCode
           );
         }
       }
