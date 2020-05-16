@@ -59,20 +59,6 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (routing.complete) {
-      setRouting(prev => ({ ...prev, starting: false, complete: true }));
-    }
-    if (routing.starting) {
-      setRouting(prev => ({
-        ...prev,
-        starting: true,
-        complete: false,
-        url: ""
-      }));
-    }
-  }, [routing.starting, routing.complete]);
-
   const [toOpen, setToOpen] = React.useState(false);
 
   const [fromOpen, setFromOpen] = React.useState(false);

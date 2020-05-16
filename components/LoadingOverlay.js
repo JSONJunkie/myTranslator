@@ -111,20 +111,6 @@ const LoadingOverlay = ({
   }, []);
 
   useEffect(() => {
-    if (routing.complete) {
-      setRouting(prev => ({ ...prev, starting: false, complete: true }));
-    }
-    if (routing.starting) {
-      setRouting(prev => ({
-        ...prev,
-        starting: true,
-        complete: false,
-        url: ""
-      }));
-    }
-  }, [routing.starting, routing.complete]);
-
-  useEffect(() => {
     if (userInput) {
       setHide(prev => false);
     }

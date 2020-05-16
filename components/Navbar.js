@@ -120,12 +120,10 @@ const Navbar = ({
     if (router.pathname !== "/") {
       updateInput("");
       reset({ TextField: "" });
-      if (router.pathname !== "/") {
-        selectLang({
-          from: router.asPath.split("/")[3],
-          to: router.asPath.split("/")[4]
-        });
-      }
+      selectLang({
+        from: router.asPath.split("/")[3],
+        to: router.asPath.split("/")[4]
+      });
       if (
         userInput ||
         (router.pathname !== "/" && router.pathname !== "/404")
@@ -138,14 +136,6 @@ const Navbar = ({
           });
         }
       }
-    }
-    if (routing.starting) {
-      setRouting(prev => ({
-        ...prev,
-        starting: true,
-        complete: false,
-        url: ""
-      }));
     }
   }, [routing.starting, routing.complete]);
 
