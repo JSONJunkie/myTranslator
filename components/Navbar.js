@@ -117,8 +117,7 @@ const Navbar = ({
         to: ""
       });
     }
-    if (routing.complete) {
-      setRouting(prev => ({ ...prev, starting: false, complete: true }));
+    if (router.pathname !== "/") {
       updateInput("");
       reset({ TextField: "" });
       if (router.pathname !== "/") {
