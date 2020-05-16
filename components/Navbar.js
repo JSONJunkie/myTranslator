@@ -123,8 +123,8 @@ const Navbar = ({
       reset({ TextField: "" });
       if (router.pathname !== "/") {
         selectLang({
-          from: router.pathname.split("/")[1],
-          to: router.pathname.split("/")[2]
+          from: router.asPath.split("/")[3],
+          to: router.asPath.split("/")[4]
         });
       }
       if (
@@ -133,9 +133,9 @@ const Navbar = ({
       ) {
         if (!router.isFallback) {
           addHit({
-            preTrans: router.asPath.split("/")[3],
-            fromCode: router.pathname.split("/")[1],
-            toCode: router.pathname.split("/")[2]
+            preTrans: router.asPath.split("/")[2],
+            fromCode: router.asPath.split("/")[3],
+            toCode: router.asPath.split("/")[4]
           });
         }
       }
