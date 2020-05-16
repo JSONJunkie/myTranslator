@@ -190,13 +190,24 @@ const LoadingOverlay = ({
                 <Fragment>
                   {!router.isFallback && (
                     <Fragment>
-                      <TranslationGrid
-                        beforeTrans={preTrans}
-                        afterTrans={postTrans}
-                        from={from}
-                        to={to}
-                        speak={handleSpeak}
-                      />
+                      {audio[0] && (
+                        <TranslationGrid
+                          beforeTrans={preTrans}
+                          afterTrans={postTrans}
+                          from={from}
+                          to={to}
+                          speak={handleSpeak}
+                        />
+                      )}
+                      {!audio[0] && (
+                        <TranslationGrid
+                          beforeTrans={preTrans}
+                          afterTrans={postTrans}
+                          from={from}
+                          to={to}
+                          speak={"none"}
+                        />
+                      )}
                       {router.pathname === "/" && preTrans && (
                         <ChartGrid hide={{ hide: !hide }} />
                       )}

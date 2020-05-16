@@ -92,7 +92,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
 
   return (
     <Fragment>
-      {afterTrans && speak && (
+      {afterTrans && speak && speak !== "none" && (
         <Grid className={classes.cardGrid} item xs={12} sm={12}>
           <Card className={classes.transparentCard}>
             <CardContent className={classes.transparentCard}>
@@ -126,6 +126,44 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
                     <VolumeUpIcon />
                   </IconButton>
                 </Tooltip>
+              </div>
+              {afterTrans && (
+                <Typography
+                  className={classes.hiddenTranslation}
+                  variant="body2"
+                >
+                  {afterTrans}
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
+      {afterTrans && speak && speak === "none" && (
+        <Grid className={classes.cardGrid} item xs={12} sm={12}>
+          <Card className={classes.transparentCard}>
+            <CardContent className={classes.transparentCard}>
+              <Typography
+                className={classes.hiddenTitle}
+                color="textSecondary"
+                gutterBottom
+              >
+                {beforeTrans}
+              </Typography>
+              <Divider className={classes.hidden} />
+              <div className={classes.wrapper}>
+                <Typography className={classes.hiddenPos} color="textSecondary">
+                  translating from {from} to {to}
+                  <Tooltip title="Play">
+                    <IconButton
+                      className={classes.hiddenPlay}
+                      onClick={speak}
+                      aria-label="play"
+                    >
+                      <VolumeUpIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
               </div>
               {afterTrans && (
                 <Typography
