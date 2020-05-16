@@ -5,8 +5,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import TranslationGrid from "../../../components/TranslationGrid";
-import ChartGrid from "../../../components/ChartGrid";
+import TranslationGrid from "../../components/TranslationGrid";
+import ChartGrid from "../../components/ChartGrid";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import TextToSpeechV1 from "ibm-watson/text-to-speech/v1";
@@ -16,7 +16,7 @@ import DatauriParser from "datauri/parser";
 // import Rollbar from "rollbar";
 import validator from "validator";
 
-import connectToMongo from "../../../database";
+import connectToMongo from "../../database";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,21 +43,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Translation = ({ doc, codes }) => {
+const Translation = ({ data, codes }) => {
   const router = useRouter();
 
   const classes = useStyles();
-
-  // console.log(router);
-  // console.log(result);
-
-  var data;
-  var date;
-
-  if (doc) {
-    data = JSON.parse(doc);
-    date = new Date(parseInt(data.date));
-  }
 
   if (router.isFallback) {
     return (
@@ -74,8 +63,6 @@ const Translation = ({ doc, codes }) => {
     );
   }
 
-  // return <p>{data.postTrans}</p>;
-
   return (
     <div className={classes.root}>
       <Container className={classes.content} maxWidth="md">
@@ -84,7 +71,7 @@ const Translation = ({ doc, codes }) => {
           variant="caption"
           color="textSecondary"
         >
-          first translated: {date.toString()}
+          first translated: {new Date(parseInt(data.date)).toString()}
         </Typography>
         <Grid
           container
@@ -94,8 +81,8 @@ const Translation = ({ doc, codes }) => {
           spacing={2}
         >
           <TranslationGrid
-            beforeTrans={data.vi}
-            afterTrans={data.en}
+            beforeTrans={data.from}
+            afterTrans={data.to}
             from={codes.from}
             to={codes.to}
           />
@@ -117,29 +104,15 @@ export async function getStaticProps(context) {
   //   console.log("empty params/query");
   //   throw new Error("No query");
   // }
-  const { connection, models } = await connectToMongo();
-  const { Translations } = models;
-
-  const dev = process.env.NODE_ENV !== "production";
-
-  const baseUrl = dev
-    ? "http://localhost:3000"
-    : "https://drees1992-mytranslator.herokuapp.com";
-
-  const from = "vi";
-  const to = "en";
-  const voice = "en-US_AllisonVoice";
-  const preTrans = context.params.translation;
-  const modelId = from + "-" + to;
 
   const getLang = data => {
     switch (data) {
       case "ar":
         return "Arabic";
       case "zh":
-        return "Simplified Chinese";
+        return "Chinese";
       case "zh-TW":
-        return "Traditional Chinese";
+        return "Chinese";
       case "en":
         return "English";
       case "fi":
@@ -175,7 +148,69 @@ export async function getStaticProps(context) {
     }
   };
 
-  const doc = await Translations.findOne({ [from]: preTrans });
+  const getVoice = data => {
+    switch (data) {
+      case "ar":
+        return "ar-AR_OmarVoice";
+      case "zh":
+        return "zh-CN_LiNaVoice";
+      case "zh-TW":
+        return "zh-CN_LiNaVoice";
+      case "en":
+        return "en-US_AllisonVoice";
+      case "fi":
+        return "none";
+      case "fr":
+        return "fr-FR_ReneeVoice";
+      case "de":
+        return "de-DE_BirgitVoice";
+      case "it":
+        return "it-IT_FrancescaVoice";
+      case "ja":
+        return "ja-JP_EmiVoice";
+      case "ko":
+        return "ko-KR_YoungmiVoice";
+      case "pt":
+        return "pt-BR_IsabelaVoice";
+      case "ro":
+        return "none";
+      case "ru":
+        return "none";
+      case "sk":
+        return "none";
+      case "es":
+        return "es-ES_EnriqueVoice";
+      case "sv":
+        return "none";
+      case "th":
+        return "none";
+      case "tr":
+        return "none";
+      case "vi":
+        return "none";
+    }
+  };
+
+  const { connection, models } = await connectToMongo();
+  const { Translations } = models;
+
+  const dev = process.env.NODE_ENV !== "production";
+
+  const baseUrl = dev
+    ? "http://localhost:3000"
+    : "https://drees1992-mytranslator.herokuapp.com";
+
+  const preTrans = context.params.translation[0];
+  const from = context.params.translation[1];
+  const to = context.params.translation[2];
+  const fromText = from + ".text";
+  const toText = to + ".text";
+  const voice = getVoice(to);
+  // const voice = "es-ES_LauraVoice";
+
+  const modelId = from + "-" + to;
+
+  const doc = await Translations.findOne({ [fromText]: preTrans });
 
   // if (validator.isEmpty(translateParams.text)) {
   //   throw new Error("Please include some text to translate");
@@ -183,8 +218,7 @@ export async function getStaticProps(context) {
 
   if (!doc) {
     const entry = new Translations({
-      [from]: preTrans,
-      [to]: "temp",
+      [fromText]: preTrans,
       hitData: [
         { time: 0, hits: 0 },
         { time: 0, hits: 0 }
@@ -194,26 +228,16 @@ export async function getStaticProps(context) {
     });
     await entry.save();
     connection.close();
-    return { props: { doc: null, codes: null } };
+    return { props: { data: null, codes: null } };
   }
 
-  if (doc[to] === "temp" || !doc[to]) {
+  if (!doc[to].text) {
     const languageTranslator = new LanguageTranslatorV3({
       version: "2018-05-01",
       authenticator: new IamAuthenticator({
         apikey: process.env.TRANSLATE_KEY
       }),
       url: process.env.TRANSLATE_URL,
-      headers: {
-        "X-Watson-Learning-Opt-Out": "true"
-      }
-    });
-
-    const textToSpeech = new TextToSpeechV1({
-      authenticator: new IamAuthenticator({
-        apikey: process.env.SPEAK_KEY
-      }),
-      url: process.env.SPEAK_URL,
       headers: {
         "X-Watson-Learning-Opt-Out": "true"
       }
@@ -229,52 +253,104 @@ export async function getStaticProps(context) {
     );
     const result = translationResult.result.translations[0].translation;
 
-    const synthesizeParams = {
-      text: result,
-      accept: "audio/mp3",
-      voice
-    };
+    if (voice !== "none") {
+      const synthesizeParams = {
+        text: result,
+        accept: "audio/mp3",
+        voice
+      };
 
-    const config = {
-      responseType: "arraybuffer"
-    };
+      const config = {
+        responseType: "arraybuffer"
+      };
 
-    const body = synthesizeParams;
+      const body = synthesizeParams;
 
-    const res = await axios.post(
-      baseUrl + "/api/translator/speak",
-      body,
-      config
-    );
+      const res = await axios.post(
+        baseUrl + "/api/translator/speak",
+        body,
+        config
+      );
 
-    const audio = res.data;
+      const audio = res.data;
 
-    const parser = new DatauriParser();
+      const parser = new DatauriParser();
 
-    const audioDataUri = parser.format("audio/webm", audio);
+      const audioDataUri = parser.format("audio/webm", audio);
+
+      const transDoc = await Translations.findOneAndUpdate(
+        { [fromText]: preTrans },
+        {
+          [to]: { text: result.toLowerCase(), audio: [audioDataUri.content] }
+        },
+        { new: true, useFindAndModify: false }
+      );
+
+      const data = {
+        from: transDoc[from].text,
+        to: transDoc[to].text,
+        date: transDoc.date
+      };
+
+      const codes = {
+        from: getLang(from),
+        to: getLang(to)
+      };
+
+      connection.close();
+
+      return {
+        props: {
+          data,
+          codes
+        }
+      };
+    }
 
     const transDoc = await Translations.findOneAndUpdate(
-      { [from]: preTrans },
-      { [to]: result.toLowerCase(), audio: { [to]: [audioDataUri.content] } },
+      { [fromText]: preTrans },
+      { [toText]: result.toLowerCase() },
       { new: true, useFindAndModify: false }
     );
+
+    const data = {
+      from: transDoc[from].text,
+      to: transDoc[to].text,
+      date: transDoc.date
+    };
+
+    const codes = {
+      from: getLang(from),
+      to: getLang(to)
+    };
 
     connection.close();
 
     return {
       props: {
-        doc: JSON.stringify(transDoc),
-        codes: { from: getLang(from), to: getLang(to) }
+        data,
+        codes
       }
     };
   }
+
+  const data = {
+    from: doc[from].text,
+    to: doc[to].text,
+    date: doc.date
+  };
+
+  const codes = {
+    from: getLang(from),
+    to: getLang(to)
+  };
 
   connection.close();
 
   return {
     props: {
-      doc: JSON.stringify(doc),
-      codes: { from: getLang(from), to: getLang(to) }
+      data,
+      codes
     }
   };
 }
