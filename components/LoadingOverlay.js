@@ -47,7 +47,13 @@ const useStyles = makeStyles(theme => ({
   },
   hiddenGrid: {
     visibility: "hidden",
-    marginBottom: theme.spacing(4)
+    marginBottom: theme.spacing(4),
+    [theme.breakpoints.up("md")]: {
+      marginBottom: theme.spacing(12)
+    }
+  },
+  hiddenChart: {
+    visibility: "hidden"
   }
 }));
 
@@ -172,7 +178,7 @@ const LoadingOverlay = ({
           >
             first translated
           </Typography>
-          <Grow in={grow} timeout={500}>
+          <Grow in={grow} timeout={2000}>
             <Grid
               container
               justify="center"
@@ -191,7 +197,7 @@ const LoadingOverlay = ({
                         to={to}
                         speak={handleSpeak}
                       />
-                      {router.pathname === "/" && (
+                      {router.pathname === "/" && preTrans && (
                         <ChartGrid hide={{ hide: !hide }} />
                       )}
                       {router.pathname !== "/" && (
@@ -210,13 +216,16 @@ const LoadingOverlay = ({
               )}
               {!hide && (
                 <Fragment>
-                  <TranslationGrid
-                    beforeTrans={userInput}
-                    afterTrans={""}
-                    from={from}
-                    to={to}
-                  />
-                  <ChartGrid hide={{ hide: !hide }} />
+                  {userInput && (
+                    <TranslationGrid
+                      beforeTrans={userInput}
+                      afterTrans={""}
+                      from={from}
+                      to={to}
+                    />
+                  )}
+                  {preTrans && <ChartGrid hide={{ hide: !hide }} />}
+                  {!preTrans && <ChartGrid hide={{ hide: "" }} />}
                 </Fragment>
               )}
             </Grid>
