@@ -6,6 +6,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Grow from "@material-ui/core/Grow";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import TranslationGrid from "../components/TranslationGrid";
 import ChartGrid from "../components/ChartGrid";
@@ -23,10 +24,14 @@ const useStyles = makeStyles(theme => ({
   },
   date: {
     visibility: "hidden"
+  },
+  progress: {
+    display: "flex",
+    justifyContent: "center"
   }
 }));
 
-const Index = ({ translations: { userInput, from, to } }) => {
+const Index = ({ translations: { userInput, preTrans, from, to } }) => {
   const classes = useStyles();
 
   const [hide, setHide] = useState(false);
@@ -41,7 +46,7 @@ const Index = ({ translations: { userInput, from, to } }) => {
     }
   }, [userInput]);
 
-  return (
+  return preTrans ? (
     <div className={classes.root}>
       <Container className={classes.content} maxWidth="md">
         <Typography
@@ -66,6 +71,17 @@ const Index = ({ translations: { userInput, from, to } }) => {
           />
           <ChartGrid hide={{ hide: "" }} />
         </Grid>
+      </Container>
+    </div>
+  ) : (
+    <div className={classes.root}>
+      <Container className={classes.content} maxWidth="md">
+        <Typography variant="h5" align="center">
+          one moment while I get that for you...
+        </Typography>
+        <div className={classes.progress}>
+          <CircularProgress disableShrink />
+        </div>
       </Container>
     </div>
   );
