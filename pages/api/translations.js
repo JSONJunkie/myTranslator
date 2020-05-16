@@ -13,8 +13,16 @@ handler.use(middleware);
 handler.get(async (req, res) => {
   try {
     const { Translations } = req.models;
-    const numDocs = await Translations.estimatedDocumentCount().exec();
-    res.json(numDocs);
+    const docs = await Translations.find({}, {}, { lean: true });
+    var totalTrans = 0;
+    docs.forEach(doc => {
+      for (var key of Object.keys(doc)) {
+        if (doc[key].text) {
+          totalTrans = totalTrans + 1;
+        }
+      }
+    });
+    res.json(totalTrans * 2);
     req.connection.close();
   } catch (err) {
     res.status(400).json({ errors: { name: err.name, message: err.message } });
