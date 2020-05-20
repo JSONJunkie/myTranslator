@@ -10,10 +10,10 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import TranslateIcon from "@material-ui/icons/Translate";
 import IconButton from "@material-ui/core/IconButton";
-import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
+import isAlpha from "validator/lib/isAlpha";
 
 import {
   updateInput,
@@ -119,7 +119,6 @@ const Navbar = ({
     }
     if (router.pathname !== "/") {
       updateInput("");
-      reset({ TextField: "" });
       selectLang({
         from: router.asPath.split("/")[3],
         to: router.asPath.split("/")[4]
@@ -139,35 +138,38 @@ const Navbar = ({
     }
   }, [routing.starting, routing.complete]);
 
-  const { handleSubmit, errors, control, reset } = useForm();
-
   const [helperText, setHelperText] = useState({
     inputError: "",
     isInputError: false
   });
 
   const handleSub = e => {
-    if (!toCode || !fromCode) {
+    e.preventDefault();
+    if (!userInput) {
       setHelperText(prev => ({
-        inputError: "Please select a from and to language for translation",
+        inputError: "Please enter a word to translate",
         isInputError: true
       }));
-    } else {
-      if (e.input === "") {
-      } else {
-        if (userInput !== "") {
-          router.push(
-            "/translate/[translation]/" + fromCode + "/" + toCode,
-            "/translate/" +
-              e.input.toLowerCase() +
-              "/" +
-              fromCode +
-              "/" +
-              toCode
-          );
-        }
-      }
+      return;
     }
+    if (!fromCode) {
+      setHelperText(prev => ({
+        inputError: "Please select a language to translate from",
+        isInputError: true
+      }));
+      return;
+    }
+    if (!toCode) {
+      setHelperText(prev => ({
+        inputError: "Please select a language to translate to",
+        isInputError: true
+      }));
+      return;
+    }
+    router.push(
+      "/translate/[translation]/" + fromCode + "/" + toCode,
+      "/translate/" + userInput.toLowerCase() + "/" + fromCode + "/" + toCode
+    );
   };
 
   const goHome = () => {
@@ -176,19 +178,13 @@ const Navbar = ({
 
   const onChange = e => {
     updateInput(e.target.value);
-    return e.target.value;
   };
 
   useEffect(() => {
-    if (errors.input) {
-      setHelperText(prev => ({
-        inputError: errors.input.message,
-        isInputError: true
-      }));
-    } else {
+    if (fromCode && toCode && userInput) {
       setHelperText(prev => ({ inputError: "", isInputError: false }));
     }
-  }, [errors.input, fromCode, toCode]);
+  }, [userInput, fromCode, toCode]);
 
   return (
     <Fragment>
@@ -213,7 +209,7 @@ const Navbar = ({
                     <IconButton
                       aria-label="home"
                       color="inherit"
-                      onClick={goHome}
+                      onClick={e => goHome(e)}
                     >
                       <TranslateIcon fontSize="large" />
                     </IconButton>
@@ -221,28 +217,20 @@ const Navbar = ({
                 </Grid>
               </Grid>
               <Grid item xs className={classes.spacing}>
-                <form onSubmit={handleSubmit(handleSub)}>
+                <form onSubmit={e => handleSub(e)}>
                   <div className={classes.search}>
-                    <Controller
-                      as={TextField}
+                    <TextField
                       name="input"
-                      control={control}
                       className={classes.input}
                       autoFocus
                       fullWidth
                       id="translate"
                       size="small"
+                      value={userInput}
                       placeholder="Translate something..."
                       helperText={helperText.inputError}
                       error={helperText.isInputError}
-                      onChange={([e]) => onChange(e)}
-                      defaultValue=""
-                      rules={{
-                        pattern: {
-                          value: /\b[^\d\W]+\b/,
-                          message: "Alphabet characters only"
-                        }
-                      }}
+                      onChange={e => onChange(e)}
                     />
                     <Tooltip title="Translate">
                       <Button
