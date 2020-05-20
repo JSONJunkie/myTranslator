@@ -14,7 +14,7 @@ import { IamAuthenticator } from "ibm-watson/auth";
 import axios from "axios";
 import DatauriParser from "datauri/parser";
 // import Rollbar from "rollbar";
-import validator from "validator";
+import isAlpha from "validator/lib/isAlpha";
 
 import connectToMongo from "../../database";
 
@@ -148,6 +148,49 @@ export async function getStaticProps(context) {
     }
   };
 
+  const getLocale = data => {
+    switch (data) {
+      case "ar":
+        return "ar";
+      case "zh":
+        return "";
+      case "zh-TW":
+        return "";
+      case "en":
+        return "en-US";
+      case "fi":
+        return "";
+      case "fr":
+        return "fr-FR";
+      case "de":
+        return "de-DE";
+      case "it":
+        return "it-IT";
+      case "ja":
+        return "";
+      case "ko":
+        return "";
+      case "pt":
+        return "pt-BR";
+      case "ro":
+        return "";
+      case "ru":
+        return "ru-RU";
+      case "sk":
+        return "sk-SK";
+      case "es":
+        return "es-ES";
+      case "sv":
+        return "sv-SE";
+      case "th":
+        return "";
+      case "tr":
+        return "tr-TR";
+      case "vi":
+        return "";
+    }
+  };
+
   const getVoice = data => {
     switch (data) {
       case "ar":
@@ -206,9 +249,25 @@ export async function getStaticProps(context) {
   const fromText = from + ".text";
   const toText = to + ".text";
   const voice = getVoice(to);
+  const locale = getLocale(from);
   // const voice = "es-ES_LauraVoice";
 
   const modelId = from + "-" + to;
+  if (!preTrans) {
+    throw new Error("Please enter a word to translate");
+  }
+
+  if (locale) {
+    if (!isAlpha(userInput, locale)) {
+      throw new Error(
+        "Looks like this is not a translatable " +
+          from +
+          " word. Please only include " +
+          from +
+          " letters only, no punctuations or numbers"
+      );
+    }
+  }
 
   const doc = await Translations.findOne({ [fromText]: preTrans });
 
