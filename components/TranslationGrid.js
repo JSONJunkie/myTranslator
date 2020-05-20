@@ -157,7 +157,6 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
                   <Tooltip title="Play">
                     <IconButton
                       className={classes.hiddenPlay}
-                      onClick={speak}
                       aria-label="play"
                     >
                       <VolumeUpIcon />
@@ -191,11 +190,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
                 translated from {from} to {to}
-                <IconButton
-                  className={classes.hiddenPlay}
-                  onClick={speak}
-                  aria-label="play"
-                >
+                <IconButton className={classes.hiddenPlay} aria-label="play">
                   <VolumeUpIcon />
                 </IconButton>
               </Typography>
@@ -227,11 +222,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
               <Divider />
               <Typography className={classes.pos} color="textSecondary">
                 translating from {from} to {to}
-                <IconButton
-                  className={classes.hiddenPlay}
-                  onClick={speak}
-                  aria-label="play"
-                >
+                <IconButton className={classes.hiddenPlay} aria-label="play">
                   <VolumeUpIcon />
                 </IconButton>
               </Typography>
@@ -252,8 +243,7 @@ TranslationGrid.propTypes = {
   beforeTrans: PropTypes.string.isRequired,
   afterTrans: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
-  speak: PropTypes.func
+  to: PropTypes.string.isRequired
   // rollbar: PropTypes.object.isRequired
 };
 
