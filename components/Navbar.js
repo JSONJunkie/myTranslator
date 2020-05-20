@@ -75,8 +75,51 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const getLocale = data => {
+  switch (data) {
+    case "ar":
+      return "ar";
+    case "zh":
+      return "";
+    case "zh-TW":
+      return "";
+    case "en":
+      return "en-US";
+    case "fi":
+      return "";
+    case "fr":
+      return "fr-FR";
+    case "de":
+      return "de-DE";
+    case "it":
+      return "it-IT";
+    case "ja":
+      return "";
+    case "ko":
+      return "";
+    case "pt":
+      return "pt-BR";
+    case "ro":
+      return "";
+    case "ru":
+      return "ru-RU";
+    case "sk":
+      return "sk-SK";
+    case "es":
+      return "es-ES";
+    case "sv":
+      return "sv-SE";
+    case "th":
+      return "";
+    case "tr":
+      return "tr-TR";
+    case "vi":
+      return "";
+  }
+};
+
 const Navbar = ({
-  translations: { userInput, fromCode, toCode, preTrans, postTrans },
+  translations: { userInput, from, fromCode, toCode, preTrans, postTrans },
   selectLang,
   updateInput,
   addHit,
@@ -91,6 +134,8 @@ const Navbar = ({
     starting: true,
     complete: false
   });
+
+  const [locale, setLocale] = useState("");
 
   const handleRouteChangeStart = url => {
     setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
@@ -166,6 +211,20 @@ const Navbar = ({
       }));
       return;
     }
+    if (locale) {
+      if (!isAlpha(userInput, locale)) {
+        setHelperText(prev => ({
+          inputError:
+            "Looks like this is not a translatable " +
+            from +
+            " word. Please only include " +
+            from +
+            " letters only, no punctuations or numbers",
+          isInputError: true
+        }));
+        return;
+      }
+    }
     router.push(
       "/translate/[translation]/" + fromCode + "/" + toCode,
       "/translate/" + userInput.toLowerCase() + "/" + fromCode + "/" + toCode
@@ -181,10 +240,25 @@ const Navbar = ({
   };
 
   useEffect(() => {
+    setLocale(prev => getLocale(fromCode));
+    if (userInput) {
+      if (!locale) {
+        setHelperText(prev => ({
+          inputError:
+            from +
+            " validation not supported, please double check your input before attempting translation"
+        }));
+      } else {
+        setHelperText(prev => ({ inputError: "", isInputError: false }));
+      }
+    }
     if (fromCode && toCode && userInput) {
       setHelperText(prev => ({ inputError: "", isInputError: false }));
     }
-  }, [userInput, fromCode, toCode]);
+    if (!userInput) {
+      setHelperText(prev => ({ inputError: "", isInputError: false }));
+    }
+  }, [userInput, fromCode, toCode, locale]);
 
   return (
     <Fragment>
