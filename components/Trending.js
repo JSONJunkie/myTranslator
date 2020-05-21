@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -68,9 +69,6 @@ const useStyles = makeStyles(theme => ({
     }
   },
   test: {
-    background: theme.palette.background.paper,
-    maxWidth: 150,
-    margin: "auto",
     fontSize: 18,
     [theme.breakpoints.up("md")]: {
       fontSize: 22
@@ -113,26 +111,42 @@ const Trending = () => {
       <div className={classes.wrapper}>
         <div className={classes.scrollContainer}>
           <div className={classes.scroll1}>
-            <Typography className={classes.test} color="textSecondary">
-              scroll
-            </Typography>
-            <Typography className={classes.test} color="textSecondary">
-              scroll2
-            </Typography>
-            <Typography className={classes.test} color="textSecondary">
-              scroll3
-            </Typography>
+            <Grid container direction="row" justify="space-around">
+              <Grid item xs="auto">
+                <Typography className={classes.test} color="textSecondary">
+                  scrollwwwww
+                </Typography>
+              </Grid>
+              <Grid item xs="auto">
+                <Typography className={classes.test} color="textSecondary">
+                  scroll2
+                </Typography>
+              </Grid>
+              <Grid item xs="auto">
+                <Typography className={classes.test} color="textSecondary">
+                  scroll3
+                </Typography>
+              </Grid>
+            </Grid>
           </div>
           <div className={classes.scroll2}>
-            <Typography className={classes.test} color="textSecondary">
-              scroll
-            </Typography>
-            <Typography className={classes.test} color="textSecondary">
-              scroll2
-            </Typography>
-            <Typography className={classes.test} color="textSecondary">
-              scroll3
-            </Typography>
+            <Grid container direction="row" justify="space-around">
+              <Grid item xs="auto">
+                <Typography className={classes.test} color="textSecondary">
+                  scrollwwwww
+                </Typography>
+              </Grid>
+              <Grid item xs="auto">
+                <Typography className={classes.test} color="textSecondary">
+                  scroll2
+                </Typography>
+              </Grid>
+              <Grid item xs="auto">
+                <Typography className={classes.test} color="textSecondary">
+                  scroll3
+                </Typography>
+              </Grid>
+            </Grid>
           </div>
         </div>
         <div className={classes.trending}>
