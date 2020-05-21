@@ -140,7 +140,6 @@ handler.patch(async (req, res) => {
           const noHitHours = hours - lastEntry.time;
           if (noHitHours < 23) {
             for (var i = 1; i < noHitHours; i++) {
-              doc.hitData.shift();
               doc.hitData.push({
                 time: lastEntry.time + i,
                 hits: 0
