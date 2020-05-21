@@ -6,9 +6,41 @@ import {
   UPDATE_INPUT,
   ADD_HIT,
   GET_DATA,
-  SELECT_LANG
+  SELECT_LANG,
+  GET_TRENDING
 } from "./types";
 import playSound from "../utils/playSound";
+
+export const getTrending = () => async dispatch => {
+  try {
+    const res = await axios.get("/api/trending");
+
+    if (res.data.length < 1) {
+      return dispatch({
+        type: GET_TRENDING,
+        payload: {
+          trending: "none"
+        }
+      });
+    }
+
+    dispatch({
+      type: GET_TRENDING,
+      payload: {
+        trending: res.data
+      }
+    });
+  } catch (err) {
+    // rollbar.error(err);
+    // dispatch({
+    //   type: ERROR,
+    //   payload: {
+    //     name: err.name,
+    //     message: err.message
+    //   }
+    // });
+  }
+};
 
 export const speak = ({ audioContext, data }) => async dispatch => {
   try {

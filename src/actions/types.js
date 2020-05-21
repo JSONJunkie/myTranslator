@@ -14,3 +14,4 @@ export const UPDATE_INPUT = "UPDATE_INPUT";
 export const ADD_HIT = "ADD_HIT";
 export const GET_DATA = "GET_DATA";
 export const SELECT_LANG = "SELECT_LANG";
+export const GET_TRENDING = "GET_TRENDING";
