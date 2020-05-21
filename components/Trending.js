@@ -52,10 +52,11 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.background.default
   },
   trendingText: {
-    padding: theme.spacing(1),
-    fontSize: 10,
+    padding: theme.spacing(0.75),
+    fontSize: 14,
     [theme.breakpoints.up("md")]: {
-      fontSize: 15
+      fontSize: 18,
+      padding: theme.spacing(1)
     }
   },
   hidden: {
@@ -70,25 +71,29 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.background.paper,
     maxWidth: 150,
     margin: "auto",
-    fontSize: 10,
+    fontSize: 18,
     [theme.breakpoints.up("md")]: {
-      fontSize: 15
+      fontSize: 22
     }
   },
   scrollContainer: {
     display: "flex",
-    width: "100%"
+    width: "100%",
+    position: "relative",
+    alignItems: "center"
   },
   scroll1: {
     width: "100%",
     display: "flex",
-    animation: `$myEffect 20s linear infinite`
+    animation: `$myEffect 20s linear infinite`,
+    position: "absolute"
   },
   scroll2: {
     width: "100%",
     display: "flex",
     animation: `$myEffect 20s linear infinite`,
-    animationDelay: "-10s"
+    animationDelay: "-10s",
+    position: "absolute"
   },
   "@keyframes myEffect": {
     "0%": {
