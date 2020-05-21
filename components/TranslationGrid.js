@@ -13,7 +13,11 @@ import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 
 const useStyles = makeStyles(theme => ({
   cardGrid: {
-    maxWidth: 360
+    maxWidth: 619,
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 360,
+      margin: "auto"
+    }
   },
   cardRoot: {
     width: "100%",
@@ -93,7 +97,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
   return (
     <Fragment>
       {afterTrans && speak && speak !== "none" && (
-        <Grid className={classes.cardGrid} item xs={12} sm={12}>
+        <Grid className={classes.cardGrid} item xs={12} sm={12} md={8}>
           <Card className={classes.transparentCard}>
             <CardContent className={classes.transparentCard}>
               <Typography
@@ -140,7 +144,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
         </Grid>
       )}
       {afterTrans && speak && speak === "none" && (
-        <Grid className={classes.cardGrid} item xs={12} sm={12}>
+        <Grid className={classes.cardGrid} item xs={12} sm={12} md={8}>
           <Card className={classes.transparentCard}>
             <CardContent className={classes.transparentCard}>
               <Typography
@@ -177,7 +181,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
         </Grid>
       )}
       {afterTrans && !speak && (
-        <Grid className={classes.cardGrid} item xs={12} sm={12}>
+        <Grid className={classes.cardGrid} item xs={12} sm={12} md={8}>
           <Card className={classes.cardRoot}>
             <CardContent>
               <Typography
@@ -209,7 +213,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
         </Grid>
       )}
       {afterTrans === "" && (
-        <Grid className={classes.cardGrid} item xs={12} sm={12}>
+        <Grid className={classes.cardGrid} item xs={12} sm={12} md={8}>
           <Card className={classes.cardRoot}>
             <CardContent>
               <Typography

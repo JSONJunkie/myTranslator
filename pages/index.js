@@ -19,11 +19,17 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     display: "flex",
+    flexDirection: "column"
+  },
+  loadingContent: {
+    display: "flex",
     flexDirection: "column",
     justifyContent: "center"
   },
   date: {
-    visibility: "hidden"
+    visibility: "hidden",
+    marginLeft: "auto",
+    marginRight: "auto"
   },
   progress: {
     display: "flex",
@@ -58,9 +64,10 @@ const Index = ({ translations: { userInput, preTrans, from, to } }) => {
         </Typography>
         <Grid
           container
-          justify="center"
-          alignItems="center"
-          alignContent="center"
+          direction="row"
+          // justify="center"
+          // alignItems="center"
+          // alignContent="center"
           spacing={2}
         >
           <TranslationGrid
@@ -75,7 +82,7 @@ const Index = ({ translations: { userInput, preTrans, from, to } }) => {
     </div>
   ) : (
     <div className={classes.root}>
-      <Container className={classes.content} maxWidth="md">
+      <Container className={classes.loadingContent} maxWidth="md">
         <Typography variant="h5" align="center">
           one moment while I get that for you...
         </Typography>

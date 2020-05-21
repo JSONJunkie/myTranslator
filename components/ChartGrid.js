@@ -10,12 +10,12 @@ import Chart from "../components/Chart";
 
 const useStyles = makeStyles(theme => ({
   chart: {
-    height: 120,
-    width: 170,
-    margin: "auto",
-    [theme.breakpoints.up("md")]: {
-      height: 240,
-      width: 340
+    height: 200,
+    width: 300,
+    [theme.breakpoints.down("sm")]: {
+      height: 120,
+      width: 170,
+      margin: "auto"
     }
   },
   showChart: {
@@ -32,12 +32,12 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center"
   },
   spacer: {
-    height: 120,
-    width: 170,
-    margin: "auto",
-    [theme.breakpoints.up("md")]: {
-      height: 240,
-      width: 340
+    height: 200,
+    width: 300,
+    [theme.breakpoints.down("sm")]: {
+      height: 120,
+      width: 170,
+      margin: "auto"
     },
     visibility: "hidden"
   }
@@ -47,7 +47,7 @@ const ChartGrid = ({ hide: { hide }, translations: { chartData } }) => {
   const classes = useStyles();
   return (
     <Fragment>
-      <Grid item xs={12} sm={12}>
+      <Grid item xs={12} sm={12} md={4}>
         {!hide && hide !== "" && (
           <Paper className={classes.chart}>
             <div className={classes.showChart}>

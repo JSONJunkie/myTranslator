@@ -26,6 +26,10 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     display: "flex",
+    flexDirection: "column"
+  },
+  loadingContent: {
+    display: "flex",
     flexDirection: "column",
     justifyContent: "center"
   },
@@ -51,7 +55,7 @@ const Translation = ({ data, codes }) => {
   if (router.isFallback) {
     return (
       <div className={classes.root}>
-        <Container className={classes.content} maxWidth="md">
+        <Container className={classes.loadingContent} maxWidth="md">
           <Typography variant="h5" align="center">
             one moment while I get that for you...
           </Typography>

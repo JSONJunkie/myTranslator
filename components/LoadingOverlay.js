@@ -26,13 +26,11 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center"
+    flexDirection: "column"
   },
   contentTyping: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
     background: theme.palette.background.default
   },
   backdrop: {
@@ -43,7 +41,9 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column"
   },
   hiddenDate: {
-    visibility: "hidden"
+    visibility: "hidden",
+    marginLeft: "auto",
+    marginRight: "auto"
   },
   hiddenGrid: {
     visibility: "hidden",
@@ -167,9 +167,10 @@ const LoadingOverlay = ({
           <Grow in={grow} timeout={2000}>
             <Grid
               container
-              justify="center"
-              alignItems="center"
-              alignContent="center"
+              direction="row"
+              // justify="flex-end"
+              // alignItems="center"
+              // alignContent="center"
               spacing={2}
             >
               {hide && (
