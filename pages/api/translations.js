@@ -138,19 +138,24 @@ handler.patch(async (req, res) => {
       } else {
         if (hours - lastEntry.time > 1) {
           const noHitHours = hours - lastEntry.time;
-          if (noHitHours <= 23) {
+          if (noHitHours < 23) {
             for (var i = 1; i < noHitHours; i++) {
-              doc.hitData.push({ time: lastEntry.time + i, hits: 0 });
+              doc.hitData.shift();
+              doc.hitData.push({
+                time: lastEntry.time + i,
+                hits: 0
+              });
             }
+            doc.hitData.shift();
             doc.hitData.push({
               time: hours,
               hits: 1
             });
           }
 
-          if (noHitHours >= 24) {
-            for (var i = 1; i < 24; i++) {
-              doc.hitData.push({ time: lastEntry.time + i, hits: 0 });
+          if (noHitHours >= 23) {
+            for (var i = 0; i < 23; i++) {
+              doc.hitData[i] = { time: hours - 23 + i, hits: 0 };
             }
             doc.hitData.push({
               time: hours,
@@ -199,19 +204,24 @@ handler.patch(async (req, res) => {
       } else {
         if (hours - lastEntry.time > 1) {
           const noHitHours = hours - lastEntry.time;
-          if (noHitHours <= 23) {
+          if (noHitHours < 23) {
             for (var i = 1; i < noHitHours; i++) {
-              newData.push({ time: lastEntry.time + i, hits: 0 });
+              newData.shift();
+              newData.push({
+                time: lastEntry.time + i,
+                hits: 0
+              });
             }
+            newData.shift();
             newData.push({
               time: hours,
               hits: 1
             });
           }
 
-          if (noHitHours >= 24) {
-            for (var i = 1; i < 24; i++) {
-              newData.push({ time: lastEntry.time + i, hits: 0 });
+          if (noHitHours >= 23) {
+            for (var i = 0; i < 23; i++) {
+              newData[i] = { time: hours - 23 + i, hits: 0 };
             }
             newData.push({
               time: hours,
