@@ -223,7 +223,7 @@ const Trending = () => {
                 color="secondary"
                 onClick={handleButtonPause}
               >
-                <PauseIcon fontSize="medium" />
+                <PauseIcon />
               </IconButton>
             )}
             {buttonPause && (
@@ -232,7 +232,7 @@ const Trending = () => {
                 color="secondary"
                 onClick={handleButtonUnpause}
               >
-                <PlayArrowIcon fontSize="medium" />
+                <PlayArrowIcon />
               </IconButton>
             )}
           </Paper>
