@@ -280,6 +280,23 @@ export async function getStaticProps(context) {
   // }
 
   if (!doc) {
+    const anyDoc = await Translations.findOne({}, {}, { lean: true });
+
+    if (!anyDoc) {
+      const entry = new Translations({
+        [fromText]: preTrans,
+        hitData: [
+          { time: 0, hits: 0 },
+          { time: 0, hits: 0 }
+        ],
+        lifetimeHits: 0,
+        date: new Date().getTime()
+      });
+      await entry.save();
+      connection.close();
+      return { props: { data: null, codes: null } };
+    }
+
     const entry = new Translations({
       [fromText]: preTrans,
       hitData: [
@@ -287,7 +304,7 @@ export async function getStaticProps(context) {
         { time: 0, hits: 0 }
       ],
       lifetimeHits: 0,
-      date: new Date().getTime()
+      date: anyDoc.date
     });
     await entry.save();
     connection.close();
