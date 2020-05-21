@@ -27,7 +27,11 @@ handler.get(async (req, res) => {
       return doc.en.text !== "welcome";
     });
 
-    res.json(newDocs);
+    const newDocsTwo = newDocs.filter(doc => {
+      return doc.en.text;
+    });
+
+    res.json(newDocsTwo);
     req.connection.close();
   } catch (err) {
     res.status(400).json({ errors: { name: err.name, message: err.message } });
