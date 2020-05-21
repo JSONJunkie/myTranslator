@@ -23,7 +23,6 @@ const Chart = ({ data }) => {
           bottom: 10
         }}
       >
-        <Tooltip />
         <Line
           type="linear"
           dataKey="hits"
