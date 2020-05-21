@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,8 +16,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { useRouter } from "next/router";
 
-import { selectLang } from "../src/actions/translations";
-import { Fragment } from "react";
+import { getTrending } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -89,6 +88,13 @@ const useStyles = makeStyles(theme => ({
       fontSize: 22
     }
   },
+  none: {
+    width: "100%",
+    fontSize: 18,
+    [theme.breakpoints.up("md")]: {
+      fontSize: 22
+    }
+  },
   scrollContainer: {
     display: "flex",
     width: "100%",
@@ -124,7 +130,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Trending = () => {
+const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
   const classes = useStyles();
 
   const [pause, setPause] = useState(false);
@@ -153,107 +159,132 @@ const Trending = () => {
     setPause(prev => false);
   };
 
+  useEffect(() => {
+    if (preTrans) {
+      getTrending();
+    }
+  }, [preTrans]);
+
   return (
     <div className={classes.root}>
       <div className={classes.wrapper}>
-        <div
-          onMouseEnter={handlePause}
-          onMouseLeave={handleUnpause}
-          className={classes.scrollContainer}
-        >
-          <div
-            className={clsx(classes.scroll1, {
-              [classes.pause]: pause
-            })}
+        {trending === "none" && (
+          <Typography
+            className={classes.none}
+            align="center"
+            color="textSecondary"
           >
-            <Grid container direction="row" justify="space-around">
-              <Grid item xs>
-                <Typography className={classes.test} color="textSecondary">
-                  scrollwwwww
-                </Typography>
-              </Grid>
-              <Grid item xs>
-                <Typography className={classes.test} color="textSecondary">
-                  scroll2
-                </Typography>
-              </Grid>
-              <Grid item xs>
-                <Typography className={classes.test} color="textSecondary">
-                  scroll3
-                </Typography>
-              </Grid>
-            </Grid>
-          </div>
+            No translations trending!
+          </Typography>
+        )}
+        {trending !== "none" && (
           <div
-            className={clsx(classes.scroll2, {
-              [classes.pause]: pause
-            })}
+            onMouseEnter={handlePause}
+            onMouseLeave={handleUnpause}
+            className={classes.scrollContainer}
           >
-            <Grid container direction="row" justify="space-around">
-              <Grid item xs>
-                <Typography className={classes.test} color="textSecondary">
-                  scrollwwwww
-                </Typography>
+            <div
+              className={clsx(classes.scroll1, {
+                [classes.pause]: pause
+              })}
+            >
+              <Grid container direction="row" justify="space-around">
+                <Grid item xs>
+                  <Typography className={classes.test} color="textSecondary">
+                    scrollwwwww
+                  </Typography>
+                </Grid>
+                <Grid item xs>
+                  <Typography className={classes.test} color="textSecondary">
+                    scroll2
+                  </Typography>
+                </Grid>
+                <Grid item xs>
+                  <Typography className={classes.test} color="textSecondary">
+                    scroll3
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs>
-                <Typography className={classes.test} color="textSecondary">
-                  scroll2
-                </Typography>
+            </div>
+            <div
+              className={clsx(classes.scroll2, {
+                [classes.pause]: pause
+              })}
+            >
+              <Grid container direction="row" justify="space-around">
+                <Grid item xs>
+                  <Typography className={classes.test} color="textSecondary">
+                    scrollwwwww
+                  </Typography>
+                </Grid>
+                <Grid item xs>
+                  <Typography className={classes.test} color="textSecondary">
+                    scroll2
+                  </Typography>
+                </Grid>
+                <Grid item xs>
+                  <Typography className={classes.test} color="textSecondary">
+                    scroll3
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs>
-                <Typography className={classes.test} color="textSecondary">
-                  scroll3
+            </div>
+            <div className={classes.trending}>
+              <Paper square={true}>
+                <Typography
+                  className={classes.trendingText}
+                  color="textSecondary"
+                >
+                  Trending
                 </Typography>
-              </Grid>
-            </Grid>
+              </Paper>
+            </div>
+            <div className={classes.button}>
+              <Paper square={true}>
+                {!buttonPause && (
+                  <IconButton
+                    aria-label="pause"
+                    color="secondary"
+                    onClick={handleButtonPause}
+                  >
+                    <PauseIcon />
+                  </IconButton>
+                )}
+                {buttonPause && (
+                  <IconButton
+                    aria-label="unpause"
+                    color="secondary"
+                    onClick={handleButtonUnpause}
+                  >
+                    <PlayArrowIcon />
+                  </IconButton>
+                )}
+              </Paper>
+            </div>
+            <div className={classes.beginningCap}>
+              <Typography className={classes.hidden} color="textSecondary">
+                Trending
+              </Typography>
+            </div>
+            <div className={classes.endCap}>
+              <Typography className={classes.hidden} color="textSecondary">
+                Trending
+              </Typography>
+            </div>
           </div>
-        </div>
-        <div className={classes.trending}>
-          <Paper square={true}>
-            <Typography className={classes.trendingText} color="textSecondary">
-              Trending
-            </Typography>
-          </Paper>
-        </div>
-        <div className={classes.button}>
-          <Paper square={true}>
-            {!buttonPause && (
-              <IconButton
-                aria-label="pause"
-                color="secondary"
-                onClick={handleButtonPause}
-              >
-                <PauseIcon />
-              </IconButton>
-            )}
-            {buttonPause && (
-              <IconButton
-                aria-label="unpause"
-                color="secondary"
-                onClick={handleButtonUnpause}
-              >
-                <PlayArrowIcon />
-              </IconButton>
-            )}
-          </Paper>
-        </div>
-        <div className={classes.beginningCap}>
-          <Typography className={classes.hidden} color="textSecondary">
-            Trending
-          </Typography>
-        </div>
-        <div className={classes.endCap}>
-          <Typography className={classes.hidden} color="textSecondary">
-            Trending
-          </Typography>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
 Trending.propTypes = {
+  translations: PropTypes.object.isRequired
   // rollbar: PropTypes.object.isRequired
 };
 
-export default Trending;
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps, { getTrending })(Trending);
