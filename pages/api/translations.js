@@ -187,12 +187,12 @@ handler.patch(async (req, res) => {
 
       const newData = reversedData.reverse();
 
-      const lastEntry = doc.newData[doc.newData.length - 1];
+      const lastEntry = newData[newData.length - 1];
 
-      doc.newData.pop();
+      newData.pop();
 
       if (lastEntry.time === hours) {
-        doc.newData.push({
+        newData.push({
           time: hours,
           hits: lastEntry.hits + 1
         });
@@ -201,9 +201,9 @@ handler.patch(async (req, res) => {
           const noHitHours = hours - lastEntry.time;
           if (noHitHours <= 23) {
             for (var i = 1; i < noHitHours; i++) {
-              doc.newData.push({ time: lastEntry.time + i, hits: 0 });
+              newData.push({ time: lastEntry.time + i, hits: 0 });
             }
-            doc.newData.push({
+            newData.push({
               time: hours,
               hits: 1
             });
@@ -211,17 +211,17 @@ handler.patch(async (req, res) => {
 
           if (noHitHours >= 24) {
             for (var i = 1; i < 24; i++) {
-              doc.newData.push({ time: lastEntry.time + i, hits: 0 });
+              newData.push({ time: lastEntry.time + i, hits: 0 });
             }
-            doc.newData.push({
+            newData.push({
               time: hours,
               hits: 1
             });
           }
         } else {
-          doc.newData.push(lastEntry);
+          newData.push(lastEntry);
 
-          doc.newData.push({
+          newData.push({
             time: hours,
             hits: 1
           });
