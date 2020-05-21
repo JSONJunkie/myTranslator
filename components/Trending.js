@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import clsx from "clsx";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -100,17 +101,41 @@ const useStyles = makeStyles(theme => ({
     "100%": {
       transform: "translateX(-100%)"
     }
+  },
+  pause: {
+    width: "100%",
+    display: "flex",
+    animationPlayState: "paused",
+    position: "absolute"
   }
 }));
 
 const Trending = () => {
   const classes = useStyles();
 
+  const [pause, setPause] = useState(false);
+
+  const handlePause = () => {
+    setPause(prev => true);
+  };
+
+  const handleUnpause = () => {
+    setPause(prev => false);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.wrapper}>
-        <div className={classes.scrollContainer}>
-          <div className={classes.scroll1}>
+        <div
+          onMouseEnter={handlePause}
+          onMouseLeave={handleUnpause}
+          className={classes.scrollContainer}
+        >
+          <div
+            className={clsx(classes.scroll1, {
+              [classes.pause]: pause
+            })}
+          >
             <Grid container direction="row" justify="space-around">
               <Grid item xs="auto">
                 <Typography className={classes.test} color="textSecondary">
@@ -129,7 +154,11 @@ const Trending = () => {
               </Grid>
             </Grid>
           </div>
-          <div className={classes.scroll2}>
+          <div
+            className={clsx(classes.scroll2, {
+              [classes.pause]: pause
+            })}
+          >
             <Grid container direction="row" justify="space-around">
               <Grid item xs="auto">
                 <Typography className={classes.test} color="textSecondary">
