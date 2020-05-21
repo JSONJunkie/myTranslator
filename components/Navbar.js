@@ -138,10 +138,12 @@ const Navbar = ({
   const [locale, setLocale] = useState("");
 
   const handleRouteChangeStart = url => {
+    console.log("starting nav");
     setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
   };
 
   const handleRouteChangeComplete = url => {
+    console.log("ending nav");
     setRouting(prev => ({ ...prev, starting: false, complete: true }));
   };
 
