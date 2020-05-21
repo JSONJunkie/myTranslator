@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Grid from "@material-ui/core/Grid";
+import PauseIcon from "@material-ui/icons/Pause";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -38,6 +41,15 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     left: theme.spacing(4),
     top: theme.spacing(-0.5)
+  },
+  button: {
+    position: "absolute",
+    left: theme.spacing(13),
+    top: theme.spacing(-1.5),
+    [theme.breakpoints.up("md")]: {
+      left: theme.spacing(15),
+      top: theme.spacing(-1)
+    }
   },
   beginningCap: {
     position: "absolute",
@@ -115,11 +127,27 @@ const Trending = () => {
 
   const [pause, setPause] = useState(false);
 
+  const [buttonPause, setButtonPause] = useState(false);
+
   const handlePause = () => {
-    setPause(prev => true);
+    if (!buttonPause) {
+      setPause(prev => true);
+    }
   };
 
   const handleUnpause = () => {
+    if (!buttonPause) {
+      setPause(prev => false);
+    }
+  };
+
+  const handleButtonPause = () => {
+    setButtonPause(prev => true);
+    setPause(prev => true);
+  };
+
+  const handleButtonUnpause = () => {
+    setButtonPause(prev => false);
     setPause(prev => false);
   };
 
@@ -183,6 +211,28 @@ const Trending = () => {
             <Typography className={classes.trendingText} color="textSecondary">
               Trending
             </Typography>
+          </Paper>
+        </div>
+        <div className={classes.button}>
+          <Paper square={true}>
+            {!buttonPause && (
+              <IconButton
+                aria-label="pause"
+                color="secondary"
+                onClick={handleButtonPause}
+              >
+                <PauseIcon fontSize="medium" />
+              </IconButton>
+            )}
+            {buttonPause && (
+              <IconButton
+                aria-label="unpause"
+                color="secondary"
+                onClick={handleButtonUnpause}
+              >
+                <PlayArrowIcon fontSize="medium" />
+              </IconButton>
+            )}
           </Paper>
         </div>
         <div className={classes.beginningCap}>
