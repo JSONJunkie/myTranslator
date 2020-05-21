@@ -258,7 +258,7 @@ export async function getStaticProps(context) {
   }
 
   if (locale) {
-    if (!isAlpha(userInput, locale)) {
+    if (!isAlpha(preTrans, locale)) {
       throw new Error(
         "Looks like this is not a translatable " +
           from +
