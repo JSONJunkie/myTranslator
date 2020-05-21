@@ -83,6 +83,8 @@ const useStyles = makeStyles(theme => ({
   },
   test: {
     fontSize: 18,
+    marginLeft: theme.spacing(1),
+    background: "yellow",
     [theme.breakpoints.up("md")]: {
       fontSize: 22
     }
@@ -165,17 +167,17 @@ const Trending = () => {
             })}
           >
             <Grid container direction="row" justify="space-around">
-              <Grid item xs="auto">
+              <Grid item xs>
                 <Typography className={classes.test} color="textSecondary">
                   scrollwwwww
                 </Typography>
               </Grid>
-              <Grid item xs="auto">
+              <Grid item xs>
                 <Typography className={classes.test} color="textSecondary">
                   scroll2
                 </Typography>
               </Grid>
-              <Grid item xs="auto">
+              <Grid item xs>
                 <Typography className={classes.test} color="textSecondary">
                   scroll3
                 </Typography>
@@ -188,17 +190,17 @@ const Trending = () => {
             })}
           >
             <Grid container direction="row" justify="space-around">
-              <Grid item xs="auto">
+              <Grid item xs>
                 <Typography className={classes.test} color="textSecondary">
                   scrollwwwww
                 </Typography>
               </Grid>
-              <Grid item xs="auto">
+              <Grid item xs>
                 <Typography className={classes.test} color="textSecondary">
                   scroll2
                 </Typography>
               </Grid>
-              <Grid item xs="auto">
+              <Grid item xs>
                 <Typography className={classes.test} color="textSecondary">
                   scroll3
                 </Typography>
