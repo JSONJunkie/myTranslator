@@ -170,6 +170,51 @@ export const selectLang = data => async dispatch => {
 
 export const getData = data => async dispatch => {
   try {
+    const getLang = data => {
+      switch (data) {
+        case "":
+          return "...";
+        case "ar":
+          return "Arabic";
+        case "zh":
+          return "Chinese";
+        case "zh-TW":
+          return "Chinese";
+        case "en":
+          return "English";
+        case "fi":
+          return "Finnish";
+        case "fr":
+          return "French";
+        case "de":
+          return "German";
+        case "it":
+          return "Italian";
+        case "ja":
+          return "Japanese";
+        case "ko":
+          return "Korean";
+        case "pt":
+          return "Portuguese";
+        case "ro":
+          return "Romanian";
+        case "ru":
+          return "Russian";
+        case "sk":
+          return "Slovak";
+        case "es":
+          return "Spanish";
+        case "sv":
+          return "Swedish";
+        case "th":
+          return "Thai";
+        case "tr":
+          return "Turkish";
+        case "vi":
+          return "Vietnamese";
+      }
+    };
+
     const { preTrans, fromCode, toCode } = data;
 
     const res = await axios.get(
@@ -190,7 +235,11 @@ export const getData = data => async dispatch => {
         key !== toCode &&
         res.data[key].text !== preTrans
       ) {
-        otherTrans.push(res.data[key]);
+        otherTrans.push({
+          text: res.data[key].text,
+          audio: res.data[key].audio,
+          to: getLang(key)
+        });
       }
     }
 
