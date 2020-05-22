@@ -20,7 +20,11 @@ import { useRouter } from "next/router";
 
 import TrendingChart from "../components/TrendingChart";
 
-import { getTrending, selectTrendingLang } from "../src/actions/translations";
+import {
+  getTrending,
+  selectTrendingLang,
+  selectLang
+} from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -194,7 +198,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Trending = ({
-  translations: { trending, preTrans, trendingLang },
+  translations: { trending, preTrans, trendingLang, toCode },
   getTrending,
   selectTrendingLang
 }) => {
@@ -229,22 +233,65 @@ const Trending = ({
   };
 
   const handleRouting = data => {
-    router.push(
-      "/translate/[translation]/" + data.from + "/" + data.to,
-      "/translate/" +
-        data.translation.toLowerCase() +
-        "/" +
-        data.from +
-        "/" +
-        data.to
-    );
+    if (
+      (data.from === "en" && !toCode) ||
+      (data.from === "en" && toCode === "en")
+    ) {
+      router.push(
+        "/translate/[translation]/" + data.from + "/es",
+        "/translate/" +
+          data.translation[data.from].text.toLowerCase() +
+          "/" +
+          data.from +
+          "/es"
+      );
+      return;
+    }
+    if (data.from === "en" && toCode && toCode !== "en") {
+      router.push(
+        "/translate/[translation]/" + data.from + "/" + toCode,
+        "/translate/" +
+          data.translation[data.from].text.toLowerCase() +
+          "/" +
+          data.from +
+          "/" +
+          toCode
+      );
+      return;
+    }
+    if (
+      (data.from !== "en" && !toCode) ||
+      (data.from !== "en" && toCode === data.from)
+    ) {
+      router.push(
+        "/translate/[translation]/" + data.from + "/en",
+        "/translate/" +
+          data.translation[data.from].text.toLowerCase() +
+          "/" +
+          data.from +
+          "/en"
+      );
+      return;
+    }
+    if (data.from !== "en" && toCode && toCode !== data.from) {
+      router.push(
+        "/translate/[translation]/" + data.from + "/" + toCode,
+        "/translate/" +
+          data.translation[data.from].text.toLowerCase() +
+          "/" +
+          data.from +
+          "/" +
+          toCode
+      );
+      return;
+    }
   };
 
   useEffect(() => {
     if (preTrans) {
-      getTrending();
+      getTrending(trendingLang);
     }
-  }, [preTrans]);
+  }, [preTrans, trendingLang]);
 
   useEffect(() => {
     if (trending[0] || trending === "none") {
@@ -281,13 +328,12 @@ const Trending = ({
                   {trending.map(translation => (
                     <Grid item xs key={translation._id}>
                       <IconButton
-                        aria-label="en-es translation"
+                        aria-label="translation"
                         color="secondary"
                         onClick={e => {
                           handleRouting({
-                            translation: translation.en.text,
-                            from: "en",
-                            to: "es"
+                            translation,
+                            from: trendingLang
                           });
                         }}
                       >
@@ -295,7 +341,7 @@ const Trending = ({
                           className={classes.translation}
                           color="textSecondary"
                         >
-                          {translation.en.text}
+                          {translation[trendingLang].text}
                         </Typography>
                         <div className={classes.chart}>
                           <div className={classes.showChart}>
@@ -316,13 +362,12 @@ const Trending = ({
                   {trending.map(translation => (
                     <Grid item xs key={translation._id}>
                       <IconButton
-                        aria-label="en-es translation"
+                        aria-label="translation"
                         color="secondary"
                         onClick={e => {
                           handleRouting({
-                            translation: translation.en.text,
-                            from: "en",
-                            to: "es"
+                            translation,
+                            from: trendingLang
                           });
                         }}
                       >
@@ -330,7 +375,7 @@ const Trending = ({
                           className={classes.translation}
                           color="textSecondary"
                         >
-                          {translation.en.text}
+                          {translation[trendingLang].text}
                         </Typography>
                         <div className={classes.chart}>
                           <div className={classes.showChart}>
