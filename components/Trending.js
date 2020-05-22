@@ -54,6 +54,17 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(-0.5),
     background: theme.palette.background.default
   },
+  spacer: {
+    position: "absolute",
+    width: theme.spacing(1),
+    left: theme.spacing(12),
+    top: theme.spacing(-0.5),
+    [theme.breakpoints.up("md")]: {
+      left: theme.spacing(14.8),
+      width: theme.spacing(0.2)
+    },
+    background: theme.palette.background.default
+  },
   endCap: {
     position: "absolute",
     width: theme.spacing(4),
@@ -303,6 +314,11 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
                 </Paper>
               </div>
               <div className={classes.beginningCap}>
+                <Typography className={classes.hidden} color="textSecondary">
+                  Trending
+                </Typography>
+              </div>
+              <div className={classes.spacer}>
                 <Typography className={classes.hidden} color="textSecondary">
                   Trending
                 </Typography>
