@@ -233,10 +233,7 @@ const Trending = ({
   };
 
   const handleRouting = data => {
-    if (
-      (data.from === "en" && !toCode) ||
-      (data.from === "en" && toCode === "en")
-    ) {
+    if (data.from === "en") {
       router.push(
         "/translate/[translation]/" + data.from + "/es",
         "/translate/" +
@@ -247,22 +244,8 @@ const Trending = ({
       );
       return;
     }
-    if (data.from === "en" && toCode && toCode !== "en") {
-      router.push(
-        "/translate/[translation]/" + data.from + "/" + toCode,
-        "/translate/" +
-          data.translation[data.from].text.toLowerCase() +
-          "/" +
-          data.from +
-          "/" +
-          toCode
-      );
-      return;
-    }
-    if (
-      (data.from !== "en" && !toCode) ||
-      (data.from !== "en" && toCode === data.from)
-    ) {
+
+    if (data.from !== "en") {
       router.push(
         "/translate/[translation]/" + data.from + "/en",
         "/translate/" +
@@ -270,18 +253,6 @@ const Trending = ({
           "/" +
           data.from +
           "/en"
-      );
-      return;
-    }
-    if (data.from !== "en" && toCode && toCode !== data.from) {
-      router.push(
-        "/translate/[translation]/" + data.from + "/" + toCode,
-        "/translate/" +
-          data.translation[data.from].text.toLowerCase() +
-          "/" +
-          data.from +
-          "/" +
-          toCode
       );
       return;
     }
