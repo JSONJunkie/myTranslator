@@ -32,9 +32,9 @@ export const selectTrendingLang = data => async dispatch => {
   }
 };
 
-export const getTrending = () => async dispatch => {
+export const getTrending = data => async dispatch => {
   try {
-    const res = await axios.get("/api/trending");
+    const res = await axios.get("/api/trending?selectLang=" + data);
 
     if (res.data.length < 1) {
       return dispatch({

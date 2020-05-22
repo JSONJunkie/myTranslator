@@ -13,6 +13,7 @@ handler.use(middleware);
 handler.get(async (req, res) => {
   try {
     const { Translations } = req.models;
+    const lang = req.query.selectLang + ".text";
     const docs = await Translations.find(
       {},
       {},
@@ -28,7 +29,7 @@ handler.get(async (req, res) => {
     });
 
     const newDocsTwo = newDocs.filter(doc => {
-      return doc.en.text && doc.es.text;
+      return !doc[lang];
     });
 
     res.json(newDocsTwo);
