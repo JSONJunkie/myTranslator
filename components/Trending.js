@@ -10,6 +10,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import Skeleton from "@material-ui/lab/Skeleton";
+import Fade from "@material-ui/core/Fade";
 import { useRouter } from "next/router";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -140,6 +142,8 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
 
   const [buttonPause, setButtonPause] = useState(false);
 
+  const [fade, setFade] = useState(false);
+
   const handlePause = () => {
     if (!buttonPause) {
       setPause(prev => true);
@@ -163,7 +167,7 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
   };
 
   const handleRouting = data => {
-    console.log(data);
+    // console.log(data);
     // router.push(
     //   "/translate/[translation]/" + data.from + "/" + data.to,
     //   "/translate/" +
@@ -181,123 +185,137 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
     }
   }, [preTrans]);
 
+  useEffect(() => {
+    if (trending[0] || trending === "none") {
+      setFade(prev => true);
+    }
+  }, [trending]);
+
   return (
     <div className={classes.root}>
       <div className={classes.wrapper}>
-        {trending === "none" && (
-          <Typography
-            className={classes.none}
-            align="center"
-            color="textSecondary"
-          >
-            No translations trending!
-          </Typography>
+        {!trending[0] && (
+          <Skeleton animation="wave" variant="rect" width="100%" />
         )}
-        {trending !== "none" && (
-          <div
-            onMouseEnter={handlePause}
-            onMouseLeave={handleUnpause}
-            className={classes.scrollContainer}
-          >
-            <div
-              className={clsx(classes.scroll1, {
-                [classes.pause]: pause
-              })}
+        {trending === "none" && (
+          <Fade in={fade} timeout={2000}>
+            <Typography
+              className={classes.none}
+              align="center"
+              color="textSecondary"
             >
-              <Grid container direction="row" justify="space-around">
-                {trending.map(translation => (
-                  <Grid item xs key={translation._id}>
-                    <IconButton
-                      aria-label="en-es translation"
-                      color="secondary"
-                      onClick={handleRouting({
-                        translation: translation.en.text,
-                        from: "en",
-                        to: "es"
-                      })}
-                    >
-                      <Typography
-                        className={classes.translation}
-                        color="textSecondary"
-                      >
-                        {translation.en.text}
-                      </Typography>
-                    </IconButton>
-                  </Grid>
-                ))}
-              </Grid>
-            </div>
+              No translations trending!
+            </Typography>
+          </Fade>
+        )}
+
+        {trending[0] && trending !== "none" && (
+          <Fade in={fade} timeout={2000}>
             <div
-              className={clsx(classes.scroll2, {
-                [classes.pause]: pause
-              })}
+              onMouseEnter={handlePause}
+              onMouseLeave={handleUnpause}
+              className={classes.scrollContainer}
             >
-              <Grid container direction="row" justify="space-around">
-                {trending.map(translation => (
-                  <Grid item xs key={translation._id}>
-                    <IconButton
-                      aria-label="en-es translation"
-                      color="secondary"
-                      onClick={handleRouting({
-                        translation: translation.en.text,
-                        from: "en",
-                        to: "es"
-                      })}
-                    >
-                      <Typography
-                        className={classes.translation}
-                        color="textSecondary"
+              <div
+                className={clsx(classes.scroll1, {
+                  [classes.pause]: pause
+                })}
+              >
+                <Grid container direction="row" justify="space-around">
+                  {trending.map(translation => (
+                    <Grid item xs key={translation._id}>
+                      <IconButton
+                        aria-label="en-es translation"
+                        color="secondary"
+                        onClick={handleRouting({
+                          translation: translation.en.text,
+                          from: "en",
+                          to: "es"
+                        })}
                       >
-                        {translation.en.text}
-                      </Typography>
+                        <Typography
+                          className={classes.translation}
+                          color="textSecondary"
+                        >
+                          {translation.en.text}
+                        </Typography>
+                      </IconButton>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+              <div
+                className={clsx(classes.scroll2, {
+                  [classes.pause]: pause
+                })}
+              >
+                <Grid container direction="row" justify="space-around">
+                  {trending.map(translation => (
+                    <Grid item xs key={translation._id}>
+                      <IconButton
+                        aria-label="en-es translation"
+                        color="secondary"
+                        onClick={handleRouting({
+                          translation: translation.en.text,
+                          from: "en",
+                          to: "es"
+                        })}
+                      >
+                        <Typography
+                          className={classes.translation}
+                          color="textSecondary"
+                        >
+                          {translation.en.text}
+                        </Typography>
+                      </IconButton>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+              <div className={classes.trending}>
+                <Paper square={true}>
+                  <Typography
+                    className={classes.trendingText}
+                    color="textSecondary"
+                  >
+                    Trending
+                  </Typography>
+                </Paper>
+              </div>
+              <div className={classes.button}>
+                <Paper square={true}>
+                  {!buttonPause && (
+                    <IconButton
+                      aria-label="pause"
+                      color="secondary"
+                      onClick={handleButtonPause}
+                    >
+                      <PauseIcon />
                     </IconButton>
-                  </Grid>
-                ))}
-              </Grid>
-            </div>
-            <div className={classes.trending}>
-              <Paper square={true}>
-                <Typography
-                  className={classes.trendingText}
-                  color="textSecondary"
-                >
+                  )}
+                  {buttonPause && (
+                    <IconButton
+                      aria-label="unpause"
+                      color="secondary"
+                      onClick={handleButtonUnpause}
+                    >
+                      <PlayArrowIcon />
+                    </IconButton>
+                  )}
+                </Paper>
+              </div>
+              <div className={classes.beginningCap}>
+                <Typography className={classes.hidden} color="textSecondary">
                   Trending
                 </Typography>
-              </Paper>
+              </div>
+              <div className={classes.endCap}>
+                <Typography className={classes.hidden} color="textSecondary">
+                  Trending
+                </Typography>
+              </div>
             </div>
-            <div className={classes.button}>
-              <Paper square={true}>
-                {!buttonPause && (
-                  <IconButton
-                    aria-label="pause"
-                    color="secondary"
-                    onClick={handleButtonPause}
-                  >
-                    <PauseIcon />
-                  </IconButton>
-                )}
-                {buttonPause && (
-                  <IconButton
-                    aria-label="unpause"
-                    color="secondary"
-                    onClick={handleButtonUnpause}
-                  >
-                    <PlayArrowIcon />
-                  </IconButton>
-                )}
-              </Paper>
-            </div>
-            <div className={classes.beginningCap}>
-              <Typography className={classes.hidden} color="textSecondary">
-                Trending
-              </Typography>
-            </div>
-            <div className={classes.endCap}>
-              <Typography className={classes.hidden} color="textSecondary">
-                Trending
-              </Typography>
-            </div>
-          </div>
+          </Fade>
         )}
       </div>
     </div>
