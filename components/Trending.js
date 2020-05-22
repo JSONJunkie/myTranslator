@@ -13,6 +13,8 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import Fade from "@material-ui/core/Fade";
 import { useRouter } from "next/router";
 
+import TrendingChart from "../components/TrendingChart";
+
 import { getTrending } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
@@ -91,10 +93,12 @@ const useStyles = makeStyles(theme => ({
   translation: {
     fontSize: 18,
     padding: theme.spacing(2),
+    paddingRight: theme.spacing(8),
     marginLeft: theme.spacing(1),
     background: theme.palette.background.paper,
     [theme.breakpoints.up("md")]: {
-      fontSize: 22
+      fontSize: 22,
+      paddingRight: theme.spacing(10)
     }
   },
   none: {
@@ -136,6 +140,22 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     animationPlayState: "paused",
     position: "absolute"
+  },
+  chart: {
+    position: "absolute",
+    zIndex: 0,
+    height: theme.spacing(3),
+    width: theme.spacing(5),
+    marginLeft: theme.spacing(3.5),
+    [theme.breakpoints.up("md")]: {
+      height: theme.spacing(4),
+      width: theme.spacing(6),
+      marginLeft: theme.spacing(4.5)
+    }
+  },
+  showChart: {
+    height: "100%",
+    width: "100%"
   }
 }));
 
@@ -246,6 +266,15 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
                         >
                           {translation.en.text}
                         </Typography>
+                        <div
+                          square={true}
+                          elevation={0}
+                          className={classes.chart}
+                        >
+                          <div className={classes.showChart}>
+                            <TrendingChart data={translation.hitData} />
+                          </div>
+                        </div>
                       </IconButton>
                     </Grid>
                   ))}
@@ -276,6 +305,15 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
                         >
                           {translation.en.text}
                         </Typography>
+                        <div
+                          square={true}
+                          elevation={0}
+                          className={classes.chart}
+                        >
+                          <div className={classes.showChart}>
+                            <TrendingChart data={translation.hitData} />
+                          </div>
+                        </div>
                       </IconButton>
                     </Grid>
                   ))}
