@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 
 import TranslationGrid from "../components/TranslationGrid";
 import ChartGrid from "../components/ChartGrid";
+import Footer from "../components/Footer";
 
 import { speak } from "../src/actions/translations";
 

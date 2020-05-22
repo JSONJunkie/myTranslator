@@ -10,7 +10,6 @@ import Navbar from "../components/Navbar";
 import LanguageSelect from "../components/LanguageSelect";
 import Trending from "../components/Trending";
 import LoadingOverlay from "../components/LoadingOverlay";
-import Footer from "../components/Footer";
 import theme from "../themes/theme";
 
 function getRollbar() {
@@ -82,7 +81,6 @@ function MyApp({ Component, pageProps, store }) {
             <LoadingOverlay />
             <Component rollbar={rollbar} {...pageProps} />
           </div>
-          <Footer />
         </ThemeProvider>
       </div>
     </React.Fragment>
