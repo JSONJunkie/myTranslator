@@ -167,16 +167,15 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
   };
 
   const handleRouting = data => {
-    // console.log(data);
-    // router.push(
-    //   "/translate/[translation]/" + data.from + "/" + data.to,
-    //   "/translate/" +
-    //     data.translation.toLowerCase() +
-    //     "/" +
-    //     data.from +
-    //     "/" +
-    //     data.to
-    // );
+    router.push(
+      "/translate/[translation]/" + data.from + "/" + data.to,
+      "/translate/" +
+        data.translation.toLowerCase() +
+        "/" +
+        data.from +
+        "/" +
+        data.to
+    );
   };
 
   useEffect(() => {
@@ -227,11 +226,13 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
                       <IconButton
                         aria-label="en-es translation"
                         color="secondary"
-                        onClick={handleRouting({
-                          translation: translation.en.text,
-                          from: "en",
-                          to: "es"
-                        })}
+                        onClick={e => {
+                          handleRouting({
+                            translation: translation.en.text,
+                            from: "en",
+                            to: "es"
+                          });
+                        }}
                       >
                         <Typography
                           className={classes.translation}
@@ -255,11 +256,13 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
                       <IconButton
                         aria-label="en-es translation"
                         color="secondary"
-                        onClick={handleRouting({
-                          translation: translation.en.text,
-                          from: "en",
-                          to: "es"
-                        })}
+                        onClick={e => {
+                          handleRouting({
+                            translation: translation.en.text,
+                            from: "en",
+                            to: "es"
+                          });
+                        }}
                       >
                         <Typography
                           className={classes.translation}
