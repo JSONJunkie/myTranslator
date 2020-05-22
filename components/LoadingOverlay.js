@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 
 import TranslationGrid from "../components/TranslationGrid";
 import ChartGrid from "../components/ChartGrid";
+import OtherTranslations from "../components/OtherTranslations";
 import Footer from "../components/Footer";
 
 import { speak } from "../src/actions/translations";
@@ -59,7 +60,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoadingOverlay = ({
-  translations: { userInput, preTrans, postTrans, from, to, toCode, audio },
+  translations: {
+    userInput,
+    preTrans,
+    postTrans,
+    from,
+    to,
+    toCode,
+    audio,
+    otherTrans
+  },
   speak
 }) => {
   const classes = useStyles();
@@ -227,8 +237,14 @@ const LoadingOverlay = ({
                   {!preTrans && <ChartGrid hide={{ hide: "" }} />}
                 </Fragment>
               )}
+              <OtherTranslations
+                otherTrans={otherTrans}
+                audioContext={audioContext}
+                speak={speak}
+              />
             </Grid>
           </Grow>
+          <Footer />
         </Container>
       </div>
     </Fragment>
