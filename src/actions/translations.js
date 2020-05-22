@@ -181,13 +181,27 @@ export const getData = data => async dispatch => {
         getData({ preTrans: "welcome", fromCode: "en", toCode: "es" })
       );
     }
+
+    var otherTrans = [];
+
+    for (var key of Object.keys(res.data)) {
+      if (
+        res.data[key].text &&
+        key !== toCode &&
+        res.data[key].text !== preTrans
+      ) {
+        otherTrans.push(res.data[key]);
+      }
+    }
+
     dispatch({
       type: GET_DATA,
       payload: {
         preTrans: res.data[fromCode].text,
         postTrans: res.data[toCode].text,
         chartData: res.data.hitData,
-        audio: res.data[toCode].audio
+        audio: res.data[toCode].audio,
+        otherTrans
       }
     });
   } catch (err) {

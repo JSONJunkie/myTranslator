@@ -18,6 +18,7 @@ const initialState = {
   toCode: "",
   to: "...",
   audio: "",
+  otherTrans: [],
   trendingLang: "en",
   trending: [],
   chartData: []
@@ -36,7 +37,8 @@ export default function (state = initialState, action) {
         preTrans: payload.preTrans,
         postTrans: payload.postTrans,
         chartData: payload.chartData,
-        audio: payload.audio
+        audio: payload.audio,
+        otherTrans: payload.otherTrans
       };
     case SELECT_LANG:
       return {
