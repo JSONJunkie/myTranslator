@@ -204,8 +204,6 @@ const Trending = ({
 
   const [pause, setPause] = useState(false);
 
-  const [buttonPause, setButtonPause] = useState(false);
-
   const [fade, setFade] = useState(false);
 
   const [open, setOpen] = useState(false);
@@ -222,25 +220,11 @@ const Trending = ({
     selectTrendingLang(e.target.value);
   };
 
-  const handlePause = () => {
-    if (!buttonPause) {
-      setPause(prev => true);
-    }
-  };
-
-  const handleUnpause = () => {
-    if (!buttonPause) {
-      setPause(prev => false);
-    }
-  };
-
   const handleButtonPause = () => {
-    setButtonPause(prev => true);
     setPause(prev => true);
   };
 
   const handleButtonUnpause = () => {
-    setButtonPause(prev => false);
     setPause(prev => false);
   };
 
@@ -288,11 +272,7 @@ const Trending = ({
 
         {trending[0] && trending !== "none" && (
           <Fade in={fade} timeout={2000}>
-            <div
-              onMouseEnter={handlePause}
-              onMouseLeave={handleUnpause}
-              className={classes.scrollContainer}
-            >
+            <div className={classes.scrollContainer}>
               <div
                 className={clsx(classes.scroll1, {
                   [classes.pause]: pause
@@ -456,7 +436,7 @@ const Trending = ({
               </div>
               <div className={classes.scrollToggle}>
                 <Paper square={true}>
-                  {!buttonPause && (
+                  {!pause && (
                     <IconButton
                       aria-label="pause"
                       color="secondary"
@@ -465,7 +445,7 @@ const Trending = ({
                       <PauseIcon />
                     </IconButton>
                   )}
-                  {buttonPause && (
+                  {pause && (
                     <IconButton
                       aria-label="unpause"
                       color="secondary"
