@@ -170,7 +170,7 @@ const useStyles = makeStyles(theme => ({
       transform: "translateX(100%)"
     },
     "100%": {
-      transform: "translateX(-65%)"
+      transform: "translateX(-100%)"
     }
   },
   pause: {
