@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,16 +7,11 @@ import Grid from "@material-ui/core/Grid";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import IconButton from "@material-ui/core/IconButton";
-import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Fade from "@material-ui/core/Fade";
 import { useRouter } from "next/router";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 
 import { getTrending } from "../src/actions/translations";
 
@@ -43,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     left: theme.spacing(4),
     top: theme.spacing(-0.5)
   },
-  button: {
+  scrollToggle: {
     position: "absolute",
     left: theme.spacing(13),
     top: theme.spacing(-1.5),
@@ -285,7 +280,7 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
                   </Typography>
                 </Paper>
               </div>
-              <div className={classes.button}>
+              <div className={classes.scrollToggle}>
                 <Paper square={true}>
                   {!buttonPause && (
                     <IconButton
