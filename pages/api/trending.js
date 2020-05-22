@@ -28,7 +28,7 @@ handler.get(async (req, res) => {
     });
 
     const newDocsTwo = newDocs.filter(doc => {
-      return doc.en.text;
+      return doc.en.text && doc.es.text;
     });
 
     res.json(newDocsTwo);
