@@ -7,9 +7,30 @@ import {
   ADD_HIT,
   GET_DATA,
   SELECT_LANG,
-  GET_TRENDING
+  GET_TRENDING,
+  SELECT_TREND_LANG
 } from "./types";
 import playSound from "../utils/playSound";
+
+export const selectTrendingLang = data => async dispatch => {
+  try {
+    dispatch({
+      type: SELECT_TREND_LANG,
+      payload: {
+        trendingLang: data
+      }
+    });
+  } catch (err) {
+    // rollbar.error(err);
+    // dispatch({
+    //   type: ERROR,
+    //   payload: {
+    //     name: err.name,
+    //     message: err.message
+    //   }
+    // });
+  }
+};
 
 export const getTrending = () => async dispatch => {
   try {

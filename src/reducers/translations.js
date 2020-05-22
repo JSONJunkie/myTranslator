@@ -4,7 +4,8 @@ import {
   ADD_HIT,
   GET_DATA,
   SELECT_LANG,
-  GET_TRENDING
+  GET_TRENDING,
+  SELECT_TREND_LANG
 } from "../actions/types";
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   toCode: "",
   to: "...",
   audio: "",
+  trendingLang: "en",
   trending: [],
   chartData: []
 };
@@ -46,6 +48,8 @@ export default function (state = initialState, action) {
       };
     case GET_TRENDING:
       return { ...state, trending: payload.trending };
+    case SELECT_TREND_LANG:
+      return { ...state, trendingLang: payload.trendingLang };
     case ADD_HIT:
     default:
       return state;
