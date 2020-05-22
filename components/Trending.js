@@ -269,7 +269,6 @@ const Trending = ({
             </Typography>
           </Fade>
         )}
-
         {trending[0] && trending !== "none" && (
           <Fade in={fade} timeout={2000}>
             <div className={classes.scrollContainer}>
@@ -343,137 +342,137 @@ const Trending = ({
                   ))}
                 </Grid>
               </div>
-              <div className={classes.trending}>
-                <Paper
-                  square={true}
-                  elevation={0}
-                  className={classes.trendingTextDesktop}
-                >
-                  <Typography noWrap={true} color="textSecondary">
-                    Trending
-                  </Typography>
-                </Paper>
-                <Paper
-                  square={true}
-                  elevation={0}
-                  className={classes.trendingTextMobile}
-                >
-                  <TrendingUpIcon />
-                </Paper>
-                <FormControl
-                  variant="outlined"
-                  size="small"
-                  className={classes.formControl}
-                >
-                  <Select
-                    labelId="trending language"
-                    id="trending language"
-                    open={open}
-                    onClose={handleClose}
-                    onOpen={handleOpen}
-                    value={trendingLang}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="ar" disabled={trendingLang === "ar"}>
-                      Arabic
-                    </MenuItem>
-                    <MenuItem value="zh" disabled={trendingLang === "zh"}>
-                      Chinese (simplified)
-                    </MenuItem>
-                    <MenuItem value="zh-TW" disabled={trendingLang === "zh-TW"}>
-                      Chinese (traditional)
-                    </MenuItem>
-                    <MenuItem value="en" disabled={trendingLang === "en"}>
-                      English
-                    </MenuItem>
-                    <MenuItem value="fi" disabled={trendingLang === "fi"}>
-                      Finnish
-                    </MenuItem>
-                    <MenuItem value="fr" disabled={trendingLang === "fr"}>
-                      French
-                    </MenuItem>
-                    <MenuItem value="de" disabled={trendingLang === "de"}>
-                      German
-                    </MenuItem>
-                    <MenuItem value="it" disabled={trendingLang === "it"}>
-                      Italian
-                    </MenuItem>
-                    <MenuItem value="ja" disabled={trendingLang === "ja"}>
-                      Japanese
-                    </MenuItem>
-                    <MenuItem value="ko" disabled={trendingLang === "ko"}>
-                      Korean
-                    </MenuItem>
-                    <MenuItem value="pt" disabled={trendingLang === "pt"}>
-                      Portuguese
-                    </MenuItem>
-                    <MenuItem value="ro" disabled={trendingLang === "ro"}>
-                      Romanian
-                    </MenuItem>
-                    <MenuItem value="ru" disabled={trendingLang === "ru"}>
-                      Russian
-                    </MenuItem>
-                    <MenuItem value="sk" disabled={trendingLang === "sk"}>
-                      Slovak
-                    </MenuItem>
-                    <MenuItem value="es" disabled={trendingLang === "es"}>
-                      Spanish
-                    </MenuItem>
-                    <MenuItem value="sv" disabled={trendingLang === "sv"}>
-                      Swedish
-                    </MenuItem>
-                    <MenuItem value="th" disabled={trendingLang === "th"}>
-                      Thai
-                    </MenuItem>
-                    <MenuItem value="tr" disabled={trendingLang === "tr"}>
-                      Turkish
-                    </MenuItem>
-                    <MenuItem value="vi" disabled={trendingLang === "vi"}>
-                      Vietnamese
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-              <div className={classes.scrollToggle}>
-                <Paper square={true}>
-                  {!pause && (
-                    <IconButton
-                      aria-label="pause"
-                      color="secondary"
-                      onClick={handleButtonPause}
-                    >
-                      <PauseIcon />
-                    </IconButton>
-                  )}
-                  {pause && (
-                    <IconButton
-                      aria-label="unpause"
-                      color="secondary"
-                      onClick={handleButtonUnpause}
-                    >
-                      <PlayArrowIcon />
-                    </IconButton>
-                  )}
-                </Paper>
-              </div>
-              <div className={classes.beginningCap}>
-                <Typography className={classes.hidden} color="textSecondary">
-                  Trending
-                </Typography>
-              </div>
-              <div className={classes.spacer}>
-                <Typography className={classes.hidden} color="textSecondary">
-                  Trending
-                </Typography>
-              </div>
-              <div className={classes.endCap}>
-                <Typography className={classes.hidden} color="textSecondary">
-                  Trending
-                </Typography>
-              </div>
             </div>
           </Fade>
         )}
+        <div className={classes.trending}>
+          <Paper
+            square={true}
+            elevation={0}
+            className={classes.trendingTextDesktop}
+          >
+            <Typography noWrap={true} color="textSecondary">
+              Trending
+            </Typography>
+          </Paper>
+          <Paper
+            square={true}
+            elevation={0}
+            className={classes.trendingTextMobile}
+          >
+            <TrendingUpIcon />
+          </Paper>
+          <FormControl
+            variant="outlined"
+            size="small"
+            className={classes.formControl}
+          >
+            <Select
+              labelId="trending language"
+              id="trending language"
+              open={open}
+              onClose={handleClose}
+              onOpen={handleOpen}
+              value={trendingLang}
+              onChange={handleChange}
+            >
+              <MenuItem value="ar" disabled={trendingLang === "ar"}>
+                Arabic
+              </MenuItem>
+              <MenuItem value="zh" disabled={trendingLang === "zh"}>
+                Chinese (simplified)
+              </MenuItem>
+              <MenuItem value="zh-TW" disabled={trendingLang === "zh-TW"}>
+                Chinese (traditional)
+              </MenuItem>
+              <MenuItem value="en" disabled={trendingLang === "en"}>
+                English
+              </MenuItem>
+              <MenuItem value="fi" disabled={trendingLang === "fi"}>
+                Finnish
+              </MenuItem>
+              <MenuItem value="fr" disabled={trendingLang === "fr"}>
+                French
+              </MenuItem>
+              <MenuItem value="de" disabled={trendingLang === "de"}>
+                German
+              </MenuItem>
+              <MenuItem value="it" disabled={trendingLang === "it"}>
+                Italian
+              </MenuItem>
+              <MenuItem value="ja" disabled={trendingLang === "ja"}>
+                Japanese
+              </MenuItem>
+              <MenuItem value="ko" disabled={trendingLang === "ko"}>
+                Korean
+              </MenuItem>
+              <MenuItem value="pt" disabled={trendingLang === "pt"}>
+                Portuguese
+              </MenuItem>
+              <MenuItem value="ro" disabled={trendingLang === "ro"}>
+                Romanian
+              </MenuItem>
+              <MenuItem value="ru" disabled={trendingLang === "ru"}>
+                Russian
+              </MenuItem>
+              <MenuItem value="sk" disabled={trendingLang === "sk"}>
+                Slovak
+              </MenuItem>
+              <MenuItem value="es" disabled={trendingLang === "es"}>
+                Spanish
+              </MenuItem>
+              <MenuItem value="sv" disabled={trendingLang === "sv"}>
+                Swedish
+              </MenuItem>
+              <MenuItem value="th" disabled={trendingLang === "th"}>
+                Thai
+              </MenuItem>
+              <MenuItem value="tr" disabled={trendingLang === "tr"}>
+                Turkish
+              </MenuItem>
+              <MenuItem value="vi" disabled={trendingLang === "vi"}>
+                Vietnamese
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <div className={classes.scrollToggle}>
+          <Paper square={true}>
+            {!pause && (
+              <IconButton
+                aria-label="pause"
+                color="secondary"
+                onClick={handleButtonPause}
+              >
+                <PauseIcon />
+              </IconButton>
+            )}
+            {pause && (
+              <IconButton
+                aria-label="unpause"
+                color="secondary"
+                onClick={handleButtonUnpause}
+              >
+                <PlayArrowIcon />
+              </IconButton>
+            )}
+          </Paper>
+        </div>
+        <div className={classes.beginningCap}>
+          <Typography className={classes.hidden} color="textSecondary">
+            Trending
+          </Typography>
+        </div>
+        <div className={classes.spacer}>
+          <Typography className={classes.hidden} color="textSecondary">
+            Trending
+          </Typography>
+        </div>
+        <div className={classes.endCap}>
+          <Typography className={classes.hidden} color="textSecondary">
+            Trending
+          </Typography>
+        </div>
       </div>
     </div>
   );
