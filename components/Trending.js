@@ -10,11 +10,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import { useRouter } from "next/router";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import { useRouter } from "next/router";
 
 import { getTrending } from "../src/actions/translations";
 
@@ -80,10 +80,11 @@ const useStyles = makeStyles(theme => ({
       fontSize: 15
     }
   },
-  test: {
+  translation: {
     fontSize: 18,
+    padding: theme.spacing(2),
     marginLeft: theme.spacing(1),
-    background: "yellow",
+    background: theme.palette.background.paper,
     [theme.breakpoints.up("md")]: {
       fontSize: 22
     }
@@ -133,6 +134,8 @@ const useStyles = makeStyles(theme => ({
 const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
   const classes = useStyles();
 
+  const router = useRouter();
+
   const [pause, setPause] = useState(false);
 
   const [buttonPause, setButtonPause] = useState(false);
@@ -157,6 +160,19 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
   const handleButtonUnpause = () => {
     setButtonPause(prev => false);
     setPause(prev => false);
+  };
+
+  const handleRouting = data => {
+    console.log(data);
+    // router.push(
+    //   "/translate/[translation]/" + data.from + "/" + data.to,
+    //   "/translate/" +
+    //     data.translation.toLowerCase() +
+    //     "/" +
+    //     data.from +
+    //     "/" +
+    //     data.to
+    // );
   };
 
   useEffect(() => {
@@ -189,21 +205,26 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
               })}
             >
               <Grid container direction="row" justify="space-around">
-                <Grid item xs>
-                  <Typography className={classes.test} color="textSecondary">
-                    scrollwwwww
-                  </Typography>
-                </Grid>
-                <Grid item xs>
-                  <Typography className={classes.test} color="textSecondary">
-                    scroll2
-                  </Typography>
-                </Grid>
-                <Grid item xs>
-                  <Typography className={classes.test} color="textSecondary">
-                    scroll3
-                  </Typography>
-                </Grid>
+                {trending.map(translation => (
+                  <Grid item xs key={translation._id}>
+                    <IconButton
+                      aria-label="en-es translation"
+                      color="secondary"
+                      onClick={handleRouting({
+                        translation: translation.en.text,
+                        from: "en",
+                        to: "es"
+                      })}
+                    >
+                      <Typography
+                        className={classes.translation}
+                        color="textSecondary"
+                      >
+                        {translation.en.text}
+                      </Typography>
+                    </IconButton>
+                  </Grid>
+                ))}
               </Grid>
             </div>
             <div
@@ -212,21 +233,26 @@ const Trending = ({ translations: { trending, preTrans }, getTrending }) => {
               })}
             >
               <Grid container direction="row" justify="space-around">
-                <Grid item xs>
-                  <Typography className={classes.test} color="textSecondary">
-                    scrollwwwww
-                  </Typography>
-                </Grid>
-                <Grid item xs>
-                  <Typography className={classes.test} color="textSecondary">
-                    scroll2
-                  </Typography>
-                </Grid>
-                <Grid item xs>
-                  <Typography className={classes.test} color="textSecondary">
-                    scroll3
-                  </Typography>
-                </Grid>
+                {trending.map(translation => (
+                  <Grid item xs key={translation._id}>
+                    <IconButton
+                      aria-label="en-es translation"
+                      color="secondary"
+                      onClick={handleRouting({
+                        translation: translation.en.text,
+                        from: "en",
+                        to: "es"
+                      })}
+                    >
+                      <Typography
+                        className={classes.translation}
+                        color="textSecondary"
+                      >
+                        {translation.en.text}
+                      </Typography>
+                    </IconButton>
+                  </Grid>
+                ))}
               </Grid>
             </div>
             <div className={classes.trending}>
