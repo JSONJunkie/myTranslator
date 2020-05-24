@@ -129,15 +129,20 @@ const useStyles = makeStyles(theme => ({
     }
   },
   translation: {
-    fontSize: 18,
-    padding: theme.spacing(2),
-    paddingRight: theme.spacing(8),
-    marginLeft: theme.spacing(1),
-    background: theme.palette.background.paper,
+    fontSize: 10,
+    paddingLeft: theme.spacing(4.5),
+    paddingRight: theme.spacing(0),
     [theme.breakpoints.up("md")]: {
-      fontSize: 22,
-      paddingRight: theme.spacing(10)
+      fontSize: 14,
+      maxWidth: theme.spacing(3),
+      paddingLeft: theme.spacing(4.5),
+      paddingRight: theme.spacing(4)
     }
+  },
+  translationWrapper: {
+    position: "relative",
+    padding: theme.spacing(1),
+    background: theme.palette.background.paper
   },
   none: {
     width: "100%",
@@ -147,10 +152,11 @@ const useStyles = makeStyles(theme => ({
     }
   },
   scrollContainer: {
-    display: "flex",
-    width: "100%",
     position: "relative",
-    alignItems: "center"
+    minWidth: theme.spacing(120),
+    [theme.breakpoints.up("md")]: {
+      minWidth: theme.spacing(140)
+    }
   },
   scroll1: {
     width: "100%",
@@ -183,12 +189,16 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     zIndex: 0,
     height: theme.spacing(3),
-    width: theme.spacing(5),
-    marginLeft: theme.spacing(3.5),
+    width: theme.spacing(4),
+    left: theme.spacing(0.5),
+    top: theme.spacing(0.5),
     [theme.breakpoints.up("md")]: {
-      height: theme.spacing(4),
-      width: theme.spacing(6),
-      marginLeft: theme.spacing(4.5)
+      top: theme.spacing(0),
+      height: theme.spacing(3),
+      width: theme.spacing(4),
+      marginLeft: theme.spacing(4.5),
+      left: theme.spacing(-4),
+      marginTop: theme.spacing(1)
     }
   },
   showChart: {
@@ -289,15 +299,22 @@ const Trending = ({
         )}
         {trending[0] && trending !== "none" && (
           <Fade in={fade} timeout={2000}>
-            <div className={classes.scrollContainer}>
-              <div
+            <Grid
+              className={classes.scrollContainer}
+              container
+              direction="row"
+              justify="space-evenly"
+              alignItems="center"
+              wrap="nowrap"
+            >
+              <span
                 className={clsx(classes.scroll1, {
                   [classes.pause]: pause
                 })}
               >
-                <Grid container direction="row" justify="space-around">
-                  {trending.map(translation => (
-                    <Grid item xs key={translation._id}>
+                {trending.length > 0 &&
+                  trending.map(translation => (
+                    <Grid item xs="auto" key={translation._id}>
                       <IconButton
                         aria-label="translation"
                         color="secondary"
@@ -308,30 +325,32 @@ const Trending = ({
                           });
                         }}
                       >
-                        <Typography
-                          className={classes.translation}
-                          color="textSecondary"
-                        >
-                          {translation[trendingLang].text}
-                        </Typography>
-                        <div className={classes.chart}>
-                          <div className={classes.showChart}>
-                            <TrendingChart data={translation.hitData} />
+                        <div className={classes.translationWrapper}>
+                          <Typography
+                            className={classes.translation}
+                            color="textSecondary"
+                            noWrap
+                          >
+                            {translation[trendingLang].text}
+                          </Typography>
+                          <div className={classes.chart}>
+                            <div className={classes.showChart}>
+                              <TrendingChart data={translation.hitData} />
+                            </div>
                           </div>
                         </div>
                       </IconButton>
                     </Grid>
                   ))}
-                </Grid>
-              </div>
-              <div
+              </span>
+              <span
                 className={clsx(classes.scroll2, {
                   [classes.pause]: pause
                 })}
               >
-                <Grid container direction="row" justify="space-around">
-                  {trending.map(translation => (
-                    <Grid item xs key={translation._id}>
+                {trending.length > 0 &&
+                  trending.map(translation => (
+                    <Grid item xs="auto" key={translation._id}>
                       <IconButton
                         aria-label="translation"
                         color="secondary"
@@ -342,23 +361,25 @@ const Trending = ({
                           });
                         }}
                       >
-                        <Typography
-                          className={classes.translation}
-                          color="textSecondary"
-                        >
-                          {translation[trendingLang].text}
-                        </Typography>
-                        <div className={classes.chart}>
-                          <div className={classes.showChart}>
-                            <TrendingChart data={translation.hitData} />
+                        <div className={classes.translationWrapper}>
+                          <Typography
+                            className={classes.translation}
+                            color="textSecondary"
+                            noWrap
+                          >
+                            {translation[trendingLang].text}
+                          </Typography>
+                          <div className={classes.chart}>
+                            <div className={classes.showChart}>
+                              <TrendingChart data={translation.hitData} />
+                            </div>
                           </div>
                         </div>
                       </IconButton>
                     </Grid>
                   ))}
-                </Grid>
-              </div>
-            </div>
+              </span>
+            </Grid>
           </Fade>
         )}
         <div className={classes.trending}>
