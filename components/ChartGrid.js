@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import Skeleton from "@material-ui/lab/Skeleton";
 import { CircularProgress } from "@material-ui/core";
 
 import Chart from "../components/Chart";
@@ -12,6 +13,16 @@ const useStyles = makeStyles(theme => ({
   chart: {
     height: 200,
     width: 300,
+    [theme.breakpoints.down("sm")]: {
+      height: 120,
+      width: 170,
+      margin: "auto"
+    }
+  },
+  chartLoading: {
+    height: 200,
+    width: 300,
+    padding: theme.spacing(1),
     [theme.breakpoints.down("sm")]: {
       height: 120,
       width: 170,
@@ -56,12 +67,13 @@ const ChartGrid = ({ hide: { hide }, translations: { chartData } }) => {
           </Paper>
         )}
         {hide && (
-          <Paper className={classes.chart}>
-            <div className={classes.showChart}>
-              <div className={classes.wrapper}>
-                <CircularProgress disableShrink />
-              </div>
-            </div>
+          <Paper className={classes.chartLoading}>
+            <Skeleton
+              animation="wave"
+              variant="rect"
+              height="100%"
+              width="100%"
+            />
           </Paper>
         )}
         {hide === "" && (
