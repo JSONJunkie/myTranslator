@@ -19,7 +19,8 @@ import {
   updateInput,
   addHit,
   getData,
-  selectLang
+  selectLang,
+  clearData
 } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
@@ -123,7 +124,8 @@ const Navbar = ({
   selectLang,
   updateInput,
   addHit,
-  getData
+  getData,
+  clearData
 }) => {
   const classes = useStyles();
 
@@ -227,6 +229,7 @@ const Navbar = ({
         return;
       }
     }
+    clearData();
     router.push(
       "/translate/[translation]/" + fromCode + "/" + toCode,
       "/translate/" + userInput.toLowerCase() + "/" + fromCode + "/" + toCode
@@ -234,7 +237,10 @@ const Navbar = ({
   };
 
   const goHome = () => {
-    router.push("/");
+    if (router.pathname !== "/") {
+      clearData();
+      router.push("/");
+    }
   };
 
   const onChange = e => {
@@ -351,5 +357,6 @@ export default connect(mapStateToProps, {
   updateInput,
   addHit,
   getData,
-  selectLang
+  selectLang,
+  clearData
 })(Navbar);

@@ -67,8 +67,10 @@ const LoadingOverlay = ({
     from,
     to,
     toCode,
+    chartData,
     audio,
-    otherTrans
+    otherTrans,
+    loading
   },
   speak
 }) => {
@@ -206,17 +208,18 @@ const LoadingOverlay = ({
                           speak={"none"}
                         />
                       )}
-                      {router.pathname === "/" && preTrans && (
+                      {router.pathname === "/" && chartData && (
                         <ChartGrid hide={{ hide: !hide }} />
                       )}
-                      {router.pathname !== "/" && (
+                      {router.pathname !== "/" && chartData && (
                         <Fragment>
-                          {routing.complete && (
-                            <ChartGrid hide={{ hide: !hide }} />
-                          )}
-                          {!routing.complete && (
-                            <ChartGrid hide={{ hide: hide }} />
-                          )}
+                          {!loading && <ChartGrid hide={{ hide: !hide }} />}
+                          {loading && <ChartGrid hide={{ hide: hide }} />}
+                        </Fragment>
+                      )}
+                      {router.pathname !== "/" && !chartData && (
+                        <Fragment>
+                          <ChartGrid hide={{ hide: hide }} />
                         </Fragment>
                       )}
                     </Fragment>

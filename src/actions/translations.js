@@ -8,9 +8,27 @@ import {
   GET_DATA,
   SELECT_LANG,
   GET_TRENDING,
-  SELECT_TREND_LANG
+  SELECT_TREND_LANG,
+  CLEAR_DATA
 } from "./types";
 import playSound from "../utils/playSound";
+
+export const clearData = () => async dispatch => {
+  try {
+    dispatch({
+      type: CLEAR_DATA
+    });
+  } catch (err) {
+    // rollbar.error(err);
+    // dispatch({
+    //   type: ERROR,
+    //   payload: {
+    //     name: err.name,
+    //     message: err.message
+    //   }
+    // });
+  }
+};
 
 export const selectTrendingLang = data => async dispatch => {
   try {
@@ -290,10 +308,21 @@ export const addHit = data => async dispatch => {
 
 export const updateInput = data => async dispatch => {
   try {
-    dispatch({
-      type: UPDATE_INPUT,
-      payload: { userInput: data }
-    });
+    if (data) {
+      dispatch({
+        type: UPDATE_INPUT,
+        payload: { userInput: data, loading: true }
+      });
+      return;
+    }
+
+    if (!data) {
+      dispatch({
+        type: UPDATE_INPUT,
+        payload: { userInput: data, loading: false }
+      });
+      return;
+    }
   } catch (err) {
     // rollbar.error(err);
     // dispatch({
