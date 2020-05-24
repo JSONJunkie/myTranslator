@@ -208,16 +208,21 @@ const LoadingOverlay = ({
                           speak={"none"}
                         />
                       )}
-                      {router.pathname === "/" && chartData && (
+                      {router.pathname === "/" && chartData.length > 0 && (
                         <ChartGrid hide={{ hide: !hide }} />
                       )}
-                      {router.pathname !== "/" && chartData && (
+                      {router.pathname === "/" && chartData.length === 0 && (
+                        <Fragment>
+                          <ChartGrid hide={{ hide: hide }} />
+                        </Fragment>
+                      )}
+                      {router.pathname !== "/" && chartData.length > 0 && (
                         <Fragment>
                           {!loading && <ChartGrid hide={{ hide: !hide }} />}
                           {loading && <ChartGrid hide={{ hide: hide }} />}
                         </Fragment>
                       )}
-                      {router.pathname !== "/" && !chartData && (
+                      {router.pathname !== "/" && chartData.length === 0 && (
                         <Fragment>
                           <ChartGrid hide={{ hide: hide }} />
                         </Fragment>
