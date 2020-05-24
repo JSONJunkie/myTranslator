@@ -141,6 +141,7 @@ const Navbar = ({
 
   const handleRouteChangeStart = url => {
     console.log("starting nav");
+    clearData();
     setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
   };
 
@@ -166,22 +167,24 @@ const Navbar = ({
         to: ""
       });
     }
-    if (router.pathname !== "/") {
-      updateInput("");
-      selectLang({
-        from: router.asPath.split("/")[3],
-        to: router.asPath.split("/")[4]
-      });
-      if (
-        userInput ||
-        (router.pathname !== "/" && router.pathname !== "/404")
-      ) {
-        if (!router.isFallback) {
-          addHit({
-            preTrans: router.asPath.split("/")[2],
-            fromCode: router.asPath.split("/")[3],
-            toCode: router.asPath.split("/")[4]
-          });
+    if (routing.complete) {
+      if (router.pathname !== "/") {
+        updateInput("");
+        selectLang({
+          from: router.asPath.split("/")[3],
+          to: router.asPath.split("/")[4]
+        });
+        if (
+          userInput ||
+          (router.pathname !== "/" && router.pathname !== "/404")
+        ) {
+          if (!router.isFallback) {
+            addHit({
+              preTrans: router.asPath.split("/")[2],
+              fromCode: router.asPath.split("/")[3],
+              toCode: router.asPath.split("/")[4]
+            });
+          }
         }
       }
     }
@@ -229,7 +232,6 @@ const Navbar = ({
         return;
       }
     }
-    clearData();
     router.push(
       "/translate/[translation]/" + fromCode + "/" + toCode,
       "/translate/" + userInput.toLowerCase() + "/" + fromCode + "/" + toCode
@@ -238,7 +240,6 @@ const Navbar = ({
 
   const goHome = () => {
     if (router.pathname !== "/") {
-      clearData();
       router.push("/");
     }
   };
