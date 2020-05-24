@@ -32,6 +32,13 @@ const TrendingChart = ({ data }) => {
           activeDot={true}
           isAnimationActive={false}
         />
+        <Line
+          type="linear"
+          dataKey="mostHits"
+          stroke="#8884d8"
+          isAnimationActive={false}
+          strokeWidth={0}
+        />
       </LineChart>
     </ResponsiveContainer>
   );

@@ -261,12 +261,14 @@ export const getData = data => async dispatch => {
       }
     }
 
+    const newHitData = [...res.data.hitData, { mostHits: res.data.mostHits }];
+
     dispatch({
       type: GET_DATA,
       payload: {
         preTrans: res.data[fromCode].text,
         postTrans: res.data[toCode].text,
-        chartData: res.data.hitData,
+        chartData: newHitData,
         audio: res.data[toCode].audio,
         otherTrans
       }

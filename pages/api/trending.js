@@ -24,12 +24,18 @@ handler.get(async (req, res) => {
       }
     );
 
+    const mostHits = docs[0].lifetimeHits;
+
     const newDocs = docs.filter(doc => {
       return doc.en.text !== "welcome";
     });
 
     const newDocsTwo = newDocs.filter(doc => {
       return doc[lang].text;
+    });
+
+    newDocsTwo.forEach(doc => {
+      doc.hitData.push({ mostHits });
     });
 
     res.json(newDocsTwo);

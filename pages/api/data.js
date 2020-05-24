@@ -11,7 +11,28 @@ handler.get(async (req, res) => {
     const preTrans = req.query.preTrans;
     const from = req.query.fromCode + ".text";
     const { Translations } = req.models;
-    const doc = await Translations.findOne({ [from]: preTrans });
+    const doc = await Translations.findOne(
+      { [from]: preTrans },
+      {},
+      { lean: true }
+    );
+    if (doc) {
+      const popularDoc = await Translations.find(
+        {},
+        {},
+        {
+          lean: true,
+          sort: { lifetimeHits: -1 },
+          limit: 1
+        }
+      );
+
+      const newDoc = { ...doc, mostHits: popularDoc[0].lifetimeHits };
+
+      res.json(newDoc);
+      req.connection.close();
+      return;
+    }
     res.json(doc);
     req.connection.close();
     // const minutes = (d - doc.date) / 1000 / 60;
