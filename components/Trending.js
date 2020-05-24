@@ -161,14 +161,14 @@ const useStyles = makeStyles(theme => ({
   scroll1: {
     width: "100%",
     display: "flex",
-    animation: `$myEffect 20s linear infinite`,
+    animation: `$myEffect 50s linear infinite`,
     position: "absolute"
   },
   scroll2: {
     width: "100%",
     display: "flex",
-    animation: `$myEffect 20s linear infinite`,
-    animationDelay: "-10s",
+    animation: `$myEffect 50s linear infinite`,
+    animationDelay: "-25s",
     position: "absolute"
   },
   "@keyframes myEffect": {
