@@ -7,6 +7,7 @@ import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const useStyles = makeStyles(theme => ({
   otherTrans: {
@@ -30,15 +31,30 @@ const useStyles = makeStyles(theme => ({
       fontSize: 17
     }
   },
+  noTrans: {
+    fontSize: 13,
+    [theme.breakpoints.up("md")]: {
+      fontSize: 18
+    }
+  },
   text: {
     fontSize: 12,
     [theme.breakpoints.up("md")]: {
       fontSize: 17
     }
+  },
+  iconsWrapper: {
+    display: "flex"
+  },
+  iconsButton: {
+    marginLeft: "auto"
+  },
+  iconsPlayButton: {
+    marginRight: "auto"
   }
 }));
 
-const OtherTrans = ({ otherTrans, audioContext, speak }) => {
+const OtherTrans = ({ loading, otherTrans, audioContext, speak, preTrans }) => {
   const classes = useStyles();
 
   const handleSpeak = data => {
@@ -50,37 +66,56 @@ const OtherTrans = ({ otherTrans, audioContext, speak }) => {
     <Fragment>
       <Grid item xs={12}>
         <Paper className={classes.otherTrans}>
-          <Typography className={classes.otherTitle}>
-            Other translations
+          <Typography align="center" className={classes.otherTitle}>
+            Other translations of {preTrans}
           </Typography>
-          <Grid container spacing={2}>
-            {otherTrans.length > 0 &&
-              otherTrans.map(translation => (
-                <Grid key={translation.text} item xs={12} md={6}>
-                  <Divider />
-                  <IconButton size="small" color="secondary">
-                    <Typography
-                      className={classes.subTitle}
-                      color="textSecondary"
-                    >
-                      {translation.to.toUpperCase()}
+          {loading && (
+            <div>
+              <Skeleton animation="wave" variant="rect" width="100%" />
+            </div>
+          )}
+          {otherTrans.length === 0 && !loading && (
+            <Typography align="center" className={classes.noTrans}>
+              No other translations found
+            </Typography>
+          )}
+          {otherTrans.length > 0 && !loading && (
+            <Grid container spacing={2}>
+              {otherTrans.length > 0 &&
+                otherTrans.map(translation => (
+                  <Grid key={translation.text} item xs={12} md={6}>
+                    <Divider />
+                    <div className={classes.iconsWrapper}>
+                      <IconButton
+                        className={classes.iconsButton}
+                        size="small"
+                        color="secondary"
+                      >
+                        <Typography
+                          className={classes.subTitle}
+                          color="textSecondary"
+                        >
+                          {translation.to.toUpperCase()}
+                        </Typography>
+                      </IconButton>
+                      <IconButton
+                        className={classes.iconsPlayButton}
+                        onClick={e => {
+                          handleSpeak(translation.audio[0]);
+                        }}
+                        aria-label="play"
+                      >
+                        <VolumeUpIcon />
+                      </IconButton>
+                    </div>
+                    <Typography align="center" className={classes.text}>
+                      {translation.text}
                     </Typography>
-                  </IconButton>
-                  <IconButton
-                    onClick={e => {
-                      handleSpeak(translation.audio[0]);
-                    }}
-                    aria-label="play"
-                  >
-                    <VolumeUpIcon />
-                  </IconButton>
-                  <Typography className={classes.text}>
-                    {translation.text}
-                  </Typography>
-                  <Divider />
-                </Grid>
-              ))}
-          </Grid>
+                    <Divider />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
         </Paper>
       </Grid>
     </Fragment>

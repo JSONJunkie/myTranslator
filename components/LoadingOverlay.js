@@ -246,6 +246,8 @@ const LoadingOverlay = ({
                 </Fragment>
               )}
               <OtherTranslations
+                loading={loading}
+                preTrans={preTrans}
                 otherTrans={otherTrans}
                 audioContext={audioContext}
                 speak={speak}
