@@ -30,6 +30,13 @@ const useStyles = makeStyles(theme => ({
       fontSize: 15
     }
   },
+  posTyping: {
+    marginBottom: 12,
+    fontSize: 9,
+    [theme.breakpoints.up("md")]: {
+      fontSize: 14
+    }
+  },
   title: {
     fontSize: 25,
     [theme.breakpoints.up("md")]: {
@@ -222,7 +229,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
                 {beforeTrans}
               </Typography>
               <Divider />
-              <Typography className={classes.pos} color="textSecondary">
+              <Typography className={classes.posTyping} color="textSecondary">
                 translating from {from} to {to}
                 <IconButton className={classes.hiddenPlay} aria-label="play">
                   <VolumeUpIcon />
