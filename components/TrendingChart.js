@@ -30,7 +30,7 @@ const TrendingChart = ({ data }) => {
           stroke="#8884d8"
           dot={false}
           activeDot={true}
-          animationBegin={700}
+          isAnimationActive={false}
         />
       </LineChart>
     </ResponsiveContainer>

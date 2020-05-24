@@ -30,6 +30,7 @@ const Chart = ({ data }) => {
           dot={false}
           activeDot={true}
           animationBegin={700}
+          isAnimationActive={false}
         />
       </LineChart>
     </ResponsiveContainer>
