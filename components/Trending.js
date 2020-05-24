@@ -398,7 +398,7 @@ const Trending = ({
               <MenuItem value="zh" disabled={trendingLang === "zh"}>
                 Chinese (simplified)
               </MenuItem>
-              <MenuItem value="zh-TW" disabled={trendingLang === "zh-TW"}>
+              <MenuItem value="zhTW" disabled={trendingLang === "zhTW"}>
                 Chinese (traditional)
               </MenuItem>
               <MenuItem value="en" disabled={trendingLang === "en"}>
