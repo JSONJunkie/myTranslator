@@ -168,6 +168,7 @@ const Navbar = ({
   }, []);
 
   useEffect(() => {
+    console.log(router.isFallback);
     if (chartData.length === 0) {
       if (router.pathname === "/") {
         addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
