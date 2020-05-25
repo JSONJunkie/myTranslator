@@ -28,15 +28,15 @@ import {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "100%",
+    // width: "100%",
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
-    display: "flex",
+    // display: "flex",
     flexDirection: "column"
   },
   wrapper: {
     position: "relative",
-    width: "100%",
+    // width: "100%",
     overflow: "hidden",
     height: theme.spacing(3),
     display: "flex",
@@ -152,24 +152,31 @@ const useStyles = makeStyles(theme => ({
     }
   },
   scrollContainer: {
-    position: "relative",
-    minWidth: theme.spacing(120),
+    // position: "relative",
+    background: "black",
+    // width: "10%",
+    // flexGrow: 1,
+    display: "flex",
     [theme.breakpoints.up("md")]: {
       minWidth: theme.spacing(140)
     }
   },
   scroll1: {
-    width: "100%",
+    // width: "100%",
     display: "flex",
     animation: `$myEffect 50s linear infinite`,
-    position: "absolute"
+    // position: "absolute",
+    background: "yellow",
+    animationDelay: "-25s"
   },
   scroll2: {
-    width: "100%",
+    // flexGrow: 1,
+    // width: "100%",
     display: "flex",
     animation: `$myEffect 50s linear infinite`,
-    animationDelay: "-25s",
-    position: "absolute"
+    // animationDelay: "-25s",
+    // position: "absolute",
+    visibility: "hidden"
   },
   "@keyframes myEffect": {
     "0%": {
@@ -301,11 +308,17 @@ const Trending = ({
               className={classes.scrollContainer}
               container
               direction="row"
-              justify="space-evenly"
+              // justify="space-evenly"
               alignItems="center"
               wrap="nowrap"
+              // spacing={2}
             >
-              <span
+              <Grid
+                container
+                direction="row"
+                // justify="space-evenly"
+                alignItems="center"
+                wrap="nowrap"
                 className={clsx(classes.scroll1, {
                   [classes.pause]: pause
                 })}
@@ -340,8 +353,8 @@ const Trending = ({
                       </IconButton>
                     </Grid>
                   ))}
-              </span>
-              <span
+              </Grid>
+              <div
                 className={clsx(classes.scroll2, {
                   [classes.pause]: pause
                 })}
@@ -376,7 +389,7 @@ const Trending = ({
                       </IconButton>
                     </Grid>
                   ))}
-              </span>
+              </div>
             </Grid>
           </Fade>
         )}
