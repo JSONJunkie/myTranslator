@@ -95,6 +95,13 @@ const useStyles = makeStyles(theme => ({
   },
   transparentCard: {
     background: "none"
+  },
+  skeleton: {
+    height: theme.spacing(10),
+    marginBottom: theme.spacing(2)
+  },
+  skeleton2: {
+    height: theme.spacing(10)
   }
 }));
 
@@ -221,15 +228,18 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
         <Grid className={classes.cardGrid} item xs={12} sm={12} md={8}>
           <Card className={classes.cardRoot}>
             <CardContent>
-              <Skeleton animation="wave" variant="rect" width="100%" />
-              <Divider />
-              <Typography className={classes.posTyping} color="textSecondary">
-                translating from {from} to {to}
-                <IconButton className={classes.hiddenPlay} aria-label="play">
-                  <VolumeUpIcon />
-                </IconButton>
-              </Typography>
-              <Skeleton animation="wave" variant="rect" width="100%" />
+              <Skeleton
+                className={classes.skeleton}
+                animation="wave"
+                variant="rect"
+                width="100%"
+              />
+              <Skeleton
+                className={classes.skeleton2}
+                animation="wave"
+                variant="rect"
+                width="100%"
+              />
             </CardContent>
           </Card>
         </Grid>

@@ -51,6 +51,9 @@ const useStyles = makeStyles(theme => ({
   },
   iconsPlayButton: {
     marginRight: "auto"
+  },
+  skeleton: {
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -66,9 +69,11 @@ const OtherTrans = ({ loading, otherTrans, audioContext, speak, preTrans }) => {
     <Fragment>
       <Grid item xs={12}>
         <Paper className={classes.otherTrans}>
-          <Typography align="center" className={classes.otherTitle}>
-            Other translations of {preTrans}
-          </Typography>
+          {loading && (
+            <div className={classes.skeleton}>
+              <Skeleton animation="wave" variant="rect" width="100%" />
+            </div>
+          )}
           {loading && (
             <div>
               <Skeleton animation="wave" variant="rect" width="100%" />
