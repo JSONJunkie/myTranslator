@@ -169,7 +169,7 @@ const Navbar = ({
 
   useEffect(() => {
     if (router.pathname === "/") {
-      addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
+      getData({ preTrans: "welcome", fromCode: "en", toCode: "es" });
       selectLang({
         from: "en",
         to: ""
