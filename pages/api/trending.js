@@ -36,6 +36,111 @@ handler.get(async (req, res) => {
 
     newDocsTwo.forEach(doc => {
       doc.hitData.push({ mostHits });
+
+      const now = new Date().getTime();
+      const hours = Math.floor((now - doc.date) / 1000 / 60 / 60) + 1;
+
+      if (doc.hitData.length < 23) {
+        const lastEntry = doc.hitData[doc.hitData.length - 1];
+
+        doc.hitData.pop();
+
+        if (lastEntry.time === hours) {
+          doc.hitData.push({
+            time: hours,
+            hits: lastEntry.hits
+          });
+        } else {
+          if (hours - lastEntry.time > 1) {
+            const noHitHours = hours - lastEntry.time;
+            if (noHitHours < 23) {
+              for (var i = 1; i < noHitHours; i++) {
+                doc.hitData.push({
+                  time: lastEntry.time + i,
+                  hits: 0
+                });
+              }
+              doc.hitData.shift();
+              doc.hitData.push({
+                time: hours,
+                hits: 1
+              });
+            }
+
+            if (noHitHours >= 23) {
+              for (var i = 0; i < 23; i++) {
+                doc.hitData[i] = { time: hours - 23 + i, hits: 0 };
+              }
+              doc.hitData.push({
+                time: hours,
+                hits: 1
+              });
+            }
+          } else {
+            doc.hitData.push(lastEntry);
+
+            doc.hitData.push({
+              time: hours,
+              hits: 1
+            });
+          }
+        }
+      }
+
+      if (doc.hitData.length >= 23) {
+        const reversedData = doc.hitData.reverse();
+
+        reversedData.pop();
+
+        const newData = reversedData.reverse();
+
+        const lastEntry = newData[newData.length - 1];
+
+        newData.pop();
+
+        if (lastEntry.time === hours) {
+          newData.push({
+            time: hours,
+            hits: lastEntry.hits
+          });
+        } else {
+          if (hours - lastEntry.time > 1) {
+            const noHitHours = hours - lastEntry.time;
+            if (noHitHours < 23) {
+              for (var i = 1; i < noHitHours; i++) {
+                newData.shift();
+                newData.push({
+                  time: lastEntry.time + i,
+                  hits: 0
+                });
+              }
+              newData.shift();
+              newData.push({
+                time: hours,
+                hits: 1
+              });
+            }
+
+            if (noHitHours >= 23) {
+              for (var i = 0; i < 23; i++) {
+                newData[i] = { time: hours - 23 + i, hits: 0 };
+              }
+              newData.push({
+                time: hours,
+                hits: 1
+              });
+            }
+          } else {
+            newData.push(lastEntry);
+
+            newData.push({
+              time: hours,
+              hits: 1
+            });
+          }
+          doc.hitData = newData;
+        }
+      }
     });
 
     res.json(newDocsTwo);
