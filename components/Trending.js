@@ -313,12 +313,7 @@ const Trending = ({
               wrap="nowrap"
               // spacing={2}
             >
-              <Grid
-                container
-                direction="row"
-                // justify="space-evenly"
-                alignItems="center"
-                wrap="nowrap"
+              <div
                 className={clsx(classes.scroll1, {
                   [classes.pause]: pause
                 })}
@@ -353,7 +348,7 @@ const Trending = ({
                       </IconButton>
                     </Grid>
                   ))}
-              </Grid>
+              </div>
               <div
                 className={clsx(classes.scroll2, {
                   [classes.pause]: pause
