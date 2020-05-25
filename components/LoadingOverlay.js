@@ -272,37 +272,6 @@ const LoadingOverlay = ({
                         />
                       </Fragment>
                     )}
-                  {!router.isFallback && router.pathname === "/" && preTrans && (
-                    <Fragment>
-                      {audio[0] && (
-                        <TranslationGrid
-                          beforeTrans={preTrans}
-                          afterTrans={postTrans}
-                          from={from}
-                          to={to}
-                          speak={handleSpeak}
-                        />
-                      )}
-                      {!audio[0] && (
-                        <TranslationGrid
-                          beforeTrans={preTrans}
-                          afterTrans={postTrans}
-                          from={from}
-                          to={to}
-                          speak={"none"}
-                        />
-                      )}
-                      {!loading && <ChartGrid hide={{ hide: !hide }} />}
-                      {loading && <ChartGrid hide={{ hide: hide }} />}
-                      <OtherTranslations
-                        loading={loading}
-                        preTrans={preTrans}
-                        otherTrans={otherTrans}
-                        audioContext={audioContext}
-                        speak={speak}
-                      />
-                    </Fragment>
-                  )}
                 </Fragment>
               )}
               {!hide && (

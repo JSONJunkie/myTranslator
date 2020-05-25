@@ -10,6 +10,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import TranslationGrid from "../components/TranslationGrid";
 import ChartGrid from "../components/ChartGrid";
+import Footer from "../components/Footer";
+
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,22 +40,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Index = ({ translations: { userInput, preTrans, from, to } }) => {
+const Index = ({ data }) => {
   const classes = useStyles();
 
-  const [hide, setHide] = useState(false);
-
-  useEffect(() => {
-    if (userInput) {
-      setHide(prev => true);
-    }
-
-    if (!userInput) {
-      setHide(prev => false);
-    }
-  }, [userInput]);
-
-  return preTrans ? (
+  return (
     <div className={classes.root}>
       <Container className={classes.content} maxWidth="md">
         <Typography
@@ -71,37 +62,109 @@ const Index = ({ translations: { userInput, preTrans, from, to } }) => {
           spacing={2}
         >
           <TranslationGrid
-            beforeTrans={"Welcome"}
-            afterTrans={"Bienvenida"}
+            beforeTrans={data.preTrans}
+            afterTrans={data.postTrans}
             from={"English"}
             to={"Spanish"}
           />
-          <ChartGrid hide={{ hide: "" }} />
+          <ChartGrid hide={{ hide: false }} indexData={data.chartData} />
         </Grid>
-      </Container>
-    </div>
-  ) : (
-    <div className={classes.root}>
-      <Container className={classes.loadingContent} maxWidth="md">
-        <Typography variant="h5" align="center">
-          one moment while I get that for you...
-        </Typography>
-        <div className={classes.progress}>
-          <CircularProgress disableShrink />
-        </div>
+        <Footer />
       </Container>
     </div>
   );
 };
 
+export async function getServerSideProps() {
+  const getLang = data => {
+    switch (data) {
+      case "":
+        return "...";
+      case "ar":
+        return "Arabic";
+      case "zh":
+        return "Chinese";
+      case "zh-TW":
+        return "Chinese";
+      case "en":
+        return "English";
+      case "fi":
+        return "Finnish";
+      case "fr":
+        return "French";
+      case "de":
+        return "German";
+      case "it":
+        return "Italian";
+      case "ja":
+        return "Japanese";
+      case "ko":
+        return "Korean";
+      case "pt":
+        return "Portuguese";
+      case "ro":
+        return "Romanian";
+      case "ru":
+        return "Russian";
+      case "sk":
+        return "Slovak";
+      case "es":
+        return "Spanish";
+      case "sv":
+        return "Swedish";
+      case "th":
+        return "Thai";
+      case "tr":
+        return "Turkish";
+      case "vi":
+        return "Vietnamese";
+    }
+  };
+
+  const dev = process.env.NODE_ENV !== "production";
+
+  const baseUrl = dev
+    ? "http://localhost:3000"
+    : "https://drees1992-mytranslator.herokuapp.com";
+
+  const res = await axios.get(
+    baseUrl + "/api/data?preTrans=welcome&fromCode=en"
+  );
+
+  var otherTrans = [];
+
+  for (var key of Object.keys(res.data)) {
+    if (
+      res.data[key].text &&
+      key !== "es" &&
+      res.data[key].text !== "welcome"
+    ) {
+      otherTrans.push({
+        text: res.data[key].text,
+        audio: res.data[key].audio,
+        to: getLang(key)
+      });
+    }
+  }
+
+  const newHitData = [...res.data.hitData, { mostHits: res.data.mostHits }];
+
+  const data = {
+    preTrans: res.data.en.text,
+    postTrans: res.data.es.text,
+    chartData: newHitData,
+    audio: res.data.es.audio,
+    otherTrans
+  };
+
+  return {
+    props: { data }
+  };
+}
+
 // Index.propTypes = {
 //   rollbar: PropTypes.object.isRequired
 // };
-
-Index.propTypes = {
-  translations: PropTypes.object.isRequired,
-  rollbar: PropTypes.object.isRequired
-};
 
 const mapStateToProps = state => ({
   translations: state.translations

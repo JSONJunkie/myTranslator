@@ -54,15 +54,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ChartGrid = ({ hide: { hide }, translations: { chartData } }) => {
+const ChartGrid = ({
+  hide: { hide },
+  translations: { chartData },
+  indexData
+}) => {
   const classes = useStyles();
   return (
     <Fragment>
       <Grid item xs={12} sm={12} md={4}>
-        {!hide && hide !== "" && (
+        {!hide && hide !== "" && !indexData && (
           <Paper className={classes.chart}>
             <div className={classes.showChart}>
               <Chart data={chartData} />
+            </div>
+          </Paper>
+        )}
+        {indexData && (
+          <Paper className={classes.chart}>
+            <div className={classes.showChart}>
+              <Chart data={indexData} />
             </div>
           </Paper>
         )}
