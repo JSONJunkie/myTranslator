@@ -35,8 +35,6 @@ handler.get(async (req, res) => {
     });
 
     newDocsTwo.forEach(doc => {
-      doc.hitData.shift({ mostHits });
-
       const now = new Date().getTime();
       const hours = Math.floor((now - doc.date) / 1000 / 60 / 60) + 1;
 
@@ -137,6 +135,7 @@ handler.get(async (req, res) => {
           doc.hitData = newData;
         }
       }
+      doc.hitData.unshift({ mostHits });
     });
 
     res.json(newDocsTwo);
