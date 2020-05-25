@@ -168,6 +168,13 @@ const Navbar = ({
   }, []);
 
   useEffect(() => {
+    if (router.pathname === "/") {
+      updateInput("");
+      selectLang({
+        from: "en",
+        to: ""
+      });
+    }
     if (router.pathname !== "/") {
       updateInput("");
       selectLang({

@@ -100,9 +100,6 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
                 value={fromCode}
                 onChange={handleFromChange}
               >
-                <MenuItem value="">
-                  <em className={classes.text}>None</em>
-                </MenuItem>
                 <MenuItem value="ar" disabled={toCode !== "en"}>
                   Arabic
                 </MenuItem>
@@ -259,9 +256,6 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
                 value={fromCode}
                 onChange={handleFromChange}
               >
-                <MenuItem value="">
-                  <em className={classes.text}>None</em>
-                </MenuItem>
                 <MenuItem value="ar">Arabic</MenuItem>
                 <MenuItem value="zh">Chinese (simplified)</MenuItem>
                 <MenuItem value="zh-TW">Chinese (traditional)</MenuItem>
