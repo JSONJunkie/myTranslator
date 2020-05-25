@@ -7,6 +7,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import TranslationGrid from "../../../components/TranslationGrid";
 import ChartGrid from "../../../components/ChartGrid";
+import OtherTranslations from "../../../components/OtherTranslations";
+import Footer from "../../../components/Footer";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import TextToSpeechV1 from "ibm-watson/text-to-speech/v1";
@@ -55,13 +57,33 @@ const Translation = ({ data, codes }) => {
   if (router.isFallback) {
     return (
       <div className={classes.root}>
-        <Container className={classes.loadingContent} maxWidth="md">
-          <Typography variant="h5" align="center">
-            one moment while I get that for you...
+        <Container className={classes.contentTyping} maxWidth="md">
+          <Typography
+            className={classes.hiddenDate}
+            variant="caption"
+            color="textSecondary"
+          >
+            first translated
           </Typography>
-          <div className={classes.progress}>
-            <CircularProgress disableShrink />
-          </div>
+          <Grid
+            container
+            direction="row"
+            // justify="flex-end"
+            // alignItems="center"
+            // alignContent="center"
+            spacing={2}
+          >
+            <TranslationGrid
+              beforeTrans={""}
+              afterTrans={""}
+              from={""}
+              to={""}
+              speak={"none"}
+            />
+            <ChartGrid hide={{ hide: true }} />
+            <OtherTranslations otherTrans={[]} loading={true} />
+          </Grid>
+          <Footer />
         </Container>
       </div>
     );
