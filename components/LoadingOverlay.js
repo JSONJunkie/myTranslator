@@ -214,7 +214,7 @@ const LoadingOverlay = ({
           </Container>
         </div>
       )}
-      {preTrans && (
+      {!loader && preTrans && router.pathname !== "/" && (
         <div className={classes.root}>
           <Container
             className={clsx(classes.content, {
