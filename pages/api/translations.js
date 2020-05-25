@@ -22,7 +22,7 @@ handler.get(async (req, res) => {
         }
       }
     });
-    res.json(totalTrans * 2);
+    res.json(totalTrans);
     req.connection.close();
   } catch (err) {
     res.status(400).json({ errors: { name: err.name, message: err.message } });
