@@ -269,10 +269,8 @@ const Trending = ({
   };
 
   useEffect(() => {
-    if (preTrans) {
-      getTrending(trendingLang);
-    }
-  }, [preTrans, trendingLang]);
+    getTrending(trendingLang);
+  }, [trendingLang]);
 
   useEffect(() => {
     if (trending[0] || trending === "none") {
