@@ -6,7 +6,7 @@ import clsx from "clsx";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Grow from "@material-ui/core/Grow";
+import Fade from "@material-ui/core/Fade";
 import Button from "@material-ui/core/Button";
 import Backdrop from "@material-ui/core/Backdrop";
 import { useRouter } from "next/router";
@@ -90,7 +90,9 @@ const LoadingOverlay = ({
 
   const [hide, setHide] = useState(true);
 
-  const [grow, setGrow] = useState(false);
+  const [fade, setFade] = useState(false);
+
+  const [loader, setLoader] = useState(true);
 
   const handleSpeak = e => {
     if (router.pathname === "/") {
@@ -137,10 +139,19 @@ const LoadingOverlay = ({
   }, [userInput]);
 
   useEffect(() => {
-    if (preTrans) {
-      setGrow(prev => true);
+    if (!router.isFallback) {
+      setFade(prev => true);
     }
-  }, [preTrans]);
+  }, [router.isFallback]);
+
+  useEffect(() => {
+    if (chartData.length > 0) {
+      setLoader(prev => false);
+    }
+    if (chartData.length === 0) {
+      setLoader(prev => true);
+    }
+  }, [chartData]);
 
   useEffect(() => {
     if (router.isFallback) {
@@ -163,21 +174,61 @@ const LoadingOverlay = ({
           Continue
         </Button>
       </Backdrop>
-      <div className={classes.root}>
-        <Container
-          className={clsx(classes.content, {
-            [classes.contentTyping]: !hide
-          })}
-          maxWidth="md"
-        >
-          <Typography
-            className={classes.hiddenDate}
-            variant="caption"
-            color="textSecondary"
+      {loader && !router.isFallback && router.pathname !== "/" && (
+        <div className={classes.root}>
+          <Container className={classes.contentTyping} maxWidth="md">
+            <Typography
+              className={classes.hiddenDate}
+              variant="caption"
+              color="textSecondary"
+            >
+              first translated
+            </Typography>
+            <Fragment>
+              <Grid
+                container
+                direction="row"
+                // justify="flex-end"
+                // alignItems="center"
+                // alignContent="center"
+                spacing={2}
+              >
+                <TranslationGrid
+                  beforeTrans={""}
+                  afterTrans={""}
+                  from={from}
+                  to={to}
+                  speak={"none"}
+                />
+                <ChartGrid hide={{ hide: hide }} />
+                <OtherTranslations
+                  loading={true}
+                  preTrans={preTrans}
+                  otherTrans={otherTrans}
+                  audioContext={audioContext}
+                  speak={speak}
+                />
+              </Grid>
+            </Fragment>
+            <Footer />
+          </Container>
+        </div>
+      )}
+      {preTrans && (
+        <div className={classes.root}>
+          <Container
+            className={clsx(classes.content, {
+              [classes.contentTyping]: !hide
+            })}
+            maxWidth="md"
           >
-            first translated
-          </Typography>
-          <Grow in={grow} timeout={2000}>
+            <Typography
+              className={classes.hiddenDate}
+              variant="caption"
+              color="textSecondary"
+            >
+              first translated
+            </Typography>
             <Grid
               container
               direction="row"
@@ -188,7 +239,40 @@ const LoadingOverlay = ({
             >
               {hide && (
                 <Fragment>
-                  {!router.isFallback && (
+                  {!router.isFallback &&
+                    router.pathname !== "/" &&
+                    routing.complete && (
+                      <Fragment>
+                        {audio[0] && (
+                          <TranslationGrid
+                            beforeTrans={preTrans}
+                            afterTrans={postTrans}
+                            from={from}
+                            to={to}
+                            speak={handleSpeak}
+                          />
+                        )}
+                        {!audio[0] && (
+                          <TranslationGrid
+                            beforeTrans={preTrans}
+                            afterTrans={postTrans}
+                            from={from}
+                            to={to}
+                            speak={"none"}
+                          />
+                        )}
+                        {!loading && <ChartGrid hide={{ hide: !hide }} />}
+                        {loading && <ChartGrid hide={{ hide: hide }} />}
+                        <OtherTranslations
+                          loading={loading}
+                          preTrans={preTrans}
+                          otherTrans={otherTrans}
+                          audioContext={audioContext}
+                          speak={speak}
+                        />
+                      </Fragment>
+                    )}
+                  {!router.isFallback && router.pathname === "/" && preTrans && (
                     <Fragment>
                       {audio[0] && (
                         <TranslationGrid
@@ -208,25 +292,15 @@ const LoadingOverlay = ({
                           speak={"none"}
                         />
                       )}
-                      {router.pathname === "/" && chartData.length > 0 && (
-                        <ChartGrid hide={{ hide: !hide }} />
-                      )}
-                      {router.pathname === "/" && chartData.length === 0 && (
-                        <Fragment>
-                          <ChartGrid hide={{ hide: hide }} />
-                        </Fragment>
-                      )}
-                      {router.pathname !== "/" && chartData.length > 0 && (
-                        <Fragment>
-                          {!loading && <ChartGrid hide={{ hide: !hide }} />}
-                          {loading && <ChartGrid hide={{ hide: hide }} />}
-                        </Fragment>
-                      )}
-                      {router.pathname !== "/" && chartData.length === 0 && (
-                        <Fragment>
-                          <ChartGrid hide={{ hide: hide }} />
-                        </Fragment>
-                      )}
+                      {!loading && <ChartGrid hide={{ hide: !hide }} />}
+                      {loading && <ChartGrid hide={{ hide: hide }} />}
+                      <OtherTranslations
+                        loading={loading}
+                        preTrans={preTrans}
+                        otherTrans={otherTrans}
+                        audioContext={audioContext}
+                        speak={speak}
+                      />
                     </Fragment>
                   )}
                 </Fragment>
@@ -241,22 +315,21 @@ const LoadingOverlay = ({
                       to={to}
                     />
                   )}
-                  {preTrans && <ChartGrid hide={{ hide: !hide }} />}
-                  {!preTrans && <ChartGrid hide={{ hide: "" }} />}
+                  <ChartGrid hide={{ hide: !hide }} />
+                  <OtherTranslations
+                    loading={true}
+                    preTrans={preTrans}
+                    otherTrans={otherTrans}
+                    audioContext={audioContext}
+                    speak={speak}
+                  />
                 </Fragment>
               )}
-              <OtherTranslations
-                loading={loading}
-                preTrans={preTrans}
-                otherTrans={otherTrans}
-                audioContext={audioContext}
-                speak={speak}
-              />
             </Grid>
-          </Grow>
-          <Footer />
-        </Container>
-      </div>
+            <Footer />
+          </Container>
+        </div>
+      )}
     </Fragment>
   );
 };

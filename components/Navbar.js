@@ -168,34 +168,35 @@ const Navbar = ({
   }, []);
 
   useEffect(() => {
-    console.log(router.isFallback);
-    if (chartData.length === 0) {
-      if (router.pathname === "/") {
-        addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
-        selectLang({
-          from: "en",
-          to: ""
-        });
-      }
+    if (router.pathname === "/") {
+      addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
+      selectLang({
+        from: "en",
+        to: ""
+      });
+    }
+    if (routing.complete) {
       if (router.pathname !== "/") {
         updateInput("");
         selectLang({
-          from: router.asPath.split("/")[3],
-          to: router.asPath.split("/")[4]
+          from: router.asPath.split("/")[1],
+          to: router.asPath.split("/")[2]
         });
         if (
           userInput ||
           (router.pathname !== "/" && router.pathname !== "/404")
         ) {
-          addHit({
-            preTrans: router.asPath.split("/")[2],
-            fromCode: router.asPath.split("/")[3],
-            toCode: router.asPath.split("/")[4]
-          });
+          if (!router.isFallback) {
+            addHit({
+              preTrans: router.asPath.split("/")[3],
+              fromCode: router.asPath.split("/")[1],
+              toCode: router.asPath.split("/")[2]
+            });
+          }
         }
       }
     }
-  }, [chartData]);
+  }, [routing]);
 
   const [helperText, setHelperText] = useState({
     inputError: "",
