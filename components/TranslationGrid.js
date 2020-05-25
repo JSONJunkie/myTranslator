@@ -221,13 +221,7 @@ const TranslationGrid = ({ beforeTrans, afterTrans, from, to, speak }) => {
         <Grid className={classes.cardGrid} item xs={12} sm={12} md={8}>
           <Card className={classes.cardRoot}>
             <CardContent>
-              <Typography
-                className={classes.title}
-                color="textSecondary"
-                gutterBottom
-              >
-                {beforeTrans}
-              </Typography>
+              <Skeleton animation="wave" variant="rect" width="100%" />
               <Divider />
               <Typography className={classes.posTyping} color="textSecondary">
                 translating from {from} to {to}
