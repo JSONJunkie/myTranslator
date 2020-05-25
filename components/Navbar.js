@@ -120,7 +120,15 @@ const getLocale = data => {
 };
 
 const Navbar = ({
-  translations: { userInput, from, fromCode, toCode, preTrans, postTrans },
+  translations: {
+    userInput,
+    from,
+    fromCode,
+    toCode,
+    chartData,
+    preTrans,
+    postTrans
+  },
   selectLang,
   updateInput,
   addHit,
@@ -160,14 +168,14 @@ const Navbar = ({
   }, []);
 
   useEffect(() => {
-    if (router.pathname === "/") {
-      addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
-      selectLang({
-        from: "en",
-        to: ""
-      });
-    }
-    if (routing.complete) {
+    if (chartData.length === 0) {
+      if (router.pathname === "/") {
+        addHit({ preTrans: "welcome", fromCode: "en", toCode: "es" });
+        selectLang({
+          from: "en",
+          to: ""
+        });
+      }
       if (router.pathname !== "/") {
         updateInput("");
         selectLang({
@@ -178,17 +186,15 @@ const Navbar = ({
           userInput ||
           (router.pathname !== "/" && router.pathname !== "/404")
         ) {
-          if (!router.isFallback) {
-            addHit({
-              preTrans: router.asPath.split("/")[2],
-              fromCode: router.asPath.split("/")[3],
-              toCode: router.asPath.split("/")[4]
-            });
-          }
+          addHit({
+            preTrans: router.asPath.split("/")[2],
+            fromCode: router.asPath.split("/")[3],
+            toCode: router.asPath.split("/")[4]
+          });
         }
       }
     }
-  }, [routing.starting, routing.complete]);
+  }, [chartData]);
 
   const [helperText, setHelperText] = useState({
     inputError: "",
