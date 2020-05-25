@@ -208,7 +208,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Trending = ({
-  translations: { trending, preTrans, trendingLang, toCode },
+  translations: { trending, chartData, preTrans, trendingLang, toCode },
   getTrending,
   selectTrendingLang
 }) => {
@@ -270,7 +270,7 @@ const Trending = ({
 
   useEffect(() => {
     getTrending(trendingLang);
-  }, [trendingLang]);
+  }, [trendingLang, chartData]);
 
   useEffect(() => {
     if (trending[0] || trending === "none") {

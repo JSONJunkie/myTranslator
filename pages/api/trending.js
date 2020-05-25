@@ -35,7 +35,7 @@ handler.get(async (req, res) => {
     });
 
     newDocsTwo.forEach(doc => {
-      doc.hitData.push({ mostHits });
+      doc.hitData.shift({ mostHits });
 
       const now = new Date().getTime();
       const hours = Math.floor((now - doc.date) / 1000 / 60 / 60) + 1;
@@ -46,12 +46,10 @@ handler.get(async (req, res) => {
         doc.hitData.pop();
 
         if (lastEntry.time === hours) {
-          doc.hitData.push({
-            time: hours,
-            hits: lastEntry.hits
-          });
+          doc.hitData.push(lastEntry);
         } else {
           if (hours - lastEntry.time > 1) {
+            doc.hitData.push(lastEntry);
             const noHitHours = hours - lastEntry.time;
             if (noHitHours < 23) {
               for (var i = 1; i < noHitHours; i++) {
@@ -63,7 +61,7 @@ handler.get(async (req, res) => {
               doc.hitData.shift();
               doc.hitData.push({
                 time: hours,
-                hits: 1
+                hits: 0
               });
             }
 
@@ -73,7 +71,7 @@ handler.get(async (req, res) => {
               }
               doc.hitData.push({
                 time: hours,
-                hits: 1
+                hits: 0
               });
             }
           } else {
@@ -81,7 +79,7 @@ handler.get(async (req, res) => {
 
             doc.hitData.push({
               time: hours,
-              hits: 1
+              hits: 0
             });
           }
         }
@@ -99,12 +97,10 @@ handler.get(async (req, res) => {
         newData.pop();
 
         if (lastEntry.time === hours) {
-          newData.push({
-            time: hours,
-            hits: lastEntry.hits
-          });
+          newData.push(lastEntry);
         } else {
           if (hours - lastEntry.time > 1) {
+            newData.push(lastEntry);
             const noHitHours = hours - lastEntry.time;
             if (noHitHours < 23) {
               for (var i = 1; i < noHitHours; i++) {
@@ -117,7 +113,7 @@ handler.get(async (req, res) => {
               newData.shift();
               newData.push({
                 time: hours,
-                hits: 1
+                hits: 0
               });
             }
 
@@ -127,7 +123,7 @@ handler.get(async (req, res) => {
               }
               newData.push({
                 time: hours,
-                hits: 1
+                hits: 0
               });
             }
           } else {
@@ -135,7 +131,7 @@ handler.get(async (req, res) => {
 
             newData.push({
               time: hours,
-              hits: 1
+              hits: 0
             });
           }
           doc.hitData = newData;
