@@ -5,8 +5,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import TranslationGrid from "../../components/TranslationGrid";
-import ChartGrid from "../../components/ChartGrid";
+import TranslationGrid from "../../../components/TranslationGrid";
+import ChartGrid from "../../../components/ChartGrid";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import TextToSpeechV1 from "ibm-watson/text-to-speech/v1";
@@ -16,7 +16,7 @@ import DatauriParser from "datauri/parser";
 // import Rollbar from "rollbar";
 import isAlpha from "validator/lib/isAlpha";
 
-import connectToMongo from "../../database";
+import connectToMongo from "../../../database";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -247,9 +247,9 @@ export async function getStaticProps(context) {
     ? "http://localhost:3000"
     : "https://drees1992-mytranslator.herokuapp.com";
 
-  const preTrans = context.params.translation[0];
-  const from = context.params.translation[1];
-  const to = context.params.translation[2];
+  const preTrans = context.params.translation;
+  const from = "sk";
+  const to = "en";
   const fromText = from + ".text";
   const toText = to + ".text";
   const voice = getVoice(to);
