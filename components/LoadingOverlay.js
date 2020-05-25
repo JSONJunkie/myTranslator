@@ -239,39 +239,37 @@ const LoadingOverlay = ({
             >
               {hide && (
                 <Fragment>
-                  {!router.isFallback &&
-                    router.pathname !== "/" &&
-                    routing.complete && (
-                      <Fragment>
-                        {audio[0] && (
-                          <TranslationGrid
-                            beforeTrans={preTrans}
-                            afterTrans={postTrans}
-                            from={from}
-                            to={to}
-                            speak={handleSpeak}
-                          />
-                        )}
-                        {!audio[0] && (
-                          <TranslationGrid
-                            beforeTrans={preTrans}
-                            afterTrans={postTrans}
-                            from={from}
-                            to={to}
-                            speak={"none"}
-                          />
-                        )}
-                        {!loading && <ChartGrid hide={{ hide: !hide }} />}
-                        {loading && <ChartGrid hide={{ hide: hide }} />}
-                        <OtherTranslations
-                          loading={loading}
-                          preTrans={preTrans}
-                          otherTrans={otherTrans}
-                          audioContext={audioContext}
-                          speak={speak}
+                  {!router.isFallback && router.pathname !== "/" && (
+                    <Fragment>
+                      {audio[0] && (
+                        <TranslationGrid
+                          beforeTrans={preTrans}
+                          afterTrans={postTrans}
+                          from={from}
+                          to={to}
+                          speak={handleSpeak}
                         />
-                      </Fragment>
-                    )}
+                      )}
+                      {!audio[0] && (
+                        <TranslationGrid
+                          beforeTrans={preTrans}
+                          afterTrans={postTrans}
+                          from={from}
+                          to={to}
+                          speak={"none"}
+                        />
+                      )}
+                      {!loading && <ChartGrid hide={{ hide: !hide }} />}
+                      {loading && <ChartGrid hide={{ hide: hide }} />}
+                      <OtherTranslations
+                        loading={loading}
+                        preTrans={preTrans}
+                        otherTrans={otherTrans}
+                        audioContext={audioContext}
+                        speak={speak}
+                      />
+                    </Fragment>
+                  )}
                 </Fragment>
               )}
               {!hide && (

@@ -168,24 +168,22 @@ const Navbar = ({
   }, []);
 
   useEffect(() => {
-    if (routing.complete) {
-      if (router.pathname !== "/") {
-        updateInput("");
-        selectLang({
-          from: router.asPath.split("/")[1],
-          to: router.asPath.split("/")[2]
-        });
-        if (
-          userInput ||
-          (router.pathname !== "/" && router.pathname !== "/404")
-        ) {
-          if (!router.isFallback) {
-            addHit({
-              preTrans: router.asPath.split("/")[3],
-              fromCode: router.asPath.split("/")[1],
-              toCode: router.asPath.split("/")[2]
-            });
-          }
+    if (router.pathname !== "/") {
+      updateInput("");
+      selectLang({
+        from: router.asPath.split("/")[1],
+        to: router.asPath.split("/")[2]
+      });
+      if (
+        userInput ||
+        (router.pathname !== "/" && router.pathname !== "/404")
+      ) {
+        if (!router.isFallback) {
+          addHit({
+            preTrans: router.asPath.split("/")[3],
+            fromCode: router.asPath.split("/")[1],
+            toCode: router.asPath.split("/")[2]
+          });
         }
       }
     }
