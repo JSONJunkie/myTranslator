@@ -239,8 +239,8 @@ const Navbar = ({
       }
     }
     router.push(
-      "/translate/[translation]/" + fromCode + "/" + toCode,
-      "/translate/" + userInput.toLowerCase() + "/" + fromCode + "/" + toCode
+      "/" + fromCode + "/" + toCode + "/[translation]",
+      "/" + fromCode + "/" + toCode + "/" + userInput.toLowerCase()
     );
   };
 

@@ -245,24 +245,24 @@ const Trending = ({
   const handleRouting = data => {
     if (data.from === "en") {
       router.push(
-        "/translate/[translation]/" + data.from + "/es",
-        "/translate/" +
-          data.translation[data.from].text.toLowerCase() +
-          "/" +
+        "/" + data.from + "/es" + "/[translation]",
+        "/" +
           data.from +
-          "/es"
+          "/es" +
+          "/" +
+          data.translation[data.from].text.toLowerCase()
       );
       return;
     }
 
     if (data.from !== "en") {
       router.push(
-        "/translate/[translation]/" + data.from + "/en",
-        "/translate/" +
-          data.translation[data.from].text.toLowerCase() +
-          "/" +
+        "/" + data.from + "/en" + "/[translation]",
+        "/" +
           data.from +
-          "/en"
+          "/en" +
+          "/" +
+          data.translation[data.from].text.toLowerCase()
       );
       return;
     }
