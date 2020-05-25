@@ -26,6 +26,11 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     flexGrow: 1
   },
+  hiddenDate: {
+    visibility: "hidden",
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
   content: {
     display: "flex",
     flexDirection: "column"
