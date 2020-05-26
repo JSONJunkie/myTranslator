@@ -155,7 +155,21 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     animation: `$myEffect 50s linear infinite`,
     position: "absolute",
-    minWidth: theme.spacing(60)
+    [theme.breakpoints.up("lg")]: {
+      minWidth: theme.spacing(250)
+    },
+    [theme.breakpoints.down("lg")]: {
+      minWidth: theme.spacing(160)
+    },
+    [theme.breakpoints.down("md")]: {
+      minWidth: theme.spacing(160)
+    },
+    [theme.breakpoints.down("sm")]: {
+      minWidth: theme.spacing(120)
+    },
+    [theme.breakpoints.down("xs")]: {
+      minWidth: theme.spacing(66)
+    }
   },
   scroll2: {
     display: "flex",
@@ -163,14 +177,28 @@ const useStyles = makeStyles(theme => ({
     animation: `$myEffect 50s linear infinite`,
     animationDelay: "-25s",
     position: "absolute",
-    minWidth: theme.spacing(60)
+    [theme.breakpoints.up("lg")]: {
+      minWidth: theme.spacing(250)
+    },
+    [theme.breakpoints.down("lg")]: {
+      minWidth: theme.spacing(160)
+    },
+    [theme.breakpoints.down("md")]: {
+      minWidth: theme.spacing(160)
+    },
+    [theme.breakpoints.down("sm")]: {
+      minWidth: theme.spacing(120)
+    },
+    [theme.breakpoints.down("xs")]: {
+      minWidth: theme.spacing(66)
+    }
   },
   "@keyframes myEffect": {
     "0%": {
-      transform: "translateX(150%)"
+      transform: "translateX(100%)"
     },
     "100%": {
-      transform: "translateX(-150%)"
+      transform: "translateX(-100%)"
     }
   },
   pause: {
