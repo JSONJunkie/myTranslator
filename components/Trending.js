@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,16 +28,16 @@ import {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    // width: "100%",
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
-    // display: "flex",
+    display: "flex",
     flexDirection: "column"
   },
   wrapper: {
     position: "relative",
-    // width: "100%",
     overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
     height: theme.spacing(3),
     display: "flex",
     [theme.breakpoints.up("md")]: {
@@ -134,9 +134,8 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(0),
     [theme.breakpoints.up("md")]: {
       fontSize: 14,
-      maxWidth: theme.spacing(3),
-      paddingLeft: theme.spacing(4.5),
-      paddingRight: theme.spacing(4)
+      paddingLeft: theme.spacing(7),
+      paddingRight: theme.spacing(1)
     }
   },
   translationWrapper: {
@@ -151,39 +150,27 @@ const useStyles = makeStyles(theme => ({
       fontSize: 22
     }
   },
-  scrollContainer: {
-    // position: "relative",
-    background: "black",
-    // width: "10%",
-    // flexGrow: 1,
-    display: "flex",
-    [theme.breakpoints.up("md")]: {
-      minWidth: theme.spacing(140)
-    }
-  },
   scroll1: {
-    // width: "100%",
     display: "flex",
+    alignItems: "center",
     animation: `$myEffect 50s linear infinite`,
-    // position: "absolute",
-    background: "yellow",
-    animationDelay: "-25s"
+    position: "absolute",
+    minWidth: theme.spacing(60)
   },
   scroll2: {
-    // flexGrow: 1,
-    // width: "100%",
     display: "flex",
+    alignItems: "center",
     animation: `$myEffect 50s linear infinite`,
-    // animationDelay: "-25s",
-    // position: "absolute",
-    visibility: "hidden"
+    animationDelay: "-25s",
+    position: "absolute",
+    minWidth: theme.spacing(60)
   },
   "@keyframes myEffect": {
     "0%": {
-      transform: "translateX(100%)"
+      transform: "translateX(150%)"
     },
     "100%": {
-      transform: "translateX(-100%)"
+      transform: "translateX(-150%)"
     }
   },
   pause: {
@@ -203,7 +190,7 @@ const useStyles = makeStyles(theme => ({
       top: theme.spacing(0),
       height: theme.spacing(3),
       width: theme.spacing(4),
-      marginLeft: theme.spacing(4.5),
+      marginLeft: theme.spacing(6),
       left: theme.spacing(-4),
       marginTop: theme.spacing(1)
     }
@@ -303,16 +290,8 @@ const Trending = ({
           </Fade>
         )}
         {trending[0] && trending !== "none" && (
-          <Fade in={fade} timeout={2000}>
-            <Grid
-              className={classes.scrollContainer}
-              container
-              direction="row"
-              // justify="space-evenly"
-              alignItems="center"
-              wrap="nowrap"
-              // spacing={2}
-            >
+          <Fragment>
+            <Fade in={fade} timeout={2000}>
               <div
                 className={clsx(classes.scroll1, {
                   [classes.pause]: pause
@@ -349,6 +328,8 @@ const Trending = ({
                     </Grid>
                   ))}
               </div>
+            </Fade>
+            <Fade in={fade} timeout={2000}>
               <div
                 className={clsx(classes.scroll2, {
                   [classes.pause]: pause
@@ -385,8 +366,8 @@ const Trending = ({
                     </Grid>
                   ))}
               </div>
-            </Grid>
-          </Fade>
+            </Fade>
+          </Fragment>
         )}
         <div className={classes.trending}>
           <Paper
