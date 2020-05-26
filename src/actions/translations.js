@@ -8,6 +8,7 @@ import {
   GET_DATA,
   SELECT_LANG,
   GET_TRENDING,
+  CLEAR_TRENDING,
   SELECT_TREND_LANG,
   CLEAR_DATA
 } from "./types";
@@ -37,6 +38,23 @@ export const selectTrendingLang = data => async dispatch => {
       payload: {
         trendingLang: data
       }
+    });
+  } catch (err) {
+    // rollbar.error(err);
+    // dispatch({
+    //   type: ERROR,
+    //   payload: {
+    //     name: err.name,
+    //     message: err.message
+    //   }
+    // });
+  }
+};
+
+export const clearTrending = () => async dispatch => {
+  try {
+    dispatch({
+      type: CLEAR_TRENDING
     });
   } catch (err) {
     // rollbar.error(err);

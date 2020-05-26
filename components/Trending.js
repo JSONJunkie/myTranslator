@@ -23,7 +23,8 @@ import TrendingChart from "../components/TrendingChart";
 import {
   getTrending,
   selectTrendingLang,
-  selectLang
+  selectLang,
+  clearTrending
 } from "../src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
@@ -232,7 +233,8 @@ const useStyles = makeStyles(theme => ({
 const Trending = ({
   translations: { trending, chartData, preTrans, trendingLang, toCode },
   getTrending,
-  selectTrendingLang
+  selectTrendingLang,
+  clearTrending
 }) => {
   const classes = useStyles();
 
@@ -291,7 +293,10 @@ const Trending = ({
   };
 
   useEffect(() => {
-    getTrending(trendingLang);
+    clearTrending();
+    if (chartData.length > 0) {
+      getTrending(trendingLang);
+    }
   }, [trendingLang, chartData]);
 
   useEffect(() => {
@@ -304,7 +309,12 @@ const Trending = ({
     <div className={classes.root}>
       <div className={classes.wrapper}>
         {!trending[0] && (
-          <Skeleton animation="wave" variant="rect" width="100%" />
+          <Skeleton
+            animation="wave"
+            variant="rect"
+            height="100%"
+            width="100%"
+          />
         )}
         {trending === "none" && (
           <Fade in={fade} timeout={2000}>
@@ -539,6 +549,8 @@ const mapStateToProps = state => ({
   translations: state.translations
 });
 
-export default connect(mapStateToProps, { getTrending, selectTrendingLang })(
-  Trending
-);
+export default connect(mapStateToProps, {
+  getTrending,
+  selectTrendingLang,
+  clearTrending
+})(Trending);

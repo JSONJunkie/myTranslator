@@ -6,7 +6,8 @@ import {
   SELECT_LANG,
   GET_TRENDING,
   SELECT_TREND_LANG,
-  CLEAR_DATA
+  CLEAR_DATA,
+  CLEAR_TRENDING
 } from "../actions/types";
 
 const initialState = {
@@ -56,6 +57,8 @@ export default function (state = initialState, action) {
       };
     case GET_TRENDING:
       return { ...state, trending: payload.trending };
+    case CLEAR_TRENDING:
+      return { ...state, trending: [] };
     case SELECT_TREND_LANG:
       return { ...state, trendingLang: payload.trendingLang };
     case CLEAR_DATA:
