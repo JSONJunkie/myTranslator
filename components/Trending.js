@@ -293,9 +293,13 @@ const Trending = ({
   };
 
   useEffect(() => {
-    clearTrending();
-    if (chartData.length > 0) {
+    if (router.pathname === "/") {
       getTrending(trendingLang);
+    } else {
+      clearTrending();
+      if (chartData.length > 0) {
+        getTrending(trendingLang);
+      }
     }
   }, [trendingLang, chartData]);
 
