@@ -131,6 +131,108 @@ export async function getServerSideProps() {
     baseUrl + "/api/data?preTrans=welcome&fromCode=en"
   );
 
+  const now = new Date().getTime();
+  const hours = Math.floor((now - res.data.date) / 1000 / 60 / 60) + 1;
+
+  if (res.data.hitData.length < 23) {
+    const lastEntry = res.data.hitData[res.data.hitData.length - 1];
+
+    res.data.hitData.pop();
+
+    if (lastEntry.time === hours) {
+      res.data.hitData.push(lastEntry);
+    } else {
+      if (hours - lastEntry.time > 1) {
+        res.data.hitData.push(lastEntry);
+        const noHitHours = hours - lastEntry.time;
+        if (noHitHours < 23) {
+          for (var i = 1; i < noHitHours; i++) {
+            res.data.hitData.push({
+              time: lastEntry.time + i,
+              hits: 0
+            });
+          }
+          res.data.hitData.shift();
+          res.data.hitData.push({
+            time: hours,
+            hits: 0
+          });
+        }
+
+        if (noHitHours >= 23) {
+          for (var i = 0; i < 23; i++) {
+            res.data.hitData[i] = { time: hours - 23 + i, hits: 0 };
+          }
+          res.data.hitData.push({
+            time: hours,
+            hits: 0
+          });
+        }
+      } else {
+        res.data.hitData.push(lastEntry);
+
+        res.data.hitData.push({
+          time: hours,
+          hits: 0
+        });
+      }
+    }
+  }
+
+  if (res.data.hitData.length >= 23) {
+    const reversedData = res.data.hitData.reverse();
+
+    reversedData.pop();
+
+    const newData = reversedData.reverse();
+
+    const lastEntry = newData[newData.length - 1];
+
+    newData.pop();
+
+    if (lastEntry.time === hours) {
+      newData.push(lastEntry);
+    } else {
+      if (hours - lastEntry.time > 1) {
+        newData.push(lastEntry);
+        const noHitHours = hours - lastEntry.time;
+        if (noHitHours < 23) {
+          for (var i = 1; i < noHitHours; i++) {
+            newData.shift();
+            newData.push({
+              time: lastEntry.time + i,
+              hits: 0
+            });
+          }
+          newData.shift();
+          newData.push({
+            time: hours,
+            hits: 0
+          });
+        }
+
+        if (noHitHours >= 23) {
+          for (var i = 0; i < 23; i++) {
+            newData[i] = { time: hours - 23 + i, hits: 0 };
+          }
+          newData.push({
+            time: hours,
+            hits: 0
+          });
+        }
+      } else {
+        newData.push(lastEntry);
+
+        newData.push({
+          time: hours,
+          hits: 0
+        });
+      }
+      res.data.hitData = newData;
+    }
+  }
+  res.data.hitData.unshift({ mostHits: res.data.mostHits });
+
   var otherTrans = [];
 
   for (var key of Object.keys(res.data)) {
