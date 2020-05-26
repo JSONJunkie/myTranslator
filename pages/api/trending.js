@@ -20,7 +20,7 @@ handler.get(async (req, res) => {
       {
         lean: true,
         sort: { lifetimeHits: -1 },
-        limit: 10
+        limit: 15
       }
     );
 
