@@ -15,7 +15,7 @@ handler.get(async (req, res) => {
     const { Translations } = req.models;
     const docs = await Translations.find({}, {}, { lean: true });
     var totalTrans = 0;
-    docs.forEach(doc => {
+    docs.forEach((doc) => {
       for (var key of Object.keys(doc)) {
         if (doc[key].text) {
           totalTrans = totalTrans + 1;
@@ -44,7 +44,7 @@ handler.patch(async (req, res) => {
 
       const baseUrl = dev
         ? "http://localhost:3000"
-        : "https://drees1992-mytranslator.herokuapp.com";
+        : "https://jsonj-mytranslator.herokuapp.com";
 
       const fromText = "en.text";
       const to = "es";
@@ -58,17 +58,17 @@ handler.patch(async (req, res) => {
       const languageTranslator = new LanguageTranslatorV3({
         version: "2018-05-01",
         authenticator: new IamAuthenticator({
-          apikey: process.env.TRANSLATE_KEY
+          apikey: process.env.TRANSLATE_KEY,
         }),
         url: process.env.TRANSLATE_URL,
         headers: {
-          "X-Watson-Learning-Opt-Out": "true"
-        }
+          "X-Watson-Learning-Opt-Out": "true",
+        },
       });
 
       const translateParams = {
         text: preTrans,
-        modelId: modelId
+        modelId: modelId,
       };
 
       const translationResult = await languageTranslator.translate(
@@ -80,11 +80,11 @@ handler.patch(async (req, res) => {
       const synthesizeParams = {
         text: result,
         accept: "audio/mp3",
-        voice
+        voice,
       };
 
       const config = {
-        responseType: "arraybuffer"
+        responseType: "arraybuffer",
       };
 
       const body = synthesizeParams;
@@ -107,10 +107,10 @@ handler.patch(async (req, res) => {
         hitData: [
           { time: 0, hits: 0 },
           { time: 0, hits: 0 },
-          { time: 0, hits: 1 }
+          { time: 0, hits: 1 },
         ],
         lifetimeHits: 0,
-        date: new Date().getTime()
+        date: new Date().getTime(),
       });
 
       await entry.save();
@@ -133,7 +133,7 @@ handler.patch(async (req, res) => {
       if (lastEntry.time === hours) {
         doc.hitData.push({
           time: hours,
-          hits: lastEntry.hits + 1
+          hits: lastEntry.hits + 1,
         });
       } else {
         if (hours - lastEntry.time > 1) {
@@ -142,13 +142,13 @@ handler.patch(async (req, res) => {
             for (var i = 1; i < noHitHours; i++) {
               doc.hitData.push({
                 time: lastEntry.time + i,
-                hits: 0
+                hits: 0,
               });
             }
             doc.hitData.shift();
             doc.hitData.push({
               time: hours,
-              hits: 1
+              hits: 1,
             });
           }
 
@@ -158,7 +158,7 @@ handler.patch(async (req, res) => {
             }
             doc.hitData.push({
               time: hours,
-              hits: 1
+              hits: 1,
             });
           }
         } else {
@@ -166,7 +166,7 @@ handler.patch(async (req, res) => {
 
           doc.hitData.push({
             time: hours,
-            hits: 1
+            hits: 1,
           });
         }
       }
@@ -176,7 +176,7 @@ handler.patch(async (req, res) => {
         { hitData: doc.hitData, lifetimeHits: doc.lifetimeHits + 1 },
         {
           new: true,
-          useFindAndModify: false
+          useFindAndModify: false,
         }
       );
 
@@ -198,7 +198,7 @@ handler.patch(async (req, res) => {
       if (lastEntry.time === hours) {
         newData.push({
           time: hours,
-          hits: lastEntry.hits + 1
+          hits: lastEntry.hits + 1,
         });
       } else {
         if (hours - lastEntry.time > 1) {
@@ -208,13 +208,13 @@ handler.patch(async (req, res) => {
               newData.shift();
               newData.push({
                 time: lastEntry.time + i,
-                hits: 0
+                hits: 0,
               });
             }
             newData.shift();
             newData.push({
               time: hours,
-              hits: 1
+              hits: 1,
             });
           }
 
@@ -224,7 +224,7 @@ handler.patch(async (req, res) => {
             }
             newData.push({
               time: hours,
-              hits: 1
+              hits: 1,
             });
           }
         } else {
@@ -232,7 +232,7 @@ handler.patch(async (req, res) => {
 
           newData.push({
             time: hours,
-            hits: 1
+            hits: 1,
           });
         }
       }
@@ -242,7 +242,7 @@ handler.patch(async (req, res) => {
         { hitData: newData, lifetimeHits: doc.lifetimeHits + 1 },
         {
           new: true,
-          useFindAndModify: false
+          useFindAndModify: false,
         }
       );
 

@@ -20,38 +20,38 @@ import isAlpha from "validator/lib/isAlpha";
 
 import connectToMongo from "../../../database";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     height: "100%",
-    flexGrow: 1
+    flexGrow: 1,
   },
   hiddenDate: {
     visibility: "hidden",
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
   },
   content: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   loadingContent: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   date: {
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
   },
   progress: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   hideChart: {
     visibility: "hidden",
-    background: "black"
-  }
+    background: "black",
+  },
 }));
 
 const Translation = ({ data, codes }) => {
@@ -136,7 +136,7 @@ export async function getStaticProps(context) {
   //   throw new Error("No query");
   // }
 
-  const getLang = data => {
+  const getLang = (data) => {
     switch (data) {
       case "ar":
         return "Arabic";
@@ -179,7 +179,7 @@ export async function getStaticProps(context) {
     }
   };
 
-  const getLocale = data => {
+  const getLocale = (data) => {
     switch (data) {
       case "ar":
         return "ar";
@@ -222,7 +222,7 @@ export async function getStaticProps(context) {
     }
   };
 
-  const getVoice = data => {
+  const getVoice = (data) => {
     switch (data) {
       case "ar":
         return "ar-AR_OmarVoice";
@@ -272,7 +272,7 @@ export async function getStaticProps(context) {
 
   const baseUrl = dev
     ? "http://localhost:3000"
-    : "https://drees1992-mytranslator.herokuapp.com";
+    : "https://jsonj-mytranslator.herokuapp.com";
 
   const preTrans = context.params.translation;
   const from = "it";
@@ -314,10 +314,10 @@ export async function getStaticProps(context) {
         [fromText]: preTrans,
         hitData: [
           { time: 0, hits: 0 },
-          { time: 0, hits: 0 }
+          { time: 0, hits: 0 },
         ],
         lifetimeHits: 0,
-        date: new Date().getTime()
+        date: new Date().getTime(),
       });
       await entry.save();
       connection.close();
@@ -328,10 +328,10 @@ export async function getStaticProps(context) {
       [fromText]: preTrans,
       hitData: [
         { time: 0, hits: 0 },
-        { time: 0, hits: 0 }
+        { time: 0, hits: 0 },
       ],
       lifetimeHits: 0,
-      date: anyDoc.date
+      date: anyDoc.date,
     });
     await entry.save();
     connection.close();
@@ -342,17 +342,17 @@ export async function getStaticProps(context) {
     const languageTranslator = new LanguageTranslatorV3({
       version: "2018-05-01",
       authenticator: new IamAuthenticator({
-        apikey: process.env.TRANSLATE_KEY
+        apikey: process.env.TRANSLATE_KEY,
       }),
       url: process.env.TRANSLATE_URL,
       headers: {
-        "X-Watson-Learning-Opt-Out": "true"
-      }
+        "X-Watson-Learning-Opt-Out": "true",
+      },
     });
 
     const translateParams = {
       text: preTrans,
-      modelId: modelId
+      modelId: modelId,
     };
 
     const translationResult = await languageTranslator.translate(
@@ -364,11 +364,11 @@ export async function getStaticProps(context) {
       const synthesizeParams = {
         text: result,
         accept: "audio/mp3",
-        voice
+        voice,
       };
 
       const config = {
-        responseType: "arraybuffer"
+        responseType: "arraybuffer",
       };
 
       const body = synthesizeParams;
@@ -388,7 +388,7 @@ export async function getStaticProps(context) {
       const transDoc = await Translations.findOneAndUpdate(
         { [fromText]: preTrans },
         {
-          [to]: { text: result.toLowerCase(), audio: [audioDataUri.content] }
+          [to]: { text: result.toLowerCase(), audio: [audioDataUri.content] },
         },
         { new: true, useFindAndModify: false }
       );
@@ -396,12 +396,12 @@ export async function getStaticProps(context) {
       const data = {
         from: transDoc[from].text,
         to: transDoc[to].text,
-        date: transDoc.date
+        date: transDoc.date,
       };
 
       const codes = {
         from: getLang(from),
-        to: getLang(to)
+        to: getLang(to),
       };
 
       connection.close();
@@ -409,8 +409,8 @@ export async function getStaticProps(context) {
       return {
         props: {
           data,
-          codes
-        }
+          codes,
+        },
       };
     }
 
@@ -423,12 +423,12 @@ export async function getStaticProps(context) {
     const data = {
       from: transDoc[from].text,
       to: transDoc[to].text,
-      date: transDoc.date
+      date: transDoc.date,
     };
 
     const codes = {
       from: getLang(from),
-      to: getLang(to)
+      to: getLang(to),
     };
 
     connection.close();
@@ -436,20 +436,20 @@ export async function getStaticProps(context) {
     return {
       props: {
         data,
-        codes
-      }
+        codes,
+      },
     };
   }
 
   const data = {
     from: doc[from].text,
     to: doc[to].text,
-    date: doc.date
+    date: doc.date,
   };
 
   const codes = {
     from: getLang(from),
-    to: getLang(to)
+    to: getLang(to),
   };
 
   connection.close();
@@ -457,15 +457,15 @@ export async function getStaticProps(context) {
   return {
     props: {
       data,
-      codes
-    }
+      codes,
+    },
   };
 }
 
 export async function getStaticPaths() {
   return {
     paths: [],
-    fallback: true
+    fallback: true,
   };
 }
 
