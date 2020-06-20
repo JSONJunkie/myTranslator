@@ -14,30 +14,30 @@ import Footer from "../components/Footer";
 
 import axios from "axios";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     height: "100%",
-    flexGrow: 1
+    flexGrow: 1,
   },
   content: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   loadingContent: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   date: {
     visibility: "hidden",
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
   },
   progress: {
     display: "flex",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 }));
 
 const Index = ({ data }) => {
@@ -76,7 +76,7 @@ const Index = ({ data }) => {
 };
 
 export async function getServerSideProps() {
-  const getLang = data => {
+  const getLang = (data) => {
     switch (data) {
       case "":
         return "...";
@@ -125,7 +125,7 @@ export async function getServerSideProps() {
 
   const baseUrl = dev
     ? "http://localhost:3000"
-    : "https://drees1992-mytranslator.herokuapp.com";
+    : "https://jsonj-mytranslator.herokuapp.com";
 
   const res = await axios.get(
     baseUrl + "/api/data?preTrans=welcome&fromCode=en"
@@ -149,13 +149,13 @@ export async function getServerSideProps() {
           for (var i = 1; i < noHitHours; i++) {
             res.data.hitData.push({
               time: lastEntry.time + i,
-              hits: 0
+              hits: 0,
             });
           }
           res.data.hitData.shift();
           res.data.hitData.push({
             time: hours,
-            hits: 0
+            hits: 0,
           });
         }
 
@@ -165,7 +165,7 @@ export async function getServerSideProps() {
           }
           res.data.hitData.push({
             time: hours,
-            hits: 0
+            hits: 0,
           });
         }
       } else {
@@ -173,7 +173,7 @@ export async function getServerSideProps() {
 
         res.data.hitData.push({
           time: hours,
-          hits: 0
+          hits: 0,
         });
       }
     }
@@ -201,13 +201,13 @@ export async function getServerSideProps() {
             newData.shift();
             newData.push({
               time: lastEntry.time + i,
-              hits: 0
+              hits: 0,
             });
           }
           newData.shift();
           newData.push({
             time: hours,
-            hits: 0
+            hits: 0,
           });
         }
 
@@ -217,7 +217,7 @@ export async function getServerSideProps() {
           }
           newData.push({
             time: hours,
-            hits: 0
+            hits: 0,
           });
         }
       } else {
@@ -225,7 +225,7 @@ export async function getServerSideProps() {
 
         newData.push({
           time: hours,
-          hits: 0
+          hits: 0,
         });
       }
       res.data.hitData = newData;
@@ -244,7 +244,7 @@ export async function getServerSideProps() {
       otherTrans.push({
         text: res.data[key].text,
         audio: res.data[key].audio,
-        to: getLang(key)
+        to: getLang(key),
       });
     }
   }
@@ -256,11 +256,11 @@ export async function getServerSideProps() {
     postTrans: res.data.es.text,
     chartData: newHitData,
     audio: res.data.es.audio,
-    otherTrans
+    otherTrans,
   };
 
   return {
-    props: { data }
+    props: { data },
   };
 }
 
@@ -268,8 +268,8 @@ export async function getServerSideProps() {
 //   rollbar: PropTypes.object.isRequired
 // };
 
-const mapStateToProps = state => ({
-  translations: state.translations
+const mapStateToProps = (state) => ({
+  translations: state.translations,
 });
 
 export default connect(mapStateToProps)(Index);
