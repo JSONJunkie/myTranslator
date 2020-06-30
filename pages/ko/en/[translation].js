@@ -272,7 +272,7 @@ export async function getStaticProps(context) {
 
   const baseUrl = dev
     ? "http://localhost:3000"
-    : "https://jsonj-mytranslator.herokuapp.com";
+    : "https://jsonj-translator.herokuapp.com";
 
   const preTrans = context.params.translation;
   const from = "ko";

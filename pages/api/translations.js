@@ -44,7 +44,7 @@ handler.patch(async (req, res) => {
 
       const baseUrl = dev
         ? "http://localhost:3000"
-        : "https://jsonj-mytranslator.herokuapp.com";
+        : "https://jsonj-translator.herokuapp.com";
 
       const fromText = "en.text";
       const to = "es";
