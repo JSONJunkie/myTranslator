@@ -270,7 +270,8 @@ const Trending = ({
     if (data.from === "en") {
       router.push(
         "/" + data.from + "/es" + "/[translation]",
-        "/" +
+        process.env.BASE_PATH +
+          "/" +
           data.from +
           "/es" +
           "/" +
@@ -282,7 +283,8 @@ const Trending = ({
     if (data.from !== "en") {
       router.push(
         "/" + data.from + "/en" + "/[translation]",
-        "/" +
+        process.env.BASE_PATH +
+          "/" +
           data.from +
           "/en" +
           "/" +

@@ -240,13 +240,19 @@ const Navbar = ({
     }
     router.push(
       "/" + fromCode + "/" + toCode + "/[translation]",
-      "/" + fromCode + "/" + toCode + "/" + userInput.toLowerCase()
+      process.env.BASE_PATH +
+        "/" +
+        fromCode +
+        "/" +
+        toCode +
+        "/" +
+        userInput.toLowerCase()
     );
   };
 
   const goHome = () => {
     if (router.pathname !== "/") {
-      router.push("/");
+      router.push("/", process.env.BASE_PATH + "/");
     }
   };
 

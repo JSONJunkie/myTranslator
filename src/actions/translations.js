@@ -70,7 +70,7 @@ export const clearTrending = () => async (dispatch) => {
 
 export const getTrending = (data) => async (dispatch) => {
   try {
-    console.log(process.env.BASE_PATH);
+    //console.log(process.env.BASE_PATH);
     const res = await axios.get(
       process.env.BASE_PATH + "/api/trending?selectLang=" + data
     );
