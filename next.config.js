@@ -1,8 +1,8 @@
 require("dotenv").config();
 
 module.exports = {
-  assetPrefix: process.env.BASE_PATH || "",
-  basePath: process.env.BASE_PATH || "",
+  assetPrefix: process.env.BASE_PATH,
+  basePath: process.env.BASE_PATH,
   env: {
     TRANSLATE_KEY: process.env.TRANSLATE_KEY,
     TRANSLATE_URL: process.env.TRANSLATE_URL,
