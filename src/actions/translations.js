@@ -70,7 +70,10 @@ export const clearTrending = () => async (dispatch) => {
 
 export const getTrending = (data) => async (dispatch) => {
   try {
-    const res = await axios.get("/api/trending?selectLang=" + data);
+    console.log(process.env.BASE_PATH);
+    const res = await axios.get(
+      process.env.BASE_PATH + "/api/trending?selectLang=" + data
+    );
 
     if (res.data.length < 1) {
       return dispatch({
@@ -254,7 +257,11 @@ export const getData = (data) => async (dispatch) => {
     const { preTrans, fromCode, toCode } = data;
 
     const res = await axios.get(
-      "/api/data?preTrans=" + preTrans + "&fromCode=" + fromCode
+      process.env.BASE_PATH +
+        "/api/data?preTrans=" +
+        preTrans +
+        "&fromCode=" +
+        fromCode
     );
 
     if (!res.data) {
@@ -307,7 +314,7 @@ export const addHit = (data) => async (dispatch) => {
   try {
     const body = { data };
 
-    await axios.patch("/api/translations", body);
+    await axios.patch(process.env.BASE_PATH + "/api/translations", body);
 
     dispatch(getData(data));
 
@@ -357,7 +364,7 @@ export const updateInput = (data) => async (dispatch) => {
 
 export const numOfTranslations = () => async (dispatch) => {
   try {
-    const res = await axios.get("/api/translations");
+    const res = await axios.get(process.env.BASE_PATH + "/api/translations");
     dispatch({
       type: GET_TRANSCOUNT,
       payload: { numTrans: res.data },

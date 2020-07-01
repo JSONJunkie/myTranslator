@@ -94,7 +94,10 @@ export const translate = ({ formData, rollbar }) => async (dispatch) => {
     };
     const transId = uuidv4();
     const body = translateParams;
-    const res = await axios.post("/api/translator", body);
+    const res = await axios.post(
+      process.env.BASE_PATH + "/api/translator",
+      body
+    );
     dispatch({
       type: TRANSLATE,
       payload: { transId, preTrans: formData, postTrans: res.data },
@@ -145,7 +148,11 @@ export const textToSpeech = ({ data, rollbar }) => async (dispatch) => {
       responseType: "arraybuffer",
     };
     const body = synthesizeParams;
-    const res = await axios.post("/api/translator/speak", body, config);
+    const res = await axios.post(
+      process.env.BASE_PATH + "/api/translator/speak",
+      body,
+      config
+    );
     const audio = res.data;
     const fileReader = new FileReader();
     const blob = new Blob([audio], { type: "audio/webm" });
@@ -279,7 +286,7 @@ export const listen = ({ blob, rollbar }) => async (dispatch) => {
       },
     };
     const transcribedRes = await axios.post(
-      "/api/translator/listen",
+      process.env.BASE_PATH + "/api/translator/listen",
       blob,
       config
     );
@@ -292,7 +299,10 @@ export const listen = ({ blob, rollbar }) => async (dispatch) => {
       modelId: "es-en",
     };
     const body = translateParams;
-    const translatedRes = await axios.post("/api/translator", body);
+    const translatedRes = await axios.post(
+      process.env.BASE_PATH + "/api/translator",
+      body
+    );
     dispatch({
       type: TRANSLATE_TRANSCRIPTION,
       payload: { translatedTranscription: translatedRes.data },
