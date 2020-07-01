@@ -2,4 +2,7 @@ node_modules/
 .next/
 *.log
 .vscode/
-next.config.js
+.env
+*.swp
+*.swo
+*~

@@ -270,9 +270,7 @@ export async function getStaticProps(context) {
 
   const dev = process.env.NODE_ENV !== "production";
 
-  const baseUrl = dev
-    ? "http://localhost:3000"
-    : "https://jsonj-translator.herokuapp.com";
+  const baseUrl = dev ? "http://localhost:3000" : process.env.PROD_BASE_URL;
 
   const preTrans = context.params.translation;
   const from = "fr";

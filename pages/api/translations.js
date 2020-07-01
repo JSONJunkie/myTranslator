@@ -42,9 +42,7 @@ handler.patch(async (req, res) => {
     if (!doc && preTrans === "welcome") {
       const dev = process.env.NODE_ENV !== "production";
 
-      const baseUrl = dev
-        ? "http://localhost:3000"
-        : "https://jsonj-translator.herokuapp.com";
+      const baseUrl = dev ? "http://localhost:3000" : process.env.PROD_BASE_URL;
 
       const fromText = "en.text";
       const to = "es";

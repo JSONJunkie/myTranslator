@@ -123,9 +123,7 @@ export async function getServerSideProps() {
 
   const dev = process.env.NODE_ENV !== "production";
 
-  const baseUrl = dev
-    ? "http://localhost:3000"
-    : "https://jsonj-translator.herokuapp.com";
+  const baseUrl = dev ? "http://localhost:3000" : process.env.PROD_BASE_URL;
 
   const res = await axios.get(
     baseUrl + "/api/data?preTrans=welcome&fromCode=en"
