@@ -3,19 +3,19 @@ import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
 import validator from "validator";
 
-import rollbar from ";
+import rollbar from "rollbar";
 
 const handler = nextConnect();
 
 const languageTranslator = new LanguageTranslatorV3({
   version: "2018-05-01",
   authenticator: new IamAuthenticator({
-    apikey: process.env.TRANSLATE_KEY
+    apikey: process.env.TRANSLATE_KEY,
   }),
   url: process.env.TRANSLATE_URL,
   headers: {
-    "X-Watson-Learning-Opt-Out": "true"
-  }
+    "X-Watson-Learning-Opt-Out": "true",
+  },
 });
 
 handler.post(async (req, res) => {

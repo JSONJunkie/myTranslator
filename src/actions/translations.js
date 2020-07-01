@@ -12,7 +12,7 @@ import {
   SELECT_TREND_LANG,
   CLEAR_DATA,
 } from "./types";
-import playSound from "utils/playSound";
+import playSound from "../utils/playSound";
 
 export const clearData = () => async (dispatch) => {
   try {

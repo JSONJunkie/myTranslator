@@ -4,7 +4,7 @@ import { IamAuthenticator } from "ibm-watson/auth";
 import axios from "axios";
 import DatauriParser from "datauri/parser";
 
-import { middleware } from ../database";
+import { middleware } from "database";
 
 const handler = nextConnect();
 
@@ -20,21 +20,21 @@ handler.get(async (req, res) => {
       {
         lean: true,
         sort: { lifetimeHits: -1 },
-        limit: 15
+        limit: 15,
       }
     );
 
     const mostHits = docs[0].lifetimeHits;
 
-    const newDocs = docs.filter(doc => {
+    const newDocs = docs.filter((doc) => {
       return doc.en.text !== "welcome";
     });
 
-    const newDocsTwo = newDocs.filter(doc => {
+    const newDocsTwo = newDocs.filter((doc) => {
       return doc[lang].text;
     });
 
-    newDocsTwo.forEach(doc => {
+    newDocsTwo.forEach((doc) => {
       const now = new Date().getTime();
       const hours = Math.floor((now - doc.date) / 1000 / 60 / 60) + 1;
 
@@ -53,13 +53,13 @@ handler.get(async (req, res) => {
               for (var i = 1; i < noHitHours; i++) {
                 doc.hitData.push({
                   time: lastEntry.time + i,
-                  hits: 0
+                  hits: 0,
                 });
               }
               doc.hitData.shift();
               doc.hitData.push({
                 time: hours,
-                hits: 0
+                hits: 0,
               });
             }
 
@@ -69,7 +69,7 @@ handler.get(async (req, res) => {
               }
               doc.hitData.push({
                 time: hours,
-                hits: 0
+                hits: 0,
               });
             }
           } else {
@@ -77,7 +77,7 @@ handler.get(async (req, res) => {
 
             doc.hitData.push({
               time: hours,
-              hits: 0
+              hits: 0,
             });
           }
         }
@@ -105,13 +105,13 @@ handler.get(async (req, res) => {
                 newData.shift();
                 newData.push({
                   time: lastEntry.time + i,
-                  hits: 0
+                  hits: 0,
                 });
               }
               newData.shift();
               newData.push({
                 time: hours,
-                hits: 0
+                hits: 0,
               });
             }
 
@@ -121,7 +121,7 @@ handler.get(async (req, res) => {
               }
               newData.push({
                 time: hours,
-                hits: 0
+                hits: 0,
               });
             }
           } else {
@@ -129,7 +129,7 @@ handler.get(async (req, res) => {
 
             newData.push({
               time: hours,
-              hits: 0
+              hits: 0,
             });
           }
           doc.hitData = newData;

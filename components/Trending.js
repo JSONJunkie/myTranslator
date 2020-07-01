@@ -18,21 +18,21 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { useRouter } from "next/router";
 
-import TrendingChart from components/TrendingChart";
+import TrendingChart from "components/TrendingChart";
 
 import {
   getTrending,
   selectTrendingLang,
   selectLang,
-  clearTrending
-} from src/actions/translations";
+  clearTrending,
+} from "src/actions/translations";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   wrapper: {
     position: "relative",
@@ -42,8 +42,8 @@ const useStyles = makeStyles(theme => ({
     height: theme.spacing(3),
     display: "flex",
     [theme.breakpoints.up("md")]: {
-      height: theme.spacing(4)
-    }
+      height: theme.spacing(4),
+    },
   },
   trending: {
     position: "absolute",
@@ -51,15 +51,15 @@ const useStyles = makeStyles(theme => ({
     left: theme.spacing(4),
     top: theme.spacing(-0.5),
     [theme.breakpoints.up("md")]: {
-      height: theme.spacing(5)
+      height: theme.spacing(5),
     },
-    background: theme.palette.background.paper
+    background: theme.palette.background.paper,
   },
   formControl: {
     width: theme.spacing(9),
     [theme.breakpoints.up("md")]: {
-      width: theme.spacing(12)
-    }
+      width: theme.spacing(12),
+    },
   },
   scrollToggle: {
     position: "absolute",
@@ -67,15 +67,15 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(-1.5),
     [theme.breakpoints.up("md")]: {
       left: theme.spacing(15),
-      top: theme.spacing(-1)
-    }
+      top: theme.spacing(-1),
+    },
   },
   beginningCap: {
     position: "absolute",
     width: theme.spacing(4),
     left: theme.spacing(0),
     top: theme.spacing(-0.5),
-    background: theme.palette.background.default
+    background: theme.palette.background.default,
   },
   spacer: {
     position: "absolute",
@@ -84,16 +84,16 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(-0.5),
     [theme.breakpoints.up("md")]: {
       left: theme.spacing(14.8),
-      width: theme.spacing(0.2)
+      width: theme.spacing(0.2),
     },
-    background: theme.palette.background.default
+    background: theme.palette.background.default,
   },
   endCap: {
     position: "absolute",
     width: theme.spacing(4),
     right: theme.spacing(0),
     top: theme.spacing(-0.5),
-    background: theme.palette.background.default
+    background: theme.palette.background.default,
   },
   trendingTextDesktop: {
     display: "none",
@@ -105,8 +105,8 @@ const useStyles = makeStyles(theme => ({
       right: theme.spacing(3),
       paddingTop: theme.spacing(1),
       paddingLeft: theme.spacing(0.5),
-      height: theme.spacing(5)
-    }
+      height: theme.spacing(5),
+    },
   },
   trendingTextMobile: {
     position: "absolute",
@@ -118,16 +118,16 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     zIndex: 1,
     [theme.breakpoints.up("md")]: {
-      display: "none"
-    }
+      display: "none",
+    },
   },
   hidden: {
     visibility: "hidden",
     padding: theme.spacing(1),
     fontSize: 10,
     [theme.breakpoints.up("md")]: {
-      fontSize: 15
-    }
+      fontSize: 15,
+    },
   },
   translation: {
     fontSize: 10,
@@ -136,20 +136,20 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("md")]: {
       fontSize: 14,
       paddingLeft: theme.spacing(7),
-      paddingRight: theme.spacing(1)
-    }
+      paddingRight: theme.spacing(1),
+    },
   },
   translationWrapper: {
     position: "relative",
     padding: theme.spacing(1),
-    background: theme.palette.background.paper
+    background: theme.palette.background.paper,
   },
   none: {
     width: "100%",
     fontSize: 18,
     [theme.breakpoints.up("md")]: {
-      fontSize: 22
-    }
+      fontSize: 22,
+    },
   },
   scroll1: {
     display: "flex",
@@ -157,20 +157,20 @@ const useStyles = makeStyles(theme => ({
     animation: `$myEffect 50s linear infinite`,
     position: "absolute",
     [theme.breakpoints.up("lg")]: {
-      minWidth: theme.spacing(250)
+      minWidth: theme.spacing(250),
     },
     [theme.breakpoints.down("lg")]: {
-      minWidth: theme.spacing(160)
+      minWidth: theme.spacing(160),
     },
     [theme.breakpoints.down("md")]: {
-      minWidth: theme.spacing(160)
+      minWidth: theme.spacing(160),
     },
     [theme.breakpoints.down("sm")]: {
-      minWidth: theme.spacing(120)
+      minWidth: theme.spacing(120),
     },
     [theme.breakpoints.down("xs")]: {
-      minWidth: theme.spacing(66)
-    }
+      minWidth: theme.spacing(66),
+    },
   },
   scroll2: {
     display: "flex",
@@ -179,34 +179,34 @@ const useStyles = makeStyles(theme => ({
     animationDelay: "-25s",
     position: "absolute",
     [theme.breakpoints.up("lg")]: {
-      minWidth: theme.spacing(250)
+      minWidth: theme.spacing(250),
     },
     [theme.breakpoints.down("lg")]: {
-      minWidth: theme.spacing(160)
+      minWidth: theme.spacing(160),
     },
     [theme.breakpoints.down("md")]: {
-      minWidth: theme.spacing(160)
+      minWidth: theme.spacing(160),
     },
     [theme.breakpoints.down("sm")]: {
-      minWidth: theme.spacing(120)
+      minWidth: theme.spacing(120),
     },
     [theme.breakpoints.down("xs")]: {
-      minWidth: theme.spacing(66)
-    }
+      minWidth: theme.spacing(66),
+    },
   },
   "@keyframes myEffect": {
     "0%": {
-      transform: "translateX(100%)"
+      transform: "translateX(100%)",
     },
     "100%": {
-      transform: "translateX(-100%)"
-    }
+      transform: "translateX(-100%)",
+    },
   },
   pause: {
     width: "100%",
     display: "flex",
     animationPlayState: "paused",
-    position: "absolute"
+    position: "absolute",
   },
   chart: {
     position: "absolute",
@@ -221,20 +221,20 @@ const useStyles = makeStyles(theme => ({
       width: theme.spacing(4),
       marginLeft: theme.spacing(6),
       left: theme.spacing(-4),
-      marginTop: theme.spacing(1)
-    }
+      marginTop: theme.spacing(1),
+    },
   },
   showChart: {
     height: "100%",
-    width: "100%"
-  }
+    width: "100%",
+  },
 }));
 
 const Trending = ({
   translations: { trending, chartData, preTrans, trendingLang, toCode },
   getTrending,
   selectTrendingLang,
-  clearTrending
+  clearTrending,
 }) => {
   const classes = useStyles();
 
@@ -247,26 +247,26 @@ const Trending = ({
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
-    setOpen(prev => false);
+    setOpen((prev) => false);
   };
 
   const handleOpen = () => {
-    setOpen(prev => true);
+    setOpen((prev) => true);
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     selectTrendingLang(e.target.value);
   };
 
   const handleButtonPause = () => {
-    setPause(prev => true);
+    setPause((prev) => true);
   };
 
   const handleButtonUnpause = () => {
-    setPause(prev => false);
+    setPause((prev) => false);
   };
 
-  const handleRouting = data => {
+  const handleRouting = (data) => {
     if (data.from === "en") {
       router.push(
         "/" + data.from + "/es" + "/[translation]",
@@ -305,7 +305,7 @@ const Trending = ({
 
   useEffect(() => {
     if (trending[0] || trending === "none") {
-      setFade(prev => true);
+      setFade((prev) => true);
     }
   }, [trending]);
 
@@ -336,19 +336,19 @@ const Trending = ({
             <Fade in={fade} timeout={2000}>
               <div
                 className={clsx(classes.scroll1, {
-                  [classes.pause]: pause
+                  [classes.pause]: pause,
                 })}
               >
                 {trending.length > 0 &&
-                  trending.map(translation => (
+                  trending.map((translation) => (
                     <Grid item xs="auto" key={translation._id}>
                       <IconButton
                         aria-label="translation"
                         color="secondary"
-                        onClick={e => {
+                        onClick={(e) => {
                           handleRouting({
                             translation,
-                            from: trendingLang
+                            from: trendingLang,
                           });
                         }}
                       >
@@ -374,19 +374,19 @@ const Trending = ({
             <Fade in={fade} timeout={2000}>
               <div
                 className={clsx(classes.scroll2, {
-                  [classes.pause]: pause
+                  [classes.pause]: pause,
                 })}
               >
                 {trending.length > 0 &&
-                  trending.map(translation => (
+                  trending.map((translation) => (
                     <Grid item xs="auto" key={translation._id}>
                       <IconButton
                         aria-label="translation"
                         color="secondary"
-                        onClick={e => {
+                        onClick={(e) => {
                           handleRouting({
                             translation,
-                            from: trendingLang
+                            from: trendingLang,
                           });
                         }}
                       >
@@ -545,16 +545,16 @@ const Trending = ({
 };
 
 Trending.propTypes = {
-  translations: PropTypes.object.isRequired
+  translations: PropTypes.object.isRequired,
   // rollbar: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  translations: state.translations
+const mapStateToProps = (state) => ({
+  translations: state.translations,
 });
 
 export default connect(mapStateToProps, {
   getTrending,
   selectTrendingLang,
-  clearTrending
+  clearTrending,
 })(Trending);

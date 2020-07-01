@@ -8,7 +8,7 @@ import {
   SELECT_TREND_LANG,
   CLEAR_DATA,
   CLEAR_TRENDING,
-} from "actions/types";
+} from "../actions/types";
 
 const initialState = {
   numTrans: "",

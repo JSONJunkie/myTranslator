@@ -7,17 +7,17 @@ import Paper from "@material-ui/core/Paper";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { CircularProgress } from "@material-ui/core";
 
-import Chart from components/Chart";
+import Chart from "components/Chart";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   chart: {
     height: 200,
     width: 300,
     [theme.breakpoints.down("sm")]: {
       height: 120,
       width: 170,
-      margin: "auto"
-    }
+      margin: "auto",
+    },
   },
   chartLoading: {
     height: 200,
@@ -26,21 +26,21 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down("sm")]: {
       height: 120,
       width: 170,
-      margin: "auto"
-    }
+      margin: "auto",
+    },
   },
   showChart: {
     height: "100%",
-    width: "100%"
+    width: "100%",
   },
   hideChart: {
-    visibility: "hidden"
+    visibility: "hidden",
   },
   wrapper: {
     display: "flex",
     height: "100%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   spacer: {
     height: 200,
@@ -48,16 +48,16 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down("sm")]: {
       height: 120,
       width: 170,
-      margin: "auto"
+      margin: "auto",
     },
-    visibility: "hidden"
-  }
+    visibility: "hidden",
+  },
 }));
 
 const ChartGrid = ({
   hide: { hide },
   translations: { chartData },
-  indexData
+  indexData,
 }) => {
   const classes = useStyles();
   return (
@@ -99,12 +99,12 @@ const ChartGrid = ({
 
 ChartGrid.propTypes = {
   translations: PropTypes.object.isRequired,
-  hide: PropTypes.object.isRequired
+  hide: PropTypes.object.isRequired,
   // rollbar: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  translations: state.translations
+const mapStateToProps = (state) => ({
+  translations: state.translations,
 });
 
 export default connect(mapStateToProps)(ChartGrid);

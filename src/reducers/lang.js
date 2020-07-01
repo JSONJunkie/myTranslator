@@ -10,7 +10,7 @@ import {
   PUSH_TRANS,
   ERROR,
   CLEAR_ERROR,
-} from "actions/types";
+} from "../actions/types";
 
 const initialState = {
   transId: "",

@@ -1,6 +1,6 @@
 import nextConnect from "next-connect";
 
-import { middleware } from ../database";
+import { middleware } from "database";
 
 const handler = nextConnect();
 
@@ -23,7 +23,7 @@ handler.get(async (req, res) => {
         {
           lean: true,
           sort: { lifetimeHits: -1 },
-          limit: 1
+          limit: 1,
         }
       );
 

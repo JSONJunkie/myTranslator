@@ -14,7 +14,7 @@ import {
   ERROR,
   CLEAR_ERROR,
 } from "./types";
-import playSound from "utils/playSound";
+import playSound from "../utils/playSound";
 
 export const deleteSaved = ({ transId, rollbar }) => (dispatch) => {
   try {

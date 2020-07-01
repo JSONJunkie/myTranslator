@@ -3,18 +3,18 @@ import TextToSpeechV1 from "ibm-watson/text-to-speech/v1";
 import { IamAuthenticator } from "ibm-watson/auth";
 import validator from "validator";
 
-import rollbar from ";
+import rollbar from "rollbar";
 
 const handler = nextConnect();
 
 const textToSpeech = new TextToSpeechV1({
   authenticator: new IamAuthenticator({
-    apikey: process.env.SPEAK_KEY
+    apikey: process.env.SPEAK_KEY,
   }),
   url: process.env.SPEAK_URL,
   headers: {
-    "X-Watson-Learning-Opt-Out": "true"
-  }
+    "X-Watson-Learning-Opt-Out": "true",
+  },
 });
 
 handler.post(async (req, res) => {

@@ -2,18 +2,18 @@ import nextConnect from "next-connect";
 import SpeechToTextV1 from "ibm-watson/speech-to-text/v1";
 import { IamAuthenticator } from "ibm-watson/auth";
 
-import rollbar from ";
+import rollbar from "rollbar";
 
 const handler = nextConnect();
 
 const speechToText = new SpeechToTextV1({
   authenticator: new IamAuthenticator({
-    apikey: process.env.LISTEN_KEY
+    apikey: process.env.LISTEN_KEY,
   }),
   url: process.env.LISTEN_URL,
   headers: {
-    "X-Watson-Learning-Opt-Out": "true"
-  }
+    "X-Watson-Learning-Opt-Out": "true",
+  },
 });
 
 handler.post(async (req, res) => {
@@ -22,7 +22,7 @@ handler.post(async (req, res) => {
       objectMode: true,
       contentType: "audio/webm",
       model: "es-ES_BroadbandModel",
-      maxAlternatives: 1
+      maxAlternatives: 1,
     };
     // var params = {
     //   objectMode: true,

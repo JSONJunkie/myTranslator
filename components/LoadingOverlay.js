@@ -11,52 +11,52 @@ import Button from "@material-ui/core/Button";
 import Backdrop from "@material-ui/core/Backdrop";
 import { useRouter } from "next/router";
 
-import TranslationGrid from components/TranslationGrid";
-import ChartGrid from components/ChartGrid";
-import OtherTranslations from components/OtherTranslations";
-import Footer from components/Footer";
+import TranslationGrid from "components/TranslationGrid";
+import ChartGrid from "components/ChartGrid";
+import OtherTranslations from "components/OtherTranslations";
+import Footer from "components/Footer";
 
-import { speak } from src/actions/translations";
+import { speak } from "src/actions/translations";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
     display: "flex",
     minHeight: "100%",
     width: "100%",
-    flexGrow: 1
+    flexGrow: 1,
   },
   content: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   contentTyping: {
     display: "flex",
     flexDirection: "column",
-    background: theme.palette.background.default
+    background: theme.palette.background.default,
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     background: "rgb(53, 53, 53, .9)",
     color: "#fff",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   hiddenDate: {
     visibility: "hidden",
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
   },
   hiddenGrid: {
     visibility: "hidden",
     marginBottom: theme.spacing(4),
     [theme.breakpoints.up("md")]: {
-      marginBottom: theme.spacing(12)
-    }
+      marginBottom: theme.spacing(12),
+    },
   },
   hiddenChart: {
-    visibility: "hidden"
-  }
+    visibility: "hidden",
+  },
 }));
 
 const LoadingOverlay = ({
@@ -70,9 +70,9 @@ const LoadingOverlay = ({
     chartData,
     audio,
     otherTrans,
-    loading
+    loading,
   },
-  speak
+  speak,
 }) => {
   const classes = useStyles();
 
@@ -81,7 +81,7 @@ const LoadingOverlay = ({
   const [routing, setRouting] = useState({
     url: "",
     starting: true,
-    complete: false
+    complete: false,
   });
 
   const [audioContext, setAudioContext] = useState(null);
@@ -94,7 +94,7 @@ const LoadingOverlay = ({
 
   const [loader, setLoader] = useState(true);
 
-  const handleSpeak = e => {
+  const handleSpeak = (e) => {
     if (router.pathname === "/") {
       audioContext.resume();
       speak({ audioContext, data: audio[0] });
@@ -108,12 +108,12 @@ const LoadingOverlay = ({
     setOpen(false);
   };
 
-  const handleRouteChangeStart = url => {
-    setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
+  const handleRouteChangeStart = (url) => {
+    setRouting((prev) => ({ ...prev, starting: true, complete: false, url }));
   };
 
-  const handleRouteChangeComplete = url => {
-    setRouting(prev => ({ ...prev, starting: false, complete: true }));
+  const handleRouteChangeComplete = (url) => {
+    setRouting((prev) => ({ ...prev, starting: false, complete: true }));
   };
 
   useEffect(() => {
@@ -127,29 +127,29 @@ const LoadingOverlay = ({
 
   useEffect(() => {
     if (userInput) {
-      setHide(prev => false);
+      setHide((prev) => false);
     }
 
     if (!userInput) {
-      setHide(prev => true);
+      setHide((prev) => true);
     }
     return () => {
-      setHide(prev => true);
+      setHide((prev) => true);
     };
   }, [userInput]);
 
   useEffect(() => {
     if (!router.isFallback) {
-      setFade(prev => true);
+      setFade((prev) => true);
     }
   }, [router.isFallback]);
 
   useEffect(() => {
     if (chartData.length > 0) {
-      setLoader(prev => false);
+      setLoader((prev) => false);
     }
     if (chartData.length === 0) {
-      setLoader(prev => true);
+      setLoader((prev) => true);
     }
   }, [chartData]);
 
@@ -218,7 +218,7 @@ const LoadingOverlay = ({
         <div className={classes.root}>
           <Container
             className={clsx(classes.content, {
-              [classes.contentTyping]: !hide
+              [classes.contentTyping]: !hide,
             })}
             maxWidth="md"
           >
@@ -307,11 +307,11 @@ const LoadingOverlay = ({
 
 LoadingOverlay.propTypes = {
   translations: PropTypes.object.isRequired,
-  speak: PropTypes.func.isRequired
+  speak: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  translations: state.translations
+const mapStateToProps = (state) => ({
+  translations: state.translations,
 });
 
 export default connect(mapStateToProps, { speak })(LoadingOverlay);

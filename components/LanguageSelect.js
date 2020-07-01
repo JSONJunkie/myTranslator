@@ -9,26 +9,26 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { useRouter } from "next/router";
 
-import { selectLang } from src/actions/translations";
+import { selectLang } from "src/actions/translations";
 import { Fragment } from "react";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%"
+    width: "100%",
   },
   content: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    alignContent: "center"
+    alignContent: "center",
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 60
+    minWidth: 60,
   },
   text: {
-    fontSize: 10
-  }
+    fontSize: 10,
+  },
 }));
 
 const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
@@ -39,15 +39,15 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
   const [routing, setRouting] = useState({
     url: "",
     starting: true,
-    complete: false
+    complete: false,
   });
 
-  const handleRouteChangeStart = url => {
-    setRouting(prev => ({ ...prev, starting: true, complete: false, url }));
+  const handleRouteChangeStart = (url) => {
+    setRouting((prev) => ({ ...prev, starting: true, complete: false, url }));
   };
 
-  const handleRouteChangeComplete = url => {
-    setRouting(prev => ({ ...prev, starting: false, complete: true }));
+  const handleRouteChangeComplete = (url) => {
+    setRouting((prev) => ({ ...prev, starting: false, complete: true }));
   };
 
   useEffect(() => {
@@ -63,25 +63,25 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
 
   const [fromOpen, setFromOpen] = React.useState(false);
 
-  const handleFromChange = e => {
+  const handleFromChange = (e) => {
     selectLang({ from: e.target.value, to: toCode });
   };
 
-  const handleToChange = e => {
+  const handleToChange = (e) => {
     selectLang({ from: fromCode, to: e.target.value });
   };
 
   const handleClose = () => {
-    setToOpen(prev => false);
-    setFromOpen(prev => false);
+    setToOpen((prev) => false);
+    setFromOpen((prev) => false);
   };
 
   const handleFromOpen = () => {
-    setFromOpen(prev => true);
+    setFromOpen((prev) => true);
   };
 
   const handleToOpen = () => {
-    setToOpen(prev => true);
+    setToOpen((prev) => true);
   };
 
   return (
@@ -484,12 +484,12 @@ const LanguageSelect = ({ selectLang, translations: { fromCode, toCode } }) => {
 
 LanguageSelect.propTypes = {
   translations: PropTypes.object.isRequired,
-  selectLang: PropTypes.func.isRequired
+  selectLang: PropTypes.func.isRequired,
   // rollbar: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  translations: state.translations
+const mapStateToProps = (state) => ({
+  translations: state.translations,
 });
 
 export default connect(mapStateToProps, { selectLang })(LanguageSelect);

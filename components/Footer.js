@@ -9,13 +9,13 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
 import Copyright from "./Copyright";
-import { numOfTranslations } from src/actions/translations";
+import { numOfTranslations } from "src/actions/translations";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "auto",
-    marginBottom: theme.spacing(2)
-  }
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const Footer = ({ numOfTranslations, translations: { numTrans } }) => {
@@ -26,8 +26,8 @@ const Footer = ({ numOfTranslations, translations: { numTrans } }) => {
   const [routeChange, setRouteChange] = useState(true);
   const [grow, setGrow] = useState(false);
 
-  const handleRouteChangeComplete = url => {
-    setRouteChange(prev => true);
+  const handleRouteChangeComplete = (url) => {
+    setRouteChange((prev) => true);
   };
 
   useEffect(() => {
@@ -40,13 +40,13 @@ const Footer = ({ numOfTranslations, translations: { numTrans } }) => {
   useEffect(() => {
     if (routeChange) {
       numOfTranslations();
-      setRouteChange(prev => false);
+      setRouteChange((prev) => false);
     }
   }, [routeChange]);
 
   useEffect(() => {
     if (numTrans) {
-      setGrow(prev => true);
+      setGrow((prev) => true);
     }
   }, [numTrans]);
 
@@ -76,11 +76,11 @@ const Footer = ({ numOfTranslations, translations: { numTrans } }) => {
 
 Footer.propTypes = {
   numOfTranslations: PropTypes.func.isRequired,
-  translations: PropTypes.object.isRequired
+  translations: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  translations: state.translations
+const mapStateToProps = (state) => ({
+  translations: state.translations,
 });
 
 export default connect(mapStateToProps, { numOfTranslations })(Footer);
