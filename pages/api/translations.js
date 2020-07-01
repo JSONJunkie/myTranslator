@@ -4,7 +4,7 @@ import { IamAuthenticator } from "ibm-watson/auth";
 import axios from "axios";
 import DatauriParser from "datauri/parser";
 
-import { middleware } from "../../database";
+import { middleware } from ../database";
 
 const handler = nextConnect();
 

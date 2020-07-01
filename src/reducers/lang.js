@@ -9,8 +9,8 @@ import {
   DELETE_SAVED,
   PUSH_TRANS,
   ERROR,
-  CLEAR_ERROR
-} from "../actions/types";
+  CLEAR_ERROR,
+} from "actions/types";
 
 const initialState = {
   transId: "",
@@ -25,7 +25,7 @@ const initialState = {
       JSON.parse(localStorage.getItem("savedTranslations"))) ||
     [],
   savedSuccess: "",
-  error: ""
+  error: "",
 };
 
 export default function (state = initialState, action) {
@@ -39,11 +39,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         translatedAudio,
-        translations: state.translations.map(translation => {
+        translations: state.translations.map((translation) => {
           if (translation.transId === payload.transId) {
             return { ...translation, translatedAudio };
           } else return translation;
-        })
+        }),
       };
     case LISTEN:
       const { transcribed } = payload;
@@ -55,29 +55,29 @@ export default function (state = initialState, action) {
       const { transId } = payload;
       return {
         ...state,
-        saved: state.saved.filter(translation => {
+        saved: state.saved.filter((translation) => {
           return translation.transId !== transId;
         }),
-        translations: state.translations.map(translation => {
+        translations: state.translations.map((translation) => {
           if (translation.transId === transId) {
             return { ...translation, stored: false };
           } else return translation;
-        })
+        }),
       };
     case SAVE:
       return {
         ...state,
         savedSuccess: true,
         saved: [...state.saved, payload],
-        translations: state.translations.map(translation => {
+        translations: state.translations.map((translation) => {
           if (translation.transId === payload.transId) {
             return {
               ...translation,
               stored: true,
-              translatedAudio: payload.translatedAudio
+              translatedAudio: payload.translatedAudio,
             };
           } else return translation;
-        })
+        }),
       };
     case PUSH_TRANS:
       return { ...state, translations: [...state.translations, payload] };
@@ -89,7 +89,7 @@ export default function (state = initialState, action) {
         translatedAudio: "",
         savedSuccess: "",
         transcribed: "",
-        translatedTranscription: ""
+        translatedTranscription: "",
       };
     case ERROR:
       return { ...state, error: payload };

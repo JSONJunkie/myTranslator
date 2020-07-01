@@ -12,15 +12,15 @@ import {
   DELETE_SAVED,
   PUSH_TRANS,
   ERROR,
-  CLEAR_ERROR
+  CLEAR_ERROR,
 } from "./types";
-import playSound from "../utils/playSound";
+import playSound from "utils/playSound";
 
-export const deleteSaved = ({ transId, rollbar }) => dispatch => {
+export const deleteSaved = ({ transId, rollbar }) => (dispatch) => {
   try {
     dispatch({
       type: DELETE_SAVED,
-      payload: { transId }
+      payload: { transId },
     });
   } catch (err) {
     rollbar.error(err);
@@ -28,8 +28,8 @@ export const deleteSaved = ({ transId, rollbar }) => dispatch => {
       type: ERROR,
       payload: {
         name: err.name,
-        message: err.message
-      }
+        message: err.message,
+      },
     });
   }
 };
@@ -40,8 +40,8 @@ export const save = ({
   translatedAudio,
   transId,
   stored,
-  rollbar
-}) => dispatch => {
+  rollbar,
+}) => (dispatch) => {
   try {
     if (!stored) {
       dispatch({
@@ -51,8 +51,8 @@ export const save = ({
           preTrans,
           postTrans,
           translatedAudio,
-          stored: true
-        }
+          stored: true,
+        },
       });
     }
   } catch (err) {
@@ -61,13 +61,13 @@ export const save = ({
       type: ERROR,
       payload: {
         name: err.name,
-        message: err.message
-      }
+        message: err.message,
+      },
     });
   }
 };
 
-export const clear = ({ data, rollbar }) => dispatch => {
+export const clear = ({ data, rollbar }) => (dispatch) => {
   try {
     if (!data) {
       dispatch({ type: CLEAR });
@@ -80,24 +80,24 @@ export const clear = ({ data, rollbar }) => dispatch => {
       type: ERROR,
       payload: {
         name: err.name,
-        message: err.message
-      }
+        message: err.message,
+      },
     });
   }
 };
 
-export const translate = ({ formData, rollbar }) => async dispatch => {
+export const translate = ({ formData, rollbar }) => async (dispatch) => {
   try {
     const translateParams = {
       text: formData,
-      modelId: "en-es"
+      modelId: "en-es",
     };
     const transId = uuidv4();
     const body = translateParams;
     const res = await axios.post("/api/translator", body);
     dispatch({
       type: TRANSLATE,
-      payload: { transId, preTrans: formData, postTrans: res.data }
+      payload: { transId, preTrans: formData, postTrans: res.data },
     });
     dispatch({
       type: PUSH_TRANS,
@@ -106,8 +106,8 @@ export const translate = ({ formData, rollbar }) => async dispatch => {
         preTrans: formData,
         postTrans: res.data,
         translatedAudio: "",
-        stored: false
-      }
+        stored: false,
+      },
     });
   } catch (err) {
     if (err.response) {
@@ -117,8 +117,8 @@ export const translate = ({ formData, rollbar }) => async dispatch => {
           type: ERROR,
           payload: {
             name: errors.name,
-            message: errors.message
-          }
+            message: errors.message,
+          },
         });
       }
     }
@@ -127,22 +127,22 @@ export const translate = ({ formData, rollbar }) => async dispatch => {
       type: ERROR,
       payload: {
         name: err.name,
-        message: err.message
-      }
+        message: err.message,
+      },
     });
   }
 };
 
-export const textToSpeech = ({ data, rollbar }) => async dispatch => {
+export const textToSpeech = ({ data, rollbar }) => async (dispatch) => {
   const { preTrans, postTrans, speaking, transId, stored, audioContext } = data;
   try {
     const synthesizeParams = {
       text: postTrans,
       accept: "audio/mp3",
-      voice: "es-ES_LauraVoice"
+      voice: "es-ES_LauraVoice",
     };
     const config = {
-      responseType: "arraybuffer"
+      responseType: "arraybuffer",
     };
     const body = synthesizeParams;
     const res = await axios.post("/api/translator/speak", body, config);
@@ -157,7 +157,7 @@ export const textToSpeech = ({ data, rollbar }) => async dispatch => {
             preTrans,
             postTrans,
             transId,
-            stored
+            stored,
           })
         );
         if (speaking) {
@@ -169,7 +169,7 @@ export const textToSpeech = ({ data, rollbar }) => async dispatch => {
       if (result) {
         dispatch({
           type: STORE_TRANSLATED_AUDIO,
-          payload: { translatedAudio: result, transId }
+          payload: { translatedAudio: result, transId },
         });
         if (speaking) {
           dispatch(
@@ -181,8 +181,8 @@ export const textToSpeech = ({ data, rollbar }) => async dispatch => {
                 speaking,
                 transId,
                 stored,
-                audioContext
-              }
+                audioContext,
+              },
             })
           );
         } else {
@@ -192,7 +192,7 @@ export const textToSpeech = ({ data, rollbar }) => async dispatch => {
               postTrans,
               translatedAudio: result,
               transId,
-              stored
+              stored,
             })
           );
         }
@@ -207,8 +207,8 @@ export const textToSpeech = ({ data, rollbar }) => async dispatch => {
           type: ERROR,
           payload: {
             name: errors.name,
-            message: errors.message
-          }
+            message: errors.message,
+          },
         });
       }
     }
@@ -217,13 +217,13 @@ export const textToSpeech = ({ data, rollbar }) => async dispatch => {
       type: ERROR,
       payload: {
         name: err.name,
-        message: err.message
-      }
+        message: err.message,
+      },
     });
   }
 };
 
-export const speak = ({ data, rollbar }) => async dispatch => {
+export const speak = ({ data, rollbar }) => async (dispatch) => {
   const {
     preTrans,
     postTrans,
@@ -231,7 +231,7 @@ export const speak = ({ data, rollbar }) => async dispatch => {
     speaking,
     transId,
     stored,
-    audioContext
+    audioContext,
   } = data;
   try {
     if (!speaking) {
@@ -255,7 +255,7 @@ export const speak = ({ data, rollbar }) => async dispatch => {
       };
       fileReader.readAsArrayBuffer(dataURLtoBlob(translatedAudio));
       dispatch({
-        type: SPEAK
+        type: SPEAK,
       });
       dispatch(save({ preTrans, postTrans, translatedAudio, transId, stored }));
     }
@@ -265,18 +265,18 @@ export const speak = ({ data, rollbar }) => async dispatch => {
       type: ERROR,
       payload: {
         name: err.name,
-        message: err.message
-      }
+        message: err.message,
+      },
     });
   }
 };
 
-export const listen = ({ blob, rollbar }) => async dispatch => {
+export const listen = ({ blob, rollbar }) => async (dispatch) => {
   try {
     const config = {
       headers: {
-        "Content-Type": "blob.type"
-      }
+        "Content-Type": "blob.type",
+      },
     };
     const transcribedRes = await axios.post(
       "/api/translator/listen",
@@ -285,17 +285,17 @@ export const listen = ({ blob, rollbar }) => async dispatch => {
     );
     dispatch({
       type: LISTEN,
-      payload: { transcribed: transcribedRes.data }
+      payload: { transcribed: transcribedRes.data },
     });
     const translateParams = {
       text: transcribedRes.data,
-      modelId: "es-en"
+      modelId: "es-en",
     };
     const body = translateParams;
     const translatedRes = await axios.post("/api/translator", body);
     dispatch({
       type: TRANSLATE_TRANSCRIPTION,
-      payload: { translatedTranscription: translatedRes.data }
+      payload: { translatedTranscription: translatedRes.data },
     });
   } catch (err) {
     if (err.response) {
@@ -305,8 +305,8 @@ export const listen = ({ blob, rollbar }) => async dispatch => {
           type: ERROR,
           payload: {
             name: errors.name,
-            message: errors.message
-          }
+            message: errors.message,
+          },
         });
       }
     }
@@ -315,8 +315,8 @@ export const listen = ({ blob, rollbar }) => async dispatch => {
       type: ERROR,
       payload: {
         name: err.name,
-        message: err.message
-      }
+        message: err.message,
+      },
     });
   }
 };

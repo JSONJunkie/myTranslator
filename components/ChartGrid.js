@@ -7,7 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { CircularProgress } from "@material-ui/core";
 
-import Chart from "../components/Chart";
+import Chart from components/Chart";
 
 const useStyles = makeStyles(theme => ({
   chart: {

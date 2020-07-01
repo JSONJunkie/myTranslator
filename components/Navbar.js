@@ -21,7 +21,7 @@ import {
   getData,
   selectLang,
   clearData
-} from "../src/actions/translations";
+} from src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   hidden: {

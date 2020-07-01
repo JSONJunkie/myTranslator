@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import { ThemeProvider, makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { withRedux } from "../lib/redux";
+import { withRedux } from "lib/redux";
 import Rollbar from "rollbar";
 
-import Navbar from "../components/Navbar";
-import LanguageSelect from "../components/LanguageSelect";
-import Trending from "../components/Trending";
-import LoadingOverlay from "../components/LoadingOverlay";
-import theme from "../themes/theme";
+import Navbar from "components/Navbar";
+import LanguageSelect from "components/LanguageSelect";
+import Trending from "components/Trending";
+import LoadingOverlay from "components/LoadingOverlay";
+import theme from "themes/theme";
 
 function getRollbar() {
   if (process.env.NODE_ENV === "development") {
@@ -18,7 +18,7 @@ function getRollbar() {
       // accessToken: process.env.ROLLBAR_CLIENT_TOKEN,
       captureUncaught: true,
       captureUnhandledRejections: true,
-      environment: "development"
+      environment: "development",
     });
     return rollbar;
   }
@@ -28,24 +28,24 @@ function getRollbar() {
       // accessToken: process.env.ROLLBAR_CLIENT_TOKEN,
       captureUncaught: true,
       captureUnhandledRejections: true,
-      environment: "production"
+      environment: "production",
     });
     return rollbar;
   }
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: "100vh",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   wrapper: {
     display: "flex",
     flexDirection: "column",
     position: "relative",
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
 function MyApp({ Component, pageProps, store }) {
@@ -88,7 +88,7 @@ function MyApp({ Component, pageProps, store }) {
 }
 
 MyApp.propTypes = {
-  Component: PropTypes.elementType.isRequired
+  Component: PropTypes.elementType.isRequired,
 };
 
 export default withRedux(MyApp);

@@ -8,9 +8,9 @@ import Grow from "@material-ui/core/Grow";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import TranslationGrid from "../components/TranslationGrid";
-import ChartGrid from "../components/ChartGrid";
-import Footer from "../components/Footer";
+import TranslationGrid from "components/TranslationGrid";
+import ChartGrid from "components/ChartGrid";
+import Footer from "components/Footer";
 
 import axios from "axios";
 

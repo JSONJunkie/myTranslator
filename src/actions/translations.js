@@ -10,14 +10,14 @@ import {
   GET_TRENDING,
   CLEAR_TRENDING,
   SELECT_TREND_LANG,
-  CLEAR_DATA
+  CLEAR_DATA,
 } from "./types";
-import playSound from "../utils/playSound";
+import playSound from "utils/playSound";
 
-export const clearData = () => async dispatch => {
+export const clearData = () => async (dispatch) => {
   try {
     dispatch({
-      type: CLEAR_DATA
+      type: CLEAR_DATA,
     });
   } catch (err) {
     // rollbar.error(err);
@@ -31,13 +31,13 @@ export const clearData = () => async dispatch => {
   }
 };
 
-export const selectTrendingLang = data => async dispatch => {
+export const selectTrendingLang = (data) => async (dispatch) => {
   try {
     dispatch({
       type: SELECT_TREND_LANG,
       payload: {
-        trendingLang: data
-      }
+        trendingLang: data,
+      },
     });
   } catch (err) {
     // rollbar.error(err);
@@ -51,10 +51,10 @@ export const selectTrendingLang = data => async dispatch => {
   }
 };
 
-export const clearTrending = () => async dispatch => {
+export const clearTrending = () => async (dispatch) => {
   try {
     dispatch({
-      type: CLEAR_TRENDING
+      type: CLEAR_TRENDING,
     });
   } catch (err) {
     // rollbar.error(err);
@@ -68,7 +68,7 @@ export const clearTrending = () => async dispatch => {
   }
 };
 
-export const getTrending = data => async dispatch => {
+export const getTrending = (data) => async (dispatch) => {
   try {
     const res = await axios.get("/api/trending?selectLang=" + data);
 
@@ -76,16 +76,16 @@ export const getTrending = data => async dispatch => {
       return dispatch({
         type: GET_TRENDING,
         payload: {
-          trending: "none"
-        }
+          trending: "none",
+        },
       });
     }
 
     dispatch({
       type: GET_TRENDING,
       payload: {
-        trending: res.data
-      }
+        trending: res.data,
+      },
     });
   } catch (err) {
     // rollbar.error(err);
@@ -99,7 +99,7 @@ export const getTrending = data => async dispatch => {
   }
 };
 
-export const speak = ({ audioContext, data }) => async dispatch => {
+export const speak = ({ audioContext, data }) => async (dispatch) => {
   try {
     const fileReader = new FileReader();
 
@@ -134,11 +134,11 @@ export const speak = ({ audioContext, data }) => async dispatch => {
   }
 };
 
-export const selectLang = data => async dispatch => {
+export const selectLang = (data) => async (dispatch) => {
   try {
     const { from, to } = data;
 
-    const getLang = data => {
+    const getLang = (data) => {
       switch (data) {
         case "":
           return "...";
@@ -189,8 +189,8 @@ export const selectLang = data => async dispatch => {
         fromCode: data.from,
         from: getLang(data.from),
         toCode: data.to,
-        to: getLang(data.to)
-      }
+        to: getLang(data.to),
+      },
     });
   } catch (err) {
     // rollbar.error(err);
@@ -204,9 +204,9 @@ export const selectLang = data => async dispatch => {
   }
 };
 
-export const getData = data => async dispatch => {
+export const getData = (data) => async (dispatch) => {
   try {
-    const getLang = data => {
+    const getLang = (data) => {
       switch (data) {
         case "":
           return "...";
@@ -274,7 +274,7 @@ export const getData = data => async dispatch => {
         otherTrans.push({
           text: res.data[key].text,
           audio: res.data[key].audio,
-          to: getLang(key)
+          to: getLang(key),
         });
       }
     }
@@ -288,8 +288,8 @@ export const getData = data => async dispatch => {
         postTrans: res.data[toCode].text,
         chartData: newHitData,
         audio: res.data[toCode].audio,
-        otherTrans
-      }
+        otherTrans,
+      },
     });
   } catch (err) {
     // rollbar.error(err);
@@ -303,7 +303,7 @@ export const getData = data => async dispatch => {
   }
 };
 
-export const addHit = data => async dispatch => {
+export const addHit = (data) => async (dispatch) => {
   try {
     const body = { data };
 
@@ -312,7 +312,7 @@ export const addHit = data => async dispatch => {
     dispatch(getData(data));
 
     dispatch({
-      type: ADD_HIT
+      type: ADD_HIT,
     });
   } catch (err) {
     // rollbar.error(err);
@@ -326,12 +326,12 @@ export const addHit = data => async dispatch => {
   }
 };
 
-export const updateInput = data => async dispatch => {
+export const updateInput = (data) => async (dispatch) => {
   try {
     if (data) {
       dispatch({
         type: UPDATE_INPUT,
-        payload: { userInput: data, loading: true }
+        payload: { userInput: data, loading: true },
       });
       return;
     }
@@ -339,7 +339,7 @@ export const updateInput = data => async dispatch => {
     if (!data) {
       dispatch({
         type: UPDATE_INPUT,
-        payload: { userInput: data, loading: false }
+        payload: { userInput: data, loading: false },
       });
       return;
     }
@@ -355,12 +355,12 @@ export const updateInput = data => async dispatch => {
   }
 };
 
-export const numOfTranslations = () => async dispatch => {
+export const numOfTranslations = () => async (dispatch) => {
   try {
     const res = await axios.get("/api/translations");
     dispatch({
       type: GET_TRANSCOUNT,
-      payload: { numTrans: res.data }
+      payload: { numTrans: res.data },
     });
   } catch (err) {
     // rollbar.error(err);

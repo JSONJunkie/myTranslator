@@ -9,7 +9,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { useRouter } from "next/router";
 
-import { selectLang } from "../src/actions/translations";
+import { selectLang } from src/actions/translations";
 import { Fragment } from "react";
 
 const useStyles = makeStyles(theme => ({

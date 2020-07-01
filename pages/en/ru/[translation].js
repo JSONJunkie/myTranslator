@@ -5,10 +5,10 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import TranslationGrid from "../../../components/TranslationGrid";
-import ChartGrid from "../../../components/ChartGrid";
-import OtherTranslations from "../../../components/OtherTranslations";
-import Footer from "../../../components/Footer";
+import TranslationGrid from ../../components/TranslationGrid";
+import ChartGrid from ../../components/ChartGrid";
+import OtherTranslations from ../../components/OtherTranslations";
+import Footer from ../../components/Footer";
 
 import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import TextToSpeechV1 from "ibm-watson/text-to-speech/v1";
@@ -18,7 +18,7 @@ import DatauriParser from "datauri/parser";
 // import Rollbar from "rollbar";
 import isAlpha from "validator/lib/isAlpha";
 
-import connectToMongo from "../../../database";
+import connectToMongo from ../../database";
 
 const useStyles = makeStyles((theme) => ({
   root: {

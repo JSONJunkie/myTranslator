@@ -3,7 +3,7 @@ import LanguageTranslatorV3 from "ibm-watson/language-translator/v3";
 import { IamAuthenticator } from "ibm-watson/auth";
 import validator from "validator";
 
-import rollbar from "../";
+import rollbar from ";
 
 const handler = nextConnect();
 

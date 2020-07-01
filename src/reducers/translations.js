@@ -7,8 +7,8 @@ import {
   GET_TRENDING,
   SELECT_TREND_LANG,
   CLEAR_DATA,
-  CLEAR_TRENDING
-} from "../actions/types";
+  CLEAR_TRENDING,
+} from "actions/types";
 
 const initialState = {
   numTrans: "",
@@ -24,7 +24,7 @@ const initialState = {
   trendingLang: "en",
   loading: false,
   trending: [],
-  chartData: []
+  chartData: [],
 };
 
 export default function (state = initialState, action) {
@@ -36,7 +36,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         userInput: payload.userInput,
-        loading: payload.loading
+        loading: payload.loading,
       };
     case GET_DATA:
       return {
@@ -45,7 +45,7 @@ export default function (state = initialState, action) {
         postTrans: payload.postTrans,
         chartData: payload.chartData,
         audio: payload.audio,
-        otherTrans: payload.otherTrans
+        otherTrans: payload.otherTrans,
       };
     case SELECT_LANG:
       return {
@@ -53,7 +53,7 @@ export default function (state = initialState, action) {
         from: payload.from,
         to: payload.to,
         fromCode: payload.fromCode,
-        toCode: payload.toCode
+        toCode: payload.toCode,
       };
     case GET_TRENDING:
       return { ...state, trending: payload.trending };
@@ -66,7 +66,7 @@ export default function (state = initialState, action) {
         ...state,
         audio: "",
         otherTrans: [],
-        chartData: []
+        chartData: [],
       };
     case ADD_HIT:
     default:

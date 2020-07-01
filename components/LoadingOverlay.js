@@ -11,12 +11,12 @@ import Button from "@material-ui/core/Button";
 import Backdrop from "@material-ui/core/Backdrop";
 import { useRouter } from "next/router";
 
-import TranslationGrid from "../components/TranslationGrid";
-import ChartGrid from "../components/ChartGrid";
-import OtherTranslations from "../components/OtherTranslations";
-import Footer from "../components/Footer";
+import TranslationGrid from components/TranslationGrid";
+import ChartGrid from components/ChartGrid";
+import OtherTranslations from components/OtherTranslations";
+import Footer from components/Footer";
 
-import { speak } from "../src/actions/translations";
+import { speak } from src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   root: {

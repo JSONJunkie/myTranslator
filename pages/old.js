@@ -37,93 +37,93 @@ import {
   translate,
   textToSpeech,
   speak,
-  listen
-} from "../src/actions/lang";
+  listen,
+} from "src/actions/lang";
 
 const StorageProgress = withStyles({
   root: {
     height: "100%",
-    borderRadius: 10
-  }
+    borderRadius: 10,
+  },
 })(LinearProgress);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     minHeight: "100vh",
-    width: "100%"
+    width: "100%",
   },
   content: {
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    paddingTop: theme.spacing(1)
+    paddingTop: theme.spacing(1),
   },
   rootUnsup: {
     display: "flex",
-    width: "100%"
+    width: "100%",
   },
   contentUnsup: {
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
     paddingTop: theme.spacing(1),
-    minHeight: "108vh"
+    minHeight: "108vh",
   },
   alert: {
     position: "absolute",
     top: theme.spacing(1),
     left: theme.spacing(0),
-    right: theme.spacing(0)
+    right: theme.spacing(0),
   },
   barText: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   barTextHidden: {
-    color: theme.palette.background.paper
+    color: theme.palette.background.paper,
   },
   form: {
-    width: "100%"
+    width: "100%",
   },
   outterButton: {
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
   },
   button: {
-    margin: theme.spacing(1, 0, 1)
+    margin: theme.spacing(1, 0, 1),
   },
   paperTwo: {
     padding: theme.spacing(2),
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     maxHeight: "35vh",
-    overflow: "auto"
+    overflow: "auto",
   },
   storage: {
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
   },
   progress: {
     position: "absolute",
     top: "50%",
     left: "47%",
     marginTop: -12,
-    marginLeft: -12
+    marginLeft: -12,
   },
   wrapper: {
-    position: "relative"
+    position: "relative",
   },
   inner: {
     position: "absolute",
     top: "50%",
     left: "39%",
     marginTop: -12,
-    marginLeft: -12
+    marginLeft: -12,
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     background: "rgb(53, 53, 53, .9)",
     color: "#fff",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   paper: {
     padding: theme.spacing(2),
@@ -131,26 +131,26 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.easeIn,
-      duration: 500
+      duration: 500,
     }),
     [theme.breakpoints.down("xs")]: {
-      height: theme.spacing(108)
+      height: theme.spacing(108),
     },
     [theme.breakpoints.up("sm")]: {
-      height: theme.spacing(54)
-    }
+      height: theme.spacing(54),
+    },
   },
   paperShift: {
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.easeIn,
-      duration: 500
+      duration: 500,
     }),
     [theme.breakpoints.down("xs")]: {
-      height: theme.spacing(54)
+      height: theme.spacing(54),
     },
     [theme.breakpoints.up("sm")]: {
-      height: theme.spacing(27)
-    }
+      height: theme.spacing(27),
+    },
   },
   paperUnsup: {
     padding: theme.spacing(2),
@@ -158,30 +158,30 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.easeIn,
-      duration: 500
+      duration: 500,
     }),
     [theme.breakpoints.down("xs")]: {
-      height: theme.spacing(54)
+      height: theme.spacing(54),
     },
     [theme.breakpoints.up("sm")]: {
-      height: theme.spacing(27)
-    }
+      height: theme.spacing(27),
+    },
   },
   paperShiftUnsup: {
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.easeIn,
-      duration: 500
+      duration: 500,
     }),
     [theme.breakpoints.down("xs")]: {
-      height: theme.spacing(27)
+      height: theme.spacing(27),
     },
     [theme.breakpoints.up("sm")]: {
-      height: theme.spacing(14)
-    }
+      height: theme.spacing(14),
+    },
   },
   loader: {
-    marginTop: theme.spacing(20)
-  }
+    marginTop: theme.spacing(20),
+  },
 }));
 
 const Old = ({
@@ -202,9 +202,9 @@ const Old = ({
     translations,
     transId,
     error,
-    savedSuccess
+    savedSuccess,
   },
-  rollbar
+  rollbar,
 }) => {
   const classes = useStyles();
 
@@ -261,7 +261,7 @@ const Old = ({
     stop() {
       mediaRecorder.stop();
       console.log("recording stopping");
-      stream.getTracks().forEach(track => {
+      stream.getTracks().forEach((track) => {
         track.stop();
       });
       const blob = new Blob(chunks, { type: "audio/webm" });
@@ -269,7 +269,7 @@ const Old = ({
       setMediaRecorder(null);
       setTransSWorking(true);
       listen({ blob, rollbar });
-    }
+    },
   };
 
   const getMaxStorage = useCallback(() => {
@@ -292,7 +292,7 @@ const Old = ({
     }
   }, []);
 
-  const onChange = e => {
+  const onChange = (e) => {
     setText(e.target.value);
   };
 
@@ -303,7 +303,7 @@ const Old = ({
     translate({ formData: text, rollbar });
   };
 
-  const handleSave = data => {
+  const handleSave = (data) => {
     const { transId, preTrans, postTrans, translatedAudio, stored } = data;
     try {
       if (preTrans && postTrans) {
@@ -314,7 +314,7 @@ const Old = ({
             translatedAudio,
             transId,
             stored,
-            rollbar
+            rollbar,
           });
         } else {
           textToSpeech({
@@ -324,9 +324,9 @@ const Old = ({
               speaking: false,
               transId,
               stored,
-              audioContext
+              audioContext,
             },
-            rollbar
+            rollbar,
           });
         }
 
@@ -338,16 +338,16 @@ const Old = ({
       }
     } catch (err) {
       rollbar.error(err.message);
-      setLocalError(prev => err);
+      setLocalError((prev) => err);
     }
   };
 
-  const handleCleanup = e => {
+  const handleCleanup = (e) => {
     setText("");
     clear({ rollbar });
   };
 
-  const handleSpeak = data => {
+  const handleSpeak = (data) => {
     audioContext.resume();
     const { preTrans, postTrans, translatedAudio, transId, stored } = data;
     try {
@@ -361,9 +361,9 @@ const Old = ({
             speaking: true,
             transId,
             stored,
-            audioContext
+            audioContext,
           },
-          rollbar
+          rollbar,
         });
       } else {
         textToSpeech({
@@ -373,22 +373,22 @@ const Old = ({
             speaking: true,
             transId,
             stored,
-            audioContext
+            audioContext,
           },
-          rollbar
+          rollbar,
         });
       }
     } catch (err) {
-      setLocalError(prev => err);
+      setLocalError((prev) => err);
     }
   };
 
-  const handleUnstore = data => {
+  const handleUnstore = (data) => {
     deleteSaved({ transId: data, rollbar });
     setIsUnstoring(true);
   };
 
-  const handleClick3 = e => {
+  const handleClick3 = (e) => {
     e.preventDefault();
     setListening(!listening);
     setDelayStop(true);
@@ -398,7 +398,7 @@ const Old = ({
     setOpen(false);
   };
 
-  const handleSwitch = e => {
+  const handleSwitch = (e) => {
     const target = e.target.name;
     if (target === "hist") {
       setHist(!hist);
@@ -429,7 +429,7 @@ const Old = ({
           }
         }
       } catch (err) {
-        setLocalError(prev => err);
+        setLocalError((prev) => err);
       }
     })();
   }, [stream, mediaRecorder, listening]);
@@ -454,8 +454,8 @@ const Old = ({
 
   useEffect(() => {
     if (mediaRecorder) {
-      mediaRecorder.ondataavailable = e => {
-        setChunks(prev => [...prev, e.data]);
+      mediaRecorder.ondataavailable = (e) => {
+        setChunks((prev) => [...prev, e.data]);
         console.log("chunk collected");
       };
       if (!recorderState) {
@@ -475,15 +475,15 @@ const Old = ({
   useEffect(() => {
     if (localStorage.prefs) {
       const prefs = JSON.parse(localStorage.getItem("prefs"));
-      setHist(prev => prefs.hist);
-      setTranscribing(prev => prefs.transcribing);
+      setHist((prev) => prefs.hist);
+      setTranscribing((prev) => prefs.transcribing);
     }
 
     localStorage.setItem("savedTranslations", JSON.stringify(saved));
 
     if (isSaving && saved.length > 0) {
       setCurrentStorage(
-        prev =>
+        (prev) =>
           prev +
           Math.ceil(
             ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024) * 100
@@ -495,7 +495,7 @@ const Old = ({
 
     if (isUnstoring && saved.length > 0) {
       setCurrentStorage(
-        prev =>
+        (prev) =>
           prev -
           Math.ceil(
             ((JSON.stringify(saved[saved.length - 1]).length * 2) / 1024) * 100
@@ -506,7 +506,7 @@ const Old = ({
     }
 
     if (isUnstoring && saved.length === 0) {
-      setCurrentStorage(prev => 0);
+      setCurrentStorage((prev) => 0);
       setIsUnstoring(false);
     }
   }, [saved, isSaving, isUnstoring]);
@@ -557,7 +557,7 @@ const Old = ({
     localStorage.setItem("prefs", JSON.stringify(prefs));
     if (!maxStorage) {
       const max = getMaxStorage();
-      setMaxStorage(prev => max);
+      setMaxStorage((prev) => max);
     }
   }, [getMaxStorage, maxStorage, hist, transcribing]);
 
@@ -583,12 +583,12 @@ const Old = ({
     <Grow in={true} {...{ timeout: 1500 }}>
       <div
         className={clsx(classes.root, {
-          [classes.rootUnsup]: !supported
+          [classes.rootUnsup]: !supported,
         })}
       >
         <Container
           className={clsx(classes.content, {
-            [classes.contentUnsup]: !supported
+            [classes.contentUnsup]: !supported,
           })}
         >
           <Container className={classes.alert}>
@@ -610,7 +610,7 @@ const Old = ({
                     control={
                       <Switch
                         checked={hist}
-                        onChange={e => {
+                        onChange={(e) => {
                           handleSwitch(e);
                         }}
                         name="hist"
@@ -623,7 +623,7 @@ const Old = ({
                     control={
                       <Switch
                         checked={transcribing}
-                        onChange={e => {
+                        onChange={(e) => {
                           handleSwitch(e);
                         }}
                         name="transcribing"
@@ -640,7 +640,7 @@ const Old = ({
           {supported ? (
             <Paper
               className={clsx(classes.paper, {
-                [classes.paperShift]: !transcribing
+                [classes.paperShift]: !transcribing,
               })}
             >
               <form
@@ -663,14 +663,14 @@ const Old = ({
                       inputRef={register({
                         required: {
                           value: true,
-                          message: "Please include some text to translate"
+                          message: "Please include some text to translate",
                         },
                         pattern: {
                           value: /\b[^\d\W]+\b/,
-                          message: "Please only include words"
-                        }
+                          message: "Please only include words",
+                        },
                       })}
-                      onChange={e => onChange(e)}
+                      onChange={(e) => onChange(e)}
                     />
                     <Grid container>
                       <Grid item xs={6} className={classes.outterButton}>
@@ -697,7 +697,7 @@ const Old = ({
                           variant="contained"
                           color="secondary"
                           className={classes.button}
-                          onClick={e => handleCleanup(e)}
+                          onClick={(e) => handleCleanup(e)}
                           disabled={
                             goodAlert ||
                             badAlert ||
@@ -735,13 +735,13 @@ const Old = ({
                     <Grid container>
                       <Grid item xs={6} className={classes.outterButton}>
                         <Button
-                          onClick={e =>
+                          onClick={(e) =>
                             handleSpeak({
                               transId,
                               preTrans,
                               postTrans,
                               translatedAudio,
-                              stored: "no and i dont want you to"
+                              stored: "no and i dont want you to",
                             })
                           }
                           fullWidth
@@ -760,12 +760,12 @@ const Old = ({
                       </Grid>
                       <Grid item xs={6} className={classes.outterButton}>
                         <Button
-                          onClick={e =>
+                          onClick={(e) =>
                             handleSave({
                               transId,
                               preTrans,
                               postTrans,
-                              translatedAudio
+                              translatedAudio,
                             })
                           }
                           fullWidth
@@ -815,7 +815,7 @@ const Old = ({
                       <Grid container>
                         <Grid item xs={12} className={classes.outterButton}>
                           <Button
-                            onClick={e => handleClick3(e)}
+                            onClick={(e) => handleClick3(e)}
                             fullWidth
                             variant="contained"
                             color="primary"
@@ -836,7 +836,7 @@ const Old = ({
                       <Grid container>
                         <Grid item xs={12} className={classes.outterButton}>
                           <Button
-                            onClick={e => handleClick3(e)}
+                            onClick={(e) => handleClick3(e)}
                             fullWidth
                             variant="contained"
                             color="secondary"
@@ -875,7 +875,7 @@ const Old = ({
           ) : (
             <Paper
               className={clsx(classes.paperUnsup, {
-                [classes.paperShiftUnsup]: !transcribing
+                [classes.paperShiftUnsup]: !transcribing,
               })}
             >
               <form
@@ -898,14 +898,14 @@ const Old = ({
                       inputRef={register({
                         required: {
                           value: true,
-                          message: "Please include some text to translate"
+                          message: "Please include some text to translate",
                         },
                         pattern: {
                           value: /\b[^\d\W]+\b/,
-                          message: "Please only include words"
-                        }
+                          message: "Please only include words",
+                        },
                       })}
-                      onChange={e => onChange(e)}
+                      onChange={(e) => onChange(e)}
                     />
                     <Grid container>
                       <Grid item xs={6} className={classes.outterButton}>
@@ -932,7 +932,7 @@ const Old = ({
                           variant="contained"
                           color="secondary"
                           className={classes.button}
-                          onClick={e => handleCleanup(e)}
+                          onClick={(e) => handleCleanup(e)}
                           disabled={
                             goodAlert ||
                             badAlert ||
@@ -970,13 +970,13 @@ const Old = ({
                     <Grid container>
                       <Grid item xs={6} className={classes.outterButton}>
                         <Button
-                          onClick={e =>
+                          onClick={(e) =>
                             handleSpeak({
                               transId,
                               preTrans,
                               postTrans,
                               translatedAudio,
-                              stored: "no and i dont want you to"
+                              stored: "no and i dont want you to",
                             })
                           }
                           fullWidth
@@ -995,12 +995,12 @@ const Old = ({
                       </Grid>
                       <Grid item xs={6} className={classes.outterButton}>
                         <Button
-                          onClick={e =>
+                          onClick={(e) =>
                             handleSave({
                               transId,
                               preTrans,
                               postTrans,
-                              translatedAudio
+                              translatedAudio,
                             })
                           }
                           fullWidth
@@ -1070,7 +1070,7 @@ const Old = ({
                         </Typography>
                         <div>
                           <List disablePadding={true}>
-                            {saved.map(translation => (
+                            {saved.map((translation) => (
                               <ListItem key={translation.transId}>
                                 <ListItemText
                                   primary={translation.preTrans}
@@ -1085,14 +1085,14 @@ const Old = ({
                                         transLWorking ||
                                         transSWorking
                                       }
-                                      onClick={e =>
+                                      onClick={(e) =>
                                         handleSpeak({
                                           transId: translation.transId,
                                           preTrans: translation.preTrans,
                                           postTrans: translation.postTrans,
                                           translatedAudio:
                                             translation.translatedAudio,
-                                          stored: "no and i dont want you to"
+                                          stored: "no and i dont want you to",
                                         })
                                       }
                                       aria-label="play"
@@ -1102,7 +1102,7 @@ const Old = ({
                                   </Tooltip>
                                   <Tooltip title="Remove">
                                     <IconButton
-                                      onClick={e =>
+                                      onClick={(e) =>
                                         handleUnstore(translation.transId)
                                       }
                                       aria-label="remove"
@@ -1126,7 +1126,7 @@ const Old = ({
                         </Typography>
                         <div>
                           <List disablePadding={true}>
-                            {translations.map(translation => (
+                            {translations.map((translation) => (
                               <ListItem key={translation.transId}>
                                 <ListItemText
                                   primary={translation.preTrans}
@@ -1141,14 +1141,14 @@ const Old = ({
                                         transLWorking ||
                                         transSWorking
                                       }
-                                      onClick={e =>
+                                      onClick={(e) =>
                                         handleSpeak({
                                           transId: translation.transId,
                                           preTrans: translation.preTrans,
                                           postTrans: translation.postTrans,
                                           translatedAudio:
                                             translation.translatedAudio,
-                                          stored: "no and i dont want you to"
+                                          stored: "no and i dont want you to",
                                         })
                                       }
                                       aria-label="play"
@@ -1159,7 +1159,7 @@ const Old = ({
                                   {translation.stored ? (
                                     <Tooltip title="Remove">
                                       <IconButton
-                                        onClick={e =>
+                                        onClick={(e) =>
                                           handleUnstore(translation.transId)
                                         }
                                         aria-label="remove"
@@ -1176,14 +1176,14 @@ const Old = ({
                                           transLWorking ||
                                           transSWorking
                                         }
-                                        onClick={e =>
+                                        onClick={(e) =>
                                           handleSave({
                                             transId: translation.transId,
                                             preTrans: translation.preTrans,
                                             postTrans: translation.postTrans,
                                             translatedAudio:
                                               translation.translatedAudio,
-                                            stored: translation.stored
+                                            stored: translation.stored,
                                           })
                                         }
                                         aria-label="save"
@@ -1221,7 +1221,7 @@ const Old = ({
                           <List disablePadding={true}>
                             {translations
                               .filter((translation, index) => index % 2 === 0)
-                              .map(translation => (
+                              .map((translation) => (
                                 <ListItem key={translation.transId}>
                                   <ListItemText
                                     primary={translation.preTrans}
@@ -1236,14 +1236,14 @@ const Old = ({
                                           transLWorking ||
                                           transSWorking
                                         }
-                                        onClick={e =>
+                                        onClick={(e) =>
                                           handleSpeak({
                                             transId: translation.transId,
                                             preTrans: translation.preTrans,
                                             postTrans: translation.postTrans,
                                             translatedAudio:
                                               translation.translatedAudio,
-                                            stored: "no and i dont want you to"
+                                            stored: "no and i dont want you to",
                                           })
                                         }
                                         aria-label="play"
@@ -1259,14 +1259,14 @@ const Old = ({
                                           transLWorking ||
                                           transSWorking
                                         }
-                                        onClick={e =>
+                                        onClick={(e) =>
                                           handleSave({
                                             transId: translation.transId,
                                             preTrans: translation.preTrans,
                                             postTrans: translation.postTrans,
                                             translatedAudio:
                                               translation.translatedAudio,
-                                            stored: translation.stored
+                                            stored: translation.stored,
                                           })
                                         }
                                         aria-label="save"
@@ -1291,7 +1291,7 @@ const Old = ({
                           <List disablePadding={true}>
                             {translations
                               .filter((translation, index) => index % 2 !== 0)
-                              .map(translation => (
+                              .map((translation) => (
                                 <ListItem key={translation.transId}>
                                   <ListItemText
                                     primary={translation.preTrans}
@@ -1306,14 +1306,14 @@ const Old = ({
                                           transLWorking ||
                                           transSWorking
                                         }
-                                        onClick={e =>
+                                        onClick={(e) =>
                                           handleSpeak({
                                             transId: translation.transId,
                                             preTrans: translation.preTrans,
                                             postTrans: translation.postTrans,
                                             translatedAudio:
                                               translation.translatedAudio,
-                                            stored: "no and i dont want you to"
+                                            stored: "no and i dont want you to",
                                           })
                                         }
                                         aria-label="play"
@@ -1329,14 +1329,14 @@ const Old = ({
                                           transLWorking ||
                                           transSWorking
                                         }
-                                        onClick={e =>
+                                        onClick={(e) =>
                                           handleSave({
                                             transId: translation.transId,
                                             preTrans: translation.preTrans,
                                             postTrans: translation.postTrans,
                                             translatedAudio:
                                               translation.translatedAudio,
-                                            stored: translation.stored
+                                            stored: translation.stored,
                                           })
                                         }
                                         aria-label="save"
@@ -1379,11 +1379,11 @@ Old.propTypes = {
   speak: PropTypes.func.isRequired,
   textToSpeech: PropTypes.func.isRequired,
   listen: PropTypes.func.isRequired,
-  lang: PropTypes.object.isRequired
+  lang: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  lang: state.lang
+const mapStateToProps = (state) => ({
+  lang: state.lang,
 });
 
 export default connect(mapStateToProps, {
@@ -1393,5 +1393,5 @@ export default connect(mapStateToProps, {
   translate,
   speak,
   textToSpeech,
-  listen
+  listen,
 })(Old);

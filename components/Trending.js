@@ -18,14 +18,14 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { useRouter } from "next/router";
 
-import TrendingChart from "../components/TrendingChart";
+import TrendingChart from components/TrendingChart";
 
 import {
   getTrending,
   selectTrendingLang,
   selectLang,
   clearTrending
-} from "../src/actions/translations";
+} from src/actions/translations";
 
 const useStyles = makeStyles(theme => ({
   root: {
