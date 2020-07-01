@@ -1,14 +1,14 @@
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   content: {
     flexGrow: 1,
-    paddingTop: theme.spacing(10)
-  }
+    paddingTop: theme.spacing(10),
+  },
 }));
 
 function Error({ statusCode }) {
@@ -36,9 +36,9 @@ Error.getInitialProps = ({ res, req, err }) => {
     const rollbar = new Rollbar({
       // accessToken: process.env.ROLLBAR_SERVER_TOKEN,
       captureUncaught: true,
-      captureUnhandledRejections: true
+      captureUnhandledRejections: true,
     });
-    rollbar.error(err, req, rollbarError => {
+    rollbar.error(err, req, (rollbarError) => {
       if (rollbarError) {
         console.error("Rollbar error reporting failed:");
         console.error(rollbarError);
