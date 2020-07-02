@@ -176,9 +176,6 @@ const Navbar = ({
       });
     }
     if (router.pathname !== "/") {
-      console.log(router.asPath);
-      console.log(router.pathname);
-      console.log(router.asPath.split("/"));
       updateInput("");
       selectLang({
         from: router.asPath.split("/")[2],

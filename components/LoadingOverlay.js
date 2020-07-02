@@ -65,6 +65,7 @@ const LoadingOverlay = ({
     preTrans,
     postTrans,
     from,
+    fromCode,
     to,
     toCode,
     chartData,
@@ -106,6 +107,22 @@ const LoadingOverlay = ({
 
   const handleClose = () => {
     setOpen(false);
+
+    //router.asPath.split("/")[4],
+    //router.asPath.split("/")[2],
+    //router.asPath.split("/")[3],
+    //console.log(router.asPath);
+    //console.log(router.pathname);
+    //console.log(router.asPath.split("/"));
+
+    let href = `/${fromCode}/${toCode}?translation=${
+      router.asPath.split("/")[4].toLowerCase
+    }`;
+    let as = `${
+      process.env.BASE_PATH
+    }/${fromCode}/${toCode}/${router.asPath.split("/")[4].toLowerCase()}`;
+
+    router.push(href, as);
   };
 
   const handleRouteChangeStart = (url) => {
