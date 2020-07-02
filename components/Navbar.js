@@ -247,7 +247,7 @@ const Navbar = ({
 
   const goHome = () => {
     if (router.pathname !== "/") {
-      router.push("/", "/");
+      router.push("/", process.env.BASE_PATH + "/");
     }
   };
 
