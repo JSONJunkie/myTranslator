@@ -176,10 +176,13 @@ const Navbar = ({
       });
     }
     if (router.pathname !== "/") {
+      console.log(router.asPath);
+      console.log(router.pathname);
+      console.log(router.asPath.split("/"));
       updateInput("");
       selectLang({
-        from: router.asPath.split("/")[1],
-        to: router.asPath.split("/")[2],
+        from: router.asPath.split("/")[2],
+        to: router.asPath.split("/")[3],
       });
       if (
         userInput ||
@@ -187,9 +190,9 @@ const Navbar = ({
       ) {
         if (!router.isFallback) {
           addHit({
-            preTrans: router.asPath.split("/")[3],
-            fromCode: router.asPath.split("/")[1],
-            toCode: router.asPath.split("/")[2],
+            preTrans: router.asPath.split("/")[4],
+            fromCode: router.asPath.split("/")[2],
+            toCode: router.asPath.split("/")[3],
           });
         }
       }
@@ -203,6 +206,10 @@ const Navbar = ({
 
   const handleSub = (e) => {
     e.preventDefault();
+    let href = `/${fromCode}/${toCode}?translation=${userInput.toLowerCase}`;
+    let as = `${
+      process.env.BASE_PATH
+    }/${fromCode}/${toCode}/${userInput.toLowerCase()}`;
     if (!userInput) {
       setHelperText((prev) => ({
         inputError: "Please enter a word to translate",
@@ -238,21 +245,12 @@ const Navbar = ({
         return;
       }
     }
-    router.push(
-      "/" + fromCode + "/" + toCode + "/[translation]",
-      process.env.BASE_PATH +
-        "/" +
-        fromCode +
-        "/" +
-        toCode +
-        "/" +
-        userInput.toLowerCase()
-    );
+    router.push(href, as);
   };
 
   const goHome = () => {
     if (router.pathname !== "/") {
-      router.push("/", process.env.BASE_PATH + "/");
+      router.push("/", "/");
     }
   };
 

@@ -268,28 +268,24 @@ const Trending = ({
 
   const handleRouting = (data) => {
     if (data.from === "en") {
-      router.push(
-        "/" + data.from + "/es" + "/[translation]",
-        process.env.BASE_PATH +
-          "/" +
-          data.from +
-          "/es" +
-          "/" +
-          data.translation[data.from].text.toLowerCase()
-      );
+      let href = `/${data.from}/es/?translation=${
+        data.translation[data.from].text.toLowerCase
+      }`;
+      let as = `${process.env.BASE_PATH}/${data.from}/es/${data.translation[
+        data.from
+      ].text.toLowerCase()}`;
+      router.push(href, as);
       return;
     }
 
     if (data.from !== "en") {
-      router.push(
-        "/" + data.from + "/en" + "/[translation]",
-        process.env.BASE_PATH +
-          "/" +
-          data.from +
-          "/en" +
-          "/" +
-          data.translation[data.from].text.toLowerCase()
-      );
+      let href = `/${data.from}/en/?translation=${
+        data.translation[data.from].text.toLowerCase
+      }`;
+      let as = `${process.env.BASE_PATH}/${data.from}/en/${data.translation[
+        data.from
+      ].text.toLowerCase()}`;
+      router.push(href, as);
       return;
     }
   };
