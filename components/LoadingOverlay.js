@@ -115,9 +115,9 @@ const LoadingOverlay = ({
     //console.log(router.pathname);
     //console.log(router.asPath.split("/"));
 
-    let href = `/${fromCode}/${toCode}?translation=${
-      router.asPath.split("/")[4].toLowerCase
-    }`;
+    let href = `/${fromCode}/${toCode}?translation=${router.asPath
+      .split("/")[4]
+      .toLowerCase()}`;
     let as = `${
       process.env.BASE_PATH
     }/${fromCode}/${toCode}/${router.asPath.split("/")[4].toLowerCase()}`;

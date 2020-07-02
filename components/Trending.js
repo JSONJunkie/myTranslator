@@ -267,10 +267,11 @@ const Trending = ({
   };
 
   const handleRouting = (data) => {
+    console.log(data.translation[data.from].text.toLowerCase());
     if (data.from === "en") {
-      let href = `/${data.from}/es/?translation=${
-        data.translation[data.from].text.toLowerCase
-      }`;
+      let href = `/${data.from}/es/?translation=${data.translation[
+        data.from
+      ].text.toLowerCase()}`;
       let as = `${process.env.BASE_PATH}/${data.from}/es/${data.translation[
         data.from
       ].text.toLowerCase()}`;
@@ -279,9 +280,9 @@ const Trending = ({
     }
 
     if (data.from !== "en") {
-      let href = `/${data.from}/en/?translation=${
-        data.translation[data.from].text.toLowerCase
-      }`;
+      let href = `/${data.from}/en/?translation=${data.translation[
+        data.from
+      ].text.toLowerCase()}`;
       let as = `${process.env.BASE_PATH}/${data.from}/en/${data.translation[
         data.from
       ].text.toLowerCase()}`;

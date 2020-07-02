@@ -203,7 +203,7 @@ const Navbar = ({
 
   const handleSub = (e) => {
     e.preventDefault();
-    let href = `/${fromCode}/${toCode}?translation=${userInput.toLowerCase}`;
+    let href = `/${fromCode}/${toCode}?translation=${userInput.toLowerCase()}`;
     let as = `${
       process.env.BASE_PATH
     }/${fromCode}/${toCode}/${userInput.toLowerCase()}`;
