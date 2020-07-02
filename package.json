@@ -47,8 +47,5 @@
     "swr": "^0.2.0",
     "uuid": "^7.0.3",
     "validator": "^13.0.0"
-  },
-  "cacheDirectories": [
-    ".next/cache"
-  ]
+  }
 }
