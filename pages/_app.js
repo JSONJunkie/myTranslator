@@ -65,10 +65,16 @@ function MyApp({ Component, pageProps, store }) {
     <React.Fragment>
       <div className={classes.root}>
         <Head>
-          <title>localhostin</title>
+          <title>Beau | translator</title>
+          <meta name="author" content="Beau Reescano" />
           <meta
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width"
+          />
+          <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+          <meta
+            name="description"
+            content="Teacher friendly translator. English, Spanish, and other languages are currently supported"
           />
         </Head>
         <ThemeProvider theme={theme}>
