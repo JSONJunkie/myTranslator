@@ -6,7 +6,7 @@ const Copyright = () => {
     <Typography variant="caption" color="textSecondary">
       {"Copyright © "}
       <Link color="inherit" href="https://webdeveloperbeau.com">
-        JSONJuggler
+        Beau Reescano
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
